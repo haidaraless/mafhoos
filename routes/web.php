@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\CreateVehicle;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -32,6 +33,11 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+
+
+    
+    Route::get('vehicles/create', CreateVehicle::class)->name('vehicles.create');
+    
 });
 
 require __DIR__.'/auth.php';
