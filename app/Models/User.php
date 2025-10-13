@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Account::class, 'current_account_id');
     }
+
+    public function vehicles(): HasMany
+    {
+        return $this->hasMany(UserVehicle::class);
+    }
 }
