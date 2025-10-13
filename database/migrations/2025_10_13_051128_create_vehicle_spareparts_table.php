@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('vehicle_spareparts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vehicle_id')->constrained('vehicles');
-            $table->foreignId('sparepart_id')->constrained('spareparts');
+            $table->foreignUlid('vehicle_id')->constrained('vehicles');
+            $table->foreignUlid('sparepart_id')->constrained('spareparts');
             $table->timestamps();
         });
     }

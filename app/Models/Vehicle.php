@@ -10,7 +10,20 @@ class Vehicle extends Model
 {
     use HasUlids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'brand',
+        'model',
+        'vin',
+        'year',
+        'make',
+        'body_class',
+        'engine_model',
+        'fuel_type',
+        'drive_type',
+        'transmission_style',
+        'vehicle_type',
+    ];
 
     public function spareparts(): HasMany
     {
