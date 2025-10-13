@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'api_vin' => [
+        'key' => env('API_VIN_KEY'),
+        'secret' => env('API_VIN_SECRET'),
+    ],
+
 ];

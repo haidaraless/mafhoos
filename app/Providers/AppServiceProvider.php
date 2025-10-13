@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->loadRoutesFrom(base_path('routes/appointments.php'));
+        $this->loadRoutesFrom(base_path('routes/inspections.php'));
     }
 }
