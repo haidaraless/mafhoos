@@ -48,7 +48,7 @@ class Register extends Component
     {
         $account = $user->accounts()->create([
             'user_id' => $user->id,
-            'type' => AccountType::CAR_OWNER,
+            'type' => AccountType::VEHICLE_OWNER,
         ]);
 
         $user->current_account_id = $account->id;
