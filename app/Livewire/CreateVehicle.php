@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Vehicle;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 
@@ -36,6 +37,254 @@ class CreateVehicle extends Component
         
         $this->isLoading = true;
         
+        // Use dummy data for testing
+        $dummyData = $this->getDummyData();
+        $parsedData = $this->parseDummyData($dummyData);
+
+        // Ensure the result is always an array, even if null
+        $this->vehicleData = is_array($parsedData) ? $parsedData : [];
+
+        $this->showVehicleData = !empty($this->vehicleData);
+        $this->isLoading = false;
+    }
+
+    public function createVehicle()
+    {
+        if (empty($this->vehicleData)) {
+            session()->flash('error', 'Please lookup vehicle data first.');
+            return;
+        }
+
+        try {
+            // Check if vehicle with this VIN already exists
+            if (Vehicle::where('vin', $this->vin)->exists()) {
+                session()->flash('error', 'A vehicle with this VIN already exists.');
+                return;
+            }
+
+            Vehicle::create([
+                'user_id' => Auth::user()->id,
+                'vin' => $this->vin,
+                'name' => $this->vehicleData['make'] . ' ' . $this->vehicleData['model'] . ' ' . $this->vehicleData['year'],
+                'model' => $this->vehicleData['model'],
+                'year' => $this->vehicleData['year'],
+                'make' => $this->vehicleData['make'],
+                'body_class' => $this->vehicleData['body_class'] ?? null,
+                'engine_model' => $this->vehicleData['engine_model'] ?? null,
+                'fuel_type' => $this->vehicleData['fuel_type'] ?? null,
+                'drive_type' => $this->vehicleData['drive_type'] ?? null,
+                'transmission_style' => $this->vehicleData['transmission_style'] ?? null,
+                'vehicle_type' => $this->vehicleData['vehicle_type'] ?? null,
+            ]);
+
+            session()->flash('success', 'Vehicle created successfully!');
+            $this->dispatch('vehicle-created');
+            
+            // Reset form
+            $this->vin = '';
+            $this->vehicleData = [];
+            $this->showVehicleData = false;
+            
+        } catch (\Exception $e) {
+            dd($e);
+            session()->flash('error', 'Failed to create vehicle. Please try again.');
+        }
+    }
+
+    private function parseDummyData(array $dummyData): array
+    {
+        $data = [];
+        
+        // Navigate to the decoder data in the dummy JSON structure
+        if (isset($dummyData['functionResponse']['data']['decoder'])) {
+            $decoder = $dummyData['functionResponse']['data']['decoder'];
+            
+            // Map the dummy data fields to our expected structure
+            $data['make'] = $decoder['make']['value'] ?? '';
+            $data['model'] = $decoder['model']['value'] ?? '';
+            $data['year'] = $decoder['model_year']['value'] ?? '';
+            $data['body_class'] = $decoder['body']['value'] ?? '';
+            $data['engine_model'] = $decoder['engine_version']['value'] ?? '';
+            $data['fuel_type'] = $decoder['fuel_type']['value'] ?? '';
+            $data['drive_type'] = $decoder['drive_type']['value'] ?? '';
+            $data['transmission_style'] = $decoder['gearbox_type']['value'] ?? '';
+            $data['vehicle_type'] = $decoder['vehicle_type']['value'] ?? '';
+            $data['doors'] = $decoder['doors']['value'] ?? '';
+            $data['cylinders'] = $decoder['engine_cylinders']['value'] ?? '';
+            $data['displacement'] = $decoder['engine_displ_l']['value'] ?? '';
+        }
+        
+        return $data;
+    }
+
+    private function getDummyData()
+    {
+        $jsonData = <<<JSON
+        {
+        "version": "3.0",
+        "vin": "WAUZZZ8R3GAXXXXXX",
+        "apiStatus": "OK",
+        "responseDate": "2025-08-13 14:44:31",
+        "functionName": "api/v3/getSimpleDecoder",
+        "functionResponse": {
+            "data": {
+            "api": {
+                "core_version": "2.4.15d",
+                "endpoint_version": 2,
+                "json_version": "1.0.0",
+                "api_type": "API Simple - Full mode - en",
+                "api_cache": "off",
+                "data_precision": 1,
+                "data_matching": "62.4%",
+                "lex_lang": "en"
+            },
+            "analyze": {
+                "vin_orginal": {
+                "desc": "Entered VIN",
+                "value": "WAUZZZ8R3GAXXXXXX"
+                },
+                "vin_corrected": {
+                "desc": "Corrected VIN",
+                "value": "WAUZZZ8R3GAXXXXXX"
+                },
+                "vin_year": {
+                "desc": "Year Identifier",
+                "value": "G"
+                },
+                "vin_serial": {
+                "desc": "Serial number",
+                "value": "139917"
+                },
+                "checkdigit": {
+                "desc": "Check Digit",
+                "value": "valid"
+                }
+            },
+            "decoder": {
+                "make": {
+                "desc": "Make",
+                "value": "Audi"
+                },
+                "model": {
+                "desc": "Model",
+                "value": "Q5"
+                },
+                "model_year": {
+                "desc": "Model year",
+                "value": "2016"
+                },
+                "body": {
+                "desc": "Body type",
+                "value": "SUV"
+                },
+                "fuel_type": {
+                "desc": "Fuel type",
+                "value": "Diesel"
+                },
+                "vehicle_type": {
+                "desc": "Vehicle type",
+                "value": "Sport Utility Vehicle"
+                },
+                "doors": {
+                "desc": "Doors number",
+                "value": "5"
+                },
+                "engine_displ_cm3": {
+                "desc": "Displacement SI",
+                "value": "2967 cm3"
+                },
+                "engine_displ_l": {
+                "desc": "Displacement Nominal",
+                "value": "3.0 l"
+                },
+                "engine_power_hp": {
+                "desc": "Horsepower",
+                "value": "322 HP"
+                },
+                "engine_power_kw": {
+                "desc": "Kilowatts",
+                "value": "240 kW"
+                },
+                "engine_conf": {
+                "desc": "Engine configuration",
+                "value": null
+                },
+                "engine_type": {
+                "desc": "Engine type",
+                "value": "V6"
+                },
+                "engine_version": {
+                "desc": "Engine version",
+                "value": "TDI"
+                },
+                "engine_head": {
+                "desc": "Valve operation",
+                "value": null
+                },
+                "engine_valves": {
+                "desc": "Valves",
+                "value": "24"
+                },
+                "engine_cylinders": {
+                "desc": "Cylinders",
+                "value": "6"
+                },
+                "engine_displ_cid": {
+                "desc": "Displacement CID",
+                "value": "181 cid"
+                },
+                "engine_turbo": {
+                "desc": "Charger (turbo/super/diesel)",
+                "value": "Y"
+                },
+                "drive_type": {
+                "desc": "Driveline",
+                "value": "AWD"
+                },
+                "gearbox_type": {
+                "desc": "Transmission type",
+                "value": "Automatic"
+                },
+                "emission_std": {
+                "desc": "Emission Standard",
+                "value": "EURO 6",
+                "co2_gkm": "174"
+                }
+            },
+            "custom_equipment": {
+                "desc": "Custom equipment list",
+                "values": [
+                {
+                    "code": "6141",
+                    "value": "4WD/AWD"
+                },
+                {
+                    "code": "6143",
+                    "value": "ALLOY WHEELS"
+                },
+                {
+                    "code": "6144",
+                    "value": "RADIO RECEIVER"
+                }
+                ]
+            }
+            }
+        },
+        "licenseInfo": {
+            "licenseNumber": "xxxx",
+            "validTo": "2030-12-31",
+            "remainingCredits": 9996,
+            "remainingMonthlyLimit": 499,
+            "remainingDailyLimit": 49
+        }
+        }
+        JSON;
+
+        return json_decode($jsonData, true);
+    }
+
+    private function sendAPIVinRequest()
+    {
         try {
             // Using API.VIN for Saudi Arabia and global vehicle data
             $apiKey = config('services.api_vin.key');
@@ -76,158 +325,6 @@ class CreateVehicle extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'An error occurred while looking up the vehicle. Please try again.');
         }
-        
-        $this->isLoading = false;
-    }
-
-    public function createVehicle()
-    {
-        if (empty($this->vehicleData)) {
-            session()->flash('error', 'Please lookup vehicle data first.');
-            return;
-        }
-
-        try {
-            // Check if vehicle with this VIN already exists
-            if (Vehicle::where('vin', $this->vin)->exists()) {
-                session()->flash('error', 'A vehicle with this VIN already exists.');
-                return;
-            }
-
-            Vehicle::create([
-                'vin' => $this->vin,
-                'name' => $this->vehicleData['make'] . ' ' . $this->vehicleData['model'] . ' ' . $this->vehicleData['year'],
-                'brand' => $this->vehicleData['make'],
-                'model' => $this->vehicleData['model'],
-                'year' => $this->vehicleData['year'],
-                'make' => $this->vehicleData['make'],
-                'body_class' => $this->vehicleData['body_class'] ?? null,
-                'engine_model' => $this->vehicleData['engine_model'] ?? null,
-                'fuel_type' => $this->vehicleData['fuel_type'] ?? null,
-                'drive_type' => $this->vehicleData['drive_type'] ?? null,
-                'transmission_style' => $this->vehicleData['transmission_style'] ?? null,
-                'vehicle_type' => $this->vehicleData['vehicle_type'] ?? null,
-            ]);
-
-            session()->flash('success', 'Vehicle created successfully!');
-            
-            // Reset form
-            $this->vin = '';
-            $this->vehicleData = [];
-            $this->showVehicleData = false;
-            
-        } catch (\Exception $e) {
-            session()->flash('error', 'Failed to create vehicle. Please try again.');
-        }
-    }
-
-    private function parseApiVinData(array $decodeData): array
-    {
-        $data = [];
-        
-        foreach ($decodeData as $item) {
-            $label = $item['label'] ?? '';
-            $value = $item['value'] ?? '';
-            
-            // Skip empty values
-            if (empty($value) || $value === 'Not available') {
-                continue;
-            }
-            
-            switch (strtolower($label)) {
-                case 'make':
-                case 'manufacturer':
-                    $data['make'] = $value;
-                    break;
-                case 'model':
-                    $data['model'] = $value;
-                    break;
-                case 'model year':
-                case 'year':
-                    $data['year'] = $value;
-                    break;
-                case 'body class':
-                case 'body type':
-                case 'vehicle type':
-                    $data['body_class'] = $value;
-                    break;
-                case 'engine model':
-                case 'engine':
-                    $data['engine_model'] = $value;
-                    break;
-                case 'fuel type':
-                case 'fuel type - primary':
-                    $data['fuel_type'] = $value;
-                    break;
-                case 'drive type':
-                case 'drive':
-                    $data['drive_type'] = $value;
-                    break;
-                case 'transmission':
-                case 'transmission style':
-                    $data['transmission_style'] = $value;
-                    break;
-                case 'vehicle type':
-                    $data['vehicle_type'] = $value;
-                    break;
-                case 'doors':
-                    $data['doors'] = $value;
-                    break;
-                case 'cylinders':
-                    $data['cylinders'] = $value;
-                    break;
-                case 'displacement':
-                    $data['displacement'] = $value;
-                    break;
-                case 'gross vehicle weight rating':
-                    $data['gvwr'] = $value;
-                    break;
-            }
-        }
-        
-        return $data;
-    }
-
-    private function parseVehicleData(array $results): array
-    {
-        $data = [];
-        
-        foreach ($results as $result) {
-            $variable = $result['Variable'];
-            $value = $result['Value'];
-            
-            switch ($variable) {
-                case 'Make':
-                    $data['make'] = $value;
-                    break;
-                case 'Model':
-                    $data['model'] = $value;
-                    break;
-                case 'Model Year':
-                    $data['year'] = $value;
-                    break;
-                case 'Body Class':
-                    $data['body_class'] = $value;
-                    break;
-                case 'Engine Model':
-                    $data['engine_model'] = $value;
-                    break;
-                case 'Fuel Type - Primary':
-                    $data['fuel_type'] = $value;
-                    break;
-                case 'Drive Type':
-                    $data['drive_type'] = $value;
-                    break;
-                case 'Transmission Style':
-                    $data['transmission_style'] = $value;
-                    break;
-                case 'Vehicle Type':
-                    $data['vehicle_type'] = $value;
-                    break;
-            }
-        }
-        
-        return $data;
     }
 
     public function render()
