@@ -11,9 +11,6 @@
             @endif
         </div>
     </div>
-    <div class="mt-3 flex gap-2">
-        <flux:button size="sm" variant="ghost" icon="wrench-screwdriver">{{ __('Manage') }}</flux:button>
-    </div>
 </div>
 
 
