@@ -8,7 +8,6 @@ use App\Models\AvailableTime;
 use App\Models\Provider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ManageAvailableTimes extends Component
@@ -19,7 +18,6 @@ class ManageAvailableTimes extends Component
     public array $slots = [];
 
     public ?string $newDay = null;
-    public ?string $newTime = null;
 
     public function mount(Provider $provider): void
     {
@@ -34,6 +32,11 @@ class ManageAvailableTimes extends Component
             'days' => array_map(fn (Day $d) => $d->value, Day::cases()),
             'times' => array_map(fn (Time $t) => $t->value, Time::cases()),
         ]);
+    }
+
+    public function updatedNewDay(string $day): void
+    {
+        $this->dispatch('day-updated', day: $day);
     }
 
     public function loadSlots(): void
