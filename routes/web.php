@@ -1,11 +1,15 @@
 <?php
 
 use App\Livewire\CreateVehicle;
+use App\Livewire\Providers\ManageAvailableTimes;
+use App\Models\Provider;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
+use App\Livewire\Vehicles\ListVehicles;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
@@ -35,8 +39,11 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 
 
-    
     Route::get('vehicles/create', CreateVehicle::class)->name('vehicles.create');
+
+
+    Route::get('providers/{provider}/available-times', ManageAvailableTimes::class)
+        ->name('providers.available-times.manage');
     
 });
 
