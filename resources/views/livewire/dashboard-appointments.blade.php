@@ -244,7 +244,7 @@
             </svg>
             <h3 class="text-lg font-medium text-gray-900 mb-2">No Appointments Found</h3>
             <p class="text-gray-500 mb-6">You don't have any appointments yet. Create your first appointment by selecting a vehicle.</p>
-            <a href="{{ route('vehicles.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
+            <a href="{{ route('appointments.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>

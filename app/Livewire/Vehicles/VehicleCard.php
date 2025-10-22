@@ -19,11 +19,11 @@ class VehicleCard extends Component
     public function createAppointment()
     {
         $appointment = Appointment::create([
-            'vehicle_id' => $this->vehicle->id,
+            'vehicle_id' => null,
             'status' => AppointmentStatus::PENDING->value,
         ]);
 
-        return $this->redirect(route('appointments.inspection-center.select', $appointment), true);
+        return $this->redirect(route('appointments.vehicle.select', $appointment), true);
     }
 
     public function render()
