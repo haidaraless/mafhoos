@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Appointments\ListProviderAppointments;
+use App\Http\Controllers\PayFeesController;
 use App\Livewire\Appointments\SelectInspectionCenter;
 use App\Livewire\Appointments\SelectInspectionDate;
 use App\Livewire\Appointments\SelectInspectionType;
@@ -23,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('{appointment}/inspection-center', SelectInspectionCenter::class)->name('appointments.inspection-center.select');
         Route::get('{appointment}/inspection-type', SelectInspectionType::class)->name('appointments.inspection-type.select');
         Route::get('{appointment}/inspection-date', SelectInspectionDate::class)->name('appointments.inspection-date.select');
-        // Route::get('{appointment}/fees', PayFees::class)->name('appointments.fees.pay');
+        Route::get('{appointment}/fees', [PayFeesController::class, 'show'])->name('appointments.fees.pay');
+        Route::get('fees/callback', [PayFeesController::class, 'callback'])->name('appointments.fees.callback.controller');
     });
 });

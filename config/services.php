@@ -40,4 +40,10 @@ return [
         'secret' => env('API_VIN_SECRET'),
     ],
 
+    'moyasar' => [
+        'secret_key' => env('MOYASAR_SECRET_KEY'),
+        'publishable_key' => env('MOYASAR_PUBLISHABLE_KEY'),
+        'webhook_secret' => env('MOYASAR_WEBHOOK_SECRET'),
+    ],
+
 ];

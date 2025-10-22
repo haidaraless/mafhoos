@@ -146,12 +146,11 @@
         <!-- Action Buttons -->
         @if($appointment && $appointment->scheduled_at)
             <div class="mt-6">
-                <button 
-                    wire:click="$dispatch('appointment-completed', { appointmentId: {{ $appointment->id }} })"
+                <a href="{{ route('appointments.fees.pay', $appointment->id) }}"
                     class="w-full bg-green-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >
                     Complete Appointment
-                </button>
+                </a>
             </div>
         @endif
         @else

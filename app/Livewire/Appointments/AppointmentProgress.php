@@ -12,7 +12,6 @@ class AppointmentProgress extends Component
     protected $listeners = [
         'appointment-updated' => '$refresh',
         'appointment-scheduled' => '$refresh',
-        'appointment-completed' => 'handleAppointmentCompleted',
         'edit-appointment' => 'handleEditAppointment'
     ];
 
@@ -21,10 +20,10 @@ class AppointmentProgress extends Component
         $this->appointmentId = $appointment->id;
     }
 
-    public function handleAppointmentCompleted($appointmentId)
+    public function handleAppointmentCompleted()
     {
-        // Handle appointment completion logic
-        $this->dispatch('appointment-completed-success', $appointmentId);
+        // Redirect to PayFees page
+        return $this->redirect(route('appointments.fees.pay', $this->appointmentId), true);
     }
 
     public function handleEditAppointment($appointmentId)

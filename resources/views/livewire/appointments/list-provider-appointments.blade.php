@@ -95,10 +95,10 @@
                                             @foreach($appointment->fees as $fee)
                                                 <div class="flex justify-between text-sm">
                                                     <span class="text-zinc-600 dark:text-zinc-400">
-                                                        {{ $fee->name }}
+                                                        {{ $fee->description }}
                                                     </span>
                                                     <span class="font-medium text-zinc-900 dark:text-zinc-100">
-                                                        ${{ number_format($fee->amount, 2) }}
+                                                        SAR {{ number_format($fee->amount, 2) }}
                                                     </span>
                                                 </div>
                                             @endforeach
