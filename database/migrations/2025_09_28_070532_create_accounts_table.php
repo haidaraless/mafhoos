@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignId('user_id')->constrained('users');
+            $table->morph('accountable');
             $table->enum('type', AccountType::cases())->default(AccountType::VEHICLE_OWNER->value);
             $table->enum('status', AccountStatus::cases())->default(AccountStatus::ACTIVE->value);
             $table->timestamps();

@@ -6,7 +6,7 @@ use App\Enums\ProviderType;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Provider extends Model
@@ -19,9 +19,9 @@ class Provider extends Model
         'type' => ProviderType::class,
     ];
 
-    public function account(): BelongsTo
+    public function account(): MorphOne
     {
-        return $this->belongsTo(Account::class);
+        return $this->morphOne(Account::class, 'accountable');
     }
 
     public function availableTimes(): HasMany

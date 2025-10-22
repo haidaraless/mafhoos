@@ -6,7 +6,8 @@ use App\Enums\AccountType;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;   
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Account extends Model
 {
@@ -18,17 +19,8 @@ class Account extends Model
         'type' => AccountType::class,
     ];
 
-    /*
-     * types of accounts
-     * 1. Vehicle Inspection Center
-     * 2. Auto Repair Workshop
-     * 3. Spare Parts Supplier
-     * 4. Car Owner
-     */
-
-
-    public function user(): BelongsTo
+    public function accountable(): MorphTo
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 }
