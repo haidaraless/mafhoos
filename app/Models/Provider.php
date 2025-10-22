@@ -27,4 +27,9 @@ class Provider extends Model
     {
         return $this->hasMany(AvailableTime::class);
     }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

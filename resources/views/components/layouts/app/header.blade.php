@@ -101,6 +101,11 @@
                     <flux:navlist.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                       {{ __('Dashboard') }}
                     </flux:navlist.item>
+					@php($provider = \App\Models\Provider::query()->where('account_id', optional(auth()->user()?->currentAccount)->id)->first())
+					@if($provider)
+						<flux:navlist.item icon="clock" :href="route('providers.available-times.manage', $provider)" :current="request()->routeIs('providers.available-times.manage')" wire:navigate>{{ __('Manage Available Times') }}</flux:navlist.item>
+						<flux:navlist.item icon="calendar" :href="route('appointments.index')" :current="request()->routeIs('appointments.index')" wire:navigate>{{ __('My Appointments') }}</flux:navlist.item>
+					@endif
                 </flux:navlist.group>
             </flux:navlist>
 

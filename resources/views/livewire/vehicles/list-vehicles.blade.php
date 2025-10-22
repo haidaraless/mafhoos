@@ -1,8 +1,4 @@
 <div class="flex w-full flex-col gap-4">
-    <div class="col-span-1 flex items-center justify-between">
-        <span class="text-3xl font-medium">My Vehicles</span>
-        <flux:button icon="plus" variant="outline" href="{{ route('vehicles.create') }}">{{ __('Create Vehicle') }}</flux:button>
-    </div>
     @if($vehicles->isEmpty())
         <flux:callout icon="car" heading="{{ __('No vehicles yet') }}" subtitle="{{ __('Add your first vehicle to get started.') }}" />
 

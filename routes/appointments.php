@@ -1,5 +1,9 @@
 <?php
 
+use App\Livewire\Appointments\ListProviderAppointments;
+use App\Livewire\Appointments\SelectInspectionCenter;
+use App\Livewire\Appointments\SelectInspectionDate;
+use App\Livewire\Appointments\SelectInspectionType;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,13 +18,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Appointments routes will be defined here
-    // Example:
-    // Route::get('appointments', [AppointmentController::class, 'index'])->name('appointments.index');
-    // Route::get('appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
-    // Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-    // Route::get('appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
-    // Route::get('appointments/{appointment}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
-    // Route::put('appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
-    // Route::delete('appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+    Route::prefix('/appointments')->group(function () {
+        Route::get('/', ListProviderAppointments::class)->name('appointments.index');
+        Route::get('{appointment}/inspection-center', SelectInspectionCenter::class)->name('appointments.inspection-center.select');
+        Route::get('{appointment}/inspection-type', SelectInspectionType::class)->name('appointments.inspection-type.select');
+        Route::get('{appointment}/inspection-date', SelectInspectionDate::class)->name('appointments.inspection-date.select');
+        // Route::get('{appointment}/fees', PayFees::class)->name('appointments.fees.pay');
+    });
 });
