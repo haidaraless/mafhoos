@@ -8,16 +8,19 @@ use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Enums\AccountType;
 
 class DashboardAppointments extends Component
 {
     public Collection $draftAppointments;
     public Collection $upcomingAppointments;
     public Collection $recentAppointments;
+    public bool $canCreateAppointment = false;
 
     public function mount()
     {
         $this->loadAppointments();
+        $this->canCreateAppointment = Auth::user()->currentAccount->type === AccountType::VEHICLE_OWNER;
     }
 
     public function loadAppointments()

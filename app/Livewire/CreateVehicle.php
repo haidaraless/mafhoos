@@ -6,6 +6,7 @@ use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
+use App\Models\Appointment;
 
 class CreateVehicle extends Component
 {
@@ -62,7 +63,7 @@ class CreateVehicle extends Component
                 return;
             }
 
-            Vehicle::create([
+            $vehicle = Vehicle::create([
                 'user_id' => Auth::user()->id,
                 'vin' => $this->vin,
                 'name' => $this->vehicleData['make'] . ' ' . $this->vehicleData['model'] . ' ' . $this->vehicleData['year'],
@@ -77,14 +78,10 @@ class CreateVehicle extends Component
                 'vehicle_type' => $this->vehicleData['vehicle_type'] ?? null,
             ]);
 
-            session()->flash('success', 'Vehicle created successfully!');
-            $this->dispatch('vehicle-created');
-            
-            // Reset form
-            $this->vin = '';
-            $this->vehicleData = [];
-            $this->showVehicleData = false;
-            
+            # create draft appointment and redirect to select inspection center
+            $appointment = Appointment::createDraftAppointment($vehicle->id);
+            return $this->redirect(route('appointments.inspection-center.select', $appointment), true);
+
         } catch (\Exception $e) {
             dd($e);
             session()->flash('error', 'Failed to create vehicle. Please try again.');

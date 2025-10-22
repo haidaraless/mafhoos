@@ -1,12 +1,13 @@
 <?php
 
-use App\Livewire\Appointments\ListProviderAppointments;
+use App\Livewire\Appointments\ListAppointments;
 use App\Http\Controllers\PayFeesController;
 use App\Livewire\Appointments\SelectInspectionCenter;
 use App\Livewire\Appointments\SelectInspectionDate;
 use App\Livewire\Appointments\SelectInspectionType;
 use App\Livewire\Appointments\SelectVehicle;
 use Illuminate\Support\Facades\Route;
+use App\Models\Appointment;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/appointments')->group(function () {
-        Route::get('/', ListProviderAppointments::class)->name('appointments.index');
+        Route::get('/', ListAppointments::class)->name('appointments.index');
+
         Route::get('/create', function() {
-            $appointment = \App\Models\Appointment::create([
-                'vehicle_id' => null,
-                'status' => \App\Enums\AppointmentStatus::PENDING->value,
-            ]);
+            $appointment = Appointment::createDraftAppointment();
             return redirect()->route('appointments.vehicle.select', $appointment);
         })->name('appointments.create');
         

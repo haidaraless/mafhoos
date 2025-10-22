@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
+use App\Enums\AccountType;
 
 class Appointment extends Model
 {
@@ -37,5 +39,18 @@ class Appointment extends Model
     public function fees(): HasMany
     {
         return $this->hasMany(Fee::class);
+    }
+
+    public static function createDraftAppointment(string $vehicleId=null): Appointment
+    {
+        $user = User::find(Auth::user()->id);
+
+        if (Auth::user()->currentAccount->type !== AccountType::VEHICLE_OWNER) {
+            return abort(403, 'You are not authorized');
+        }
+        return self::create([
+            'vehicle_id' => $vehicleId,
+            'status' => AppointmentStatus::PENDING->value,
+        ]);
     }
 }

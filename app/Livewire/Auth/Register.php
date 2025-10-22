@@ -41,7 +41,7 @@ class Register extends Component
 
         Auth::login($user);
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        $this->redirect(route('vehicles.create', absolute: false), navigate: true);
     }
 
     private function createAccount(User $user): void

@@ -14,7 +14,6 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="truck" :href="route('vehicles.index')" :current="request()->routeIs('vehicles.*')" wire:navigate>{{ __('My Vehicles') }}</flux:navlist.item>
                     <flux:navlist.item icon="calendar" :href="route('appointments.index')" :current="request()->routeIs('appointments.index')" wire:navigate>{{ __('My Appointments') }}</flux:navlist.item>
 					@php($provider = \App\Models\Provider::query()->where('account_id', optional(auth()->user()?->currentAccount)->id)->first())
 					@if($provider)

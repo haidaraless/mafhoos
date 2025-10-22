@@ -10,7 +10,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Title('My Appointments')]
-class ListProviderAppointments extends Component
+class ListAppointments extends Component
 {
     public Collection $appointments;
     public ?Provider $provider = null;
@@ -46,6 +46,6 @@ class ListProviderAppointments extends Component
 
     public function render()
     {
-        return view('livewire.appointments.list-provider-appointments');
+        return view('livewire.appointments.list-appointments');
     }
 }
