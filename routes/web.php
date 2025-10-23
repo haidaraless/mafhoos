@@ -2,7 +2,7 @@
 
 use App\Livewire\CreateVehicle;
 use App\Livewire\Providers\ManageAvailableTimes;
-use App\Models\Provider;
+use App\Livewire\Providers\ProviderSignup;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -16,9 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('providers/create', function () {
-    return view('welcome');
-})->name('home');
+Route::get('providers/create', ProviderSignup::class)->name('provider-signup');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
