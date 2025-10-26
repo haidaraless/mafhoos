@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Vehicles;
 
+use App\Enums\AppointmentStatus;
+use App\Models\Appointment;
 use App\Models\Vehicle;
 use Livewire\Component;
 
@@ -12,6 +14,16 @@ class VehicleCard extends Component
     public function mount(Vehicle $vehicle): void
     {
         $this->vehicle = $vehicle;
+    }
+
+    public function createAppointment()
+    {
+        $appointment = Appointment::create([
+            'vehicle_id' => null,
+            'status' => AppointmentStatus::PENDING->value,
+        ]);
+
+        return $this->redirect(route('appointments.vehicle.select', $appointment), true);
     }
 
     public function render()

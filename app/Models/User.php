@@ -5,7 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -63,9 +63,9 @@ class User extends Authenticatable
     }
 
 
-    public function accounts(): HasMany
+    public function accounts(): MorphMany   
     {
-        return $this->hasMany(Account::class);
+        return $this->morphMany(Account::class, 'accountable');
     }
 
     public function currentAccount(): BelongsTo

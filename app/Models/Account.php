@@ -2,32 +2,29 @@
 
 namespace App\Models;
 
-use App\Enums\AccountType;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Account extends Model
 {
-    use HasUlids;
+    use HasUlids, HasFactory;
 
     protected $guarded = [];
 
-    protected $casts = [
-        'type' => AccountType::class,
-    ];
-
-    /*
-     * types of accounts
-     * 1. Vehicle Inspection Center
-     * 2. Auto Repair Workshop
-     * 3. Spare Parts Supplier
-     * 4. Car Owner
-     */
-
-
-    public function user(): BelongsTo
+    public function accountable(): MorphTo
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
+    }
+    
+    public function isProvider(): bool
+    {
+        return $this->accountable_type === Provider::class;
+    }
+
+    public function isUser(): bool
+    {
+        return $this->accountable_type === User::class;
     }
 }

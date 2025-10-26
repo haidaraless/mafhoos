@@ -9,9 +9,6 @@
             @if($vehicle->vin)
                 <div class="text-xs text-zinc-400 mt-1 truncate">VIN: {{ $vehicle->vin }}</div>
             @endif
-            <div class="mt-3 flex gap-2">
-                <flux:button size="sm" variant="ghost" icon="wrench-screwdriver">{{ __('Create Inspection Appointment') }}</flux:button>
-            </div>
         </div>
     </div>
 </div>

@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Auth;
 
-use App\Enums\AccountType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -41,14 +40,14 @@ class Register extends Component
 
         Auth::login($user);
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        $this->redirect(route('vehicles.create', absolute: false), navigate: true);
     }
 
     private function createAccount(User $user): void
     {
         $account = $user->accounts()->create([
-            'user_id' => $user->id,
-            'type' => AccountType::VEHICLE_OWNER,
+            'accountable_id' => $user->id,
+            'accountable_type' => User::class,
         ]);
 
         $user->current_account_id = $account->id;

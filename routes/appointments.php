@@ -1,6 +1,13 @@
 <?php
 
+use App\Livewire\Appointments\ListAppointments;
+use App\Http\Controllers\PayFeesController;
+use App\Livewire\Appointments\SelectInspectionCenter;
+use App\Livewire\Appointments\SelectInspectionDate;
+use App\Livewire\Appointments\SelectInspectionType;
+use App\Livewire\Appointments\SelectVehicle;
 use Illuminate\Support\Facades\Route;
+use App\Models\Appointment;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,13 +21,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Appointments routes will be defined here
-    // Example:
-    // Route::get('appointments', [AppointmentController::class, 'index'])->name('appointments.index');
-    // Route::get('appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
-    // Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-    // Route::get('appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
-    // Route::get('appointments/{appointment}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
-    // Route::put('appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
-    // Route::delete('appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+    Route::prefix('/appointments')->group(function () {
+        Route::get('/', ListAppointments::class)->name('appointments.index');
+
+        Route::get('/create', function() {
+            $appointment = Appointment::createDraftAppointment();
+            return redirect()->route('appointments.vehicle.select', $appointment);
+        })->name('appointments.create');
+        
+        Route::get('{appointment}/select-vehicle', SelectVehicle::class)->name('appointments.vehicle.select');
+        Route::get('{appointment}/inspection-center', SelectInspectionCenter::class)->name('appointments.inspection-center.select');
+        Route::get('{appointment}/inspection-type', SelectInspectionType::class)->name('appointments.inspection-type.select');
+        Route::get('{appointment}/inspection-date', SelectInspectionDate::class)->name('appointments.inspection-date.select');
+        Route::get('{appointment}/fees', [PayFeesController::class, 'show'])->name('appointments.fees.pay');
+        Route::get('fees/callback', [PayFeesController::class, 'callback'])->name('appointments.fees.callback.controller');
+    });
 });
