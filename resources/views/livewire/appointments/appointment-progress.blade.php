@@ -146,6 +146,28 @@
         <!-- Action Buttons -->
         @if($appointment && $appointment->scheduled_at)
             <div class="mt-6">
+                <!-- Auto Quotation Request Checkbox -->
+                <div class="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input 
+                                wire:model.live="autoQuotationRequest"
+                                type="checkbox" 
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                id="auto_quotation_request"
+                            >
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="auto_quotation_request" class="font-medium text-gray-900">
+                                Auto Quotation Request
+                            </label>
+                            <p class="text-gray-600 text-xs mt-1">
+                                Automatically create quotation requests for damaged parts after inspection completion
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
                 <a href="{{ route('appointments.fees.pay', $appointment->id) }}"
                     class="w-full bg-green-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200"
                 >

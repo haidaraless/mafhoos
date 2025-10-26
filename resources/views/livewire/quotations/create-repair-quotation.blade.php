@@ -1,0 +1,131 @@
+<div>
+    <!-- Quotation Request Info -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">Repair Quotation Request</h3>
+                <p class="text-sm text-gray-600">Vehicle: {{ $quotationRequest->inspection->appointment->vehicle->year }} {{ $quotationRequest->inspection->appointment->vehicle->make }} {{ $quotationRequest->inspection->appointment->vehicle->model }}</p>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                {{ ucfirst($quotationRequest->status->value) }}
+            </span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+                <span class="font-medium text-gray-700">Inspection Number:</span>
+                <span class="text-gray-600 ml-2">{{ $quotationRequest->inspection->number }}</span>
+            </div>
+            <div>
+                <span class="font-medium text-gray-700">Request Date:</span>
+                <span class="text-gray-600 ml-2">{{ $quotationRequest->created_at->format('M d, Y') }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Quotation Button -->
+    <div class="mb-6">
+        <button wire:click="openModal" 
+                class="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors duration-200">
+            Create Repair Quotation
+        </button>
+    </div>
+
+    <!-- Existing Quotations -->
+    @if($quotations->count() > 0)
+        <div class="space-y-4">
+            <h4 class="text-lg font-semibold text-gray-900">Your Quotations</h4>
+            @foreach($quotations as $quotation)
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h5 class="font-medium text-gray-900">Quotation #{{ $quotation->id }}</h5>
+                            <p class="text-sm text-gray-600">Created: {{ $quotation->created_at->format('M d, Y \a\t g:i A') }}</p>
+                        </div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                            @if($quotation->status === 'draft') bg-yellow-100 text-yellow-800
+                            @elseif($quotation->status === 'quoted') bg-green-100 text-green-800
+                            @else bg-gray-100 text-gray-800 @endif">
+                            {{ ucfirst($quotation->status) }}
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <span class="font-medium text-gray-700">Total Amount:</span>
+                            <span class="text-lg font-semibold text-gray-900 ml-2">SAR {{ number_format($quotation->total, 2) }}</span>
+                        </div>
+                        @if($quotation->notes)
+                            <div>
+                                <span class="font-medium text-gray-700">Notes:</span>
+                                <p class="text-gray-600 mt-1">{{ $quotation->notes }}</p>
+                            </div>
+                        @endif
+                    </div>
+                    
+                    @if($quotation->status === 'draft')
+                        <div class="flex items-center space-x-2">
+                            <button wire:click="sendQuotation({{ $quotation->id }})" 
+                                    wire:confirm="Are you sure you want to send this quotation to the vehicle owner?"
+                                    class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
+                                Send Quotation
+                            </button>
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    <!-- Create Quotation Modal -->
+    @if($showModal)
+        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Create Repair Quotation</h3>
+                        <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <form wire:submit="createQuotation">
+                        <div class="mb-4">
+                            <label for="total" class="block text-sm font-medium text-gray-700 mb-2">Total Amount (SAR)</label>
+                            <input type="number" 
+                                   wire:model="total" 
+                                   step="0.01" 
+                                   min="0.01"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                   placeholder="Enter total quotation amount">
+                            @error('total') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+                            <textarea wire:model="notes" 
+                                      rows="3"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                      placeholder="Add any additional notes or details about the repair work"></textarea>
+                            @error('notes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                        
+                        <div class="flex items-center justify-end space-x-3">
+                            <button type="button" 
+                                    wire:click="closeModal"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors duration-200">
+                                Cancel
+                            </button>
+                            <button type="submit" 
+                                    class="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700 transition-colors duration-200">
+                                Create Quotation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>

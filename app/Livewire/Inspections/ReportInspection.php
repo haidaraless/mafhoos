@@ -4,6 +4,7 @@ namespace App\Livewire\Inspections;
 
 use App\Enums\AppointmentStatus;
 use App\Enums\Priority;
+use App\Enums\ProviderType;
 use App\Enums\QuotationRequestStatus;
 use App\Enums\QuotationType;
 use App\Models\Inspection;
@@ -13,6 +14,8 @@ use App\Models\DamageSparepart;
 use App\Models\QuotationRequest;
 use App\Services\SparepartCatalogService;
 use App\Mail\InspectionReportReady;
+use App\Models\Provider;
+use App\Models\QuotationProvider;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -142,7 +145,6 @@ class ReportInspection extends Component
         // Update inspection report
         $this->inspection->update([
             'report' => $this->report,
-            'completed_at' => now(),
         ]);
 
         session()->flash('message', 'Inspection report saved successfully!');
@@ -199,19 +201,43 @@ class ReportInspection extends Component
     {
         // Create spare parts quotation request if there are damaged spareparts
         if ($this->inspection->damageSpareparts->count() > 0) {
-            QuotationRequest::create([
+            $qr1 = QuotationRequest::create([
                 'inspection_id' => $this->inspection->id,
                 'type' => QuotationType::SPARE_PARTS,
                 'status' => QuotationRequestStatus::OPEN,
             ]);
+
+            # get providers that are spare parts suppliers in the same city as the inspection
+            $qr1_providers = Provider::where('city_id', $this->inspection->provider->city_id)
+                ->where('type', ProviderType::SPARE_PARTS_SUPPLIER)
+                ->get();
+
+            foreach ($qr1_providers as $qr1_provider) {
+                QuotationProvider::create([
+                    'quotation_request_id' => $qr1->id,
+                    'provider_id' => $qr1_provider->id,
+                ]);
+            }
         }
 
         // Always create repair quotation request
-        QuotationRequest::create([
+        $qr2 = QuotationRequest::create([
             'inspection_id' => $this->inspection->id,
             'type' => QuotationType::REPAIR,
             'status' => QuotationRequestStatus::OPEN,
         ]);
+
+        # get providers that are auto repair workshops in the same city as the inspection
+        $qr2_providers = Provider::where('city_id', $this->inspection->provider->city_id)
+            ->where('type', ProviderType::AUTO_REPAIR_WORKSHOP)
+            ->get();
+
+        foreach ($qr2_providers as $qr2_provider) {
+            QuotationProvider::create([
+                'quotation_request_id' => $qr2->id,
+                'provider_id' => $qr2_provider->id,
+            ]);
+        }
     }
 
     private function loadExistingDamageSpareparts()

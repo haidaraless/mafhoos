@@ -1,15 +1,26 @@
 <div class="space-y-6">
     <!-- Header -->
     <div class="bg-white rounded-lg border border-gray-200 p-6">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Vehicle Owner Dashboard</h1>
+                    <p class="text-gray-600">Manage your vehicles and inspection appointments</p>
+                </div>
             </div>
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Vehicle Owner Dashboard</h1>
-                <p class="text-gray-600">Manage your vehicles and inspection appointments</p>
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('quotation-requests.browse') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    View Quotations
+                </a>
             </div>
         </div>
     </div>
