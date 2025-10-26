@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <form wire:submit.prevent="saveReport">
+    <div>
         <!-- Report Section -->
         <div class="mb-8">
             <label for="report" class="block text-sm font-medium text-gray-700 mb-2">
@@ -191,21 +191,36 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex justify-end space-x-4">
+        <div class="flex justify-between items-center">
             <a
                 href="{{ route('dashboard.vehicle-inspection-center') }}"
                 class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
                 Cancel
             </a>
-            <button
-                type="submit"
-                class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-                Save Report
-            </button>
+            
+            <div class="flex space-x-3">
+                @if($inspection->completed_at)
+                    <span class="px-4 py-2 bg-green-100 text-green-800 rounded-md">Inspection Completed</span>
+                @else
+                    <button
+                        type="button"
+                        wire:click="saveReport"
+                        class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    >
+                        Save Draft
+                    </button>
+                    <button
+                        type="button"
+                        wire:click="completeInspection"
+                        class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                        Complete & Notify Owner
+                    </button>
+                @endif
+            </div>
         </div>
-    </form>
+    </div>
 
     <!-- Flash Messages -->
     @if (session()->has('message'))

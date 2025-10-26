@@ -2,12 +2,16 @@
 
 namespace App\Livewire\Inspections;
 
+use App\Enums\AppointmentStatus;
 use App\Enums\Priority;
 use App\Models\Inspection;
 use App\Models\Sparepart;
 use App\Models\Appointment;
 use App\Models\DamageSparepart;
 use App\Services\SparepartCatalogService;
+use App\Mail\InspectionReportReady;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class ReportInspection extends Component
@@ -134,6 +138,38 @@ class ReportInspection extends Component
         ]);
 
         session()->flash('message', 'Inspection report saved successfully!');
+        
+        return redirect()->route('dashboard.vehicle-inspection-center');
+    }
+
+    public function completeInspection()
+    {
+        $this->validate([
+            'report' => 'required|string|min:10',
+        ]);
+
+        // Update inspection report and mark as completed
+        $this->inspection->update([
+            'report' => $this->report,
+            'completed_at' => now(),
+        ]);
+
+        $this->appointment->update([
+            'status' => AppointmentStatus::COMPLETED,
+            'completed_at' => now()
+        ]);
+
+        // Send email notification to vehicle owner
+        try {
+            Mail::to($this->appointment->vehicle->user->email)
+                ->send(new InspectionReportReady($this->inspection, $this->appointment));
+            
+            session()->flash('message', 'Inspection completed successfully! Email notification sent to vehicle owner.');
+        } catch (\Exception $e) {
+            // Log the error but don't fail the completion
+            Log::error('Failed to send inspection report ready email: ' . $e->getMessage());
+            session()->flash('message', 'Inspection completed successfully! (Email notification failed to send)');
+        }
         
         return redirect()->route('dashboard.vehicle-inspection-center');
     }
