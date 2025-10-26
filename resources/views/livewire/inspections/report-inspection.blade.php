@@ -33,8 +33,11 @@
             <!-- Search Input -->
             <div class="mb-4">
                 <label for="sparepart-search" class="block text-sm font-medium text-gray-700 mb-2">
-                    Search Spareparts
+                    Search Compatible Spareparts
                 </label>
+                <div class="text-xs text-gray-500 mb-2">
+                    Showing only parts compatible with {{ $appointment->vehicle->make }} {{ $appointment->vehicle->model }} ({{ $appointment->vehicle->year }})
+                </div>
                 <input
                     type="text"
                     wire:model.live="sparepartSearch"
@@ -50,52 +53,140 @@
                             <button
                                 type="button"
                                 wire:click="selectSparepart('{{ $sparepart['id'] }}')"
-                                class="w-full px-4 py-2 text-left hover:bg-gray-50 border-b border-gray-200 last:border-b-0"
+                                class="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-200 last:border-b-0 transition-colors cursor-pointer"
                             >
-                                <div class="font-medium">{{ $sparepart['name'] }}</div>
-                                <div class="text-sm text-gray-500">{{ $sparepart['description'] ?? 'No description' }}</div>
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <div class="font-medium text-gray-900">{{ $sparepart['name'] }}</div>
+                                        <div class="text-sm text-gray-500 mt-1">
+                                            {{ $sparepart['description'] ?? 'No description' }}
+                                        </div>
+                                        <div class="flex items-center space-x-2 mt-2">
+                                            @if(isset($sparepart['category']))
+                                                <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">{{ $sparepart['category'] }}</span>
+                                            @endif
+                                            @if(isset($sparepart['brand']))
+                                                <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">{{ $sparepart['brand'] }}</span>
+                                            @endif
+                                            @if(isset($sparepart['availability']))
+                                                <span class="px-2 py-1 text-xs font-medium {{ $sparepart['availability'] === 'In Stock' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} rounded-full">
+                                                    {{ $sparepart['availability'] }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="ml-3 flex-shrink-0">
+                                        <div class="text-xs text-green-600 font-medium">
+                                            ✓ Compatible
+                                        </div>
+                                        @if(isset($sparepart['price_range']))
+                                            <div class="text-xs text-gray-500 mt-1">
+                                                ${{ $sparepart['price_range'] }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
                             </button>
                         @endforeach
                     </div>
                 @endif
             </div>
 
-            <!-- Selected Spareparts -->
-            @if(count($selectedSpareparts) > 0)
+            <!-- Damage Spareparts -->
+            @if(count($this->damageSpareparts) > 0)
                 <div class="space-y-3">
-                    <h4 class="font-medium text-gray-900">Selected Spareparts:</h4>
-                    @foreach($this->selectedSpareparts as $sparepart)
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <div class="flex-1">
-                                <div class="font-medium">{{ $sparepart->name }}</div>
-                                <div class="text-sm text-gray-500">{{ $sparepart->description ?? 'No description' }}</div>
-                            </div>
-                            
-                            <div class="flex items-center space-x-3">
-                                <!-- Priority Select -->
-                                <select
-                                    wire:change="updatePriority('{{ $sparepart->id }}', $event.target.value)"
-                                    class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option value="low" {{ ($sparepartPriorities[$sparepart->id] ?? 'medium') === 'low' ? 'selected' : '' }}>Low</option>
-                                    <option value="medium" {{ ($sparepartPriorities[$sparepart->id] ?? 'medium') === 'medium' ? 'selected' : '' }}>Medium</option>
-                                    <option value="high" {{ ($sparepartPriorities[$sparepart->id] ?? 'medium') === 'high' ? 'selected' : '' }}>High</option>
-                                </select>
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-medium text-gray-900">Damage Spareparts ({{ count($this->damageSpareparts) }}):</h4>
+                        <div class="flex items-center space-x-4 text-sm">
+                            @php
+                                $priorityCounts = [
+                                    'high' => 0,
+                                    'medium' => 0,
+                                    'low' => 0
+                                ];
+                                foreach($this->damageSpareparts as $damageSparepart) {
+                                    $priority = $damageSparepart->priority->value;
+                                    $priorityCounts[$priority] = ($priorityCounts[$priority] ?? 0) + 1;
+                                }
+                            @endphp
+                            @if($priorityCounts['high'] > 0)
+                                <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
+                                    {{ $priorityCounts['high'] }} High Priority
+                                </span>
+                            @endif
+                            @if($priorityCounts['medium'] > 0)
+                                <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
+                                    {{ $priorityCounts['medium'] }} Medium Priority
+                                </span>
+                            @endif
+                            @if($priorityCounts['low'] > 0)
+                                <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                                    {{ $priorityCounts['low'] }} Low Priority
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                    @foreach($this->damageSpareparts as $damageSparepart)
+                        @php $sparepart = $damageSparepart->sparepart; @endphp
+                        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="font-medium text-gray-900">{{ $sparepart->name }}</div>
+                                    <div class="text-sm text-gray-500 mt-1">{{ $sparepart->description ?? 'No description' }}</div>
+                                    @if($sparepart->brand)
+                                        <div class="text-xs text-gray-400 mt-1">Brand: {{ $sparepart->brand }}</div>
+                                    @endif
+                                    @if($sparepart->category)
+                                        <span class="inline-block mt-2 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                            {{ $sparepart->category }}
+                                        </span>
+                                    @endif
+                                </div>
                                 
-                                <!-- Remove Button -->
-                                <button
-                                    type="button"
-                                    wire:click="removeSparepart('{{ $sparepart->id }}')"
-                                    class="text-red-600 hover:text-red-800 text-sm font-medium"
-                                >
-                                    Remove
-                                </button>
+                                <div class="flex items-center space-x-3 ml-4">
+                                    <!-- Priority Buttons -->
+                                    <div class="flex flex-col space-y-2">
+                                        <div class="text-xs font-medium text-gray-700">Priority:</div>
+                                        <div class="flex space-x-1">
+                                            <button
+                                                type="button"
+                                                wire:click="updatePriority('{{ $sparepart->id }}', 'low')"
+                                                class="px-3 py-1 text-xs font-medium rounded-md transition-colors {{ $damageSparepart->priority->value === 'low' ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-700' }}"
+                                            >
+                                                Low
+                                            </button>
+                                            <button
+                                                type="button"
+                                                wire:click="updatePriority('{{ $sparepart->id }}', 'medium')"
+                                                class="px-3 py-1 text-xs font-medium rounded-md transition-colors {{ $damageSparepart->priority->value === 'medium' ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' : 'bg-gray-100 text-gray-600 hover:bg-yellow-50 hover:text-yellow-700' }}"
+                                            >
+                                                Medium
+                                            </button>
+                                            <button
+                                                type="button"
+                                                wire:click="updatePriority('{{ $sparepart->id }}', 'high')"
+                                                class="px-3 py-1 text-xs font-medium rounded-md transition-colors {{ $damageSparepart->priority->value === 'high' ? 'bg-red-100 text-red-800 border border-red-300' : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-700' }}"
+                                            >
+                                                High
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Remove Button -->
+                                    <button
+                                        type="button"
+                                        wire:click="removeSparepart('{{ $sparepart->id }}')"
+                                        class="px-3 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
             @else
-                <div class="text-gray-500 text-sm italic">No spareparts selected yet. Use the search above to add damaged spareparts.</div>
+                <div class="text-gray-500 text-sm italic">No damage spareparts selected yet. Use the search above to add damaged spareparts.</div>
             @endif
         </div>
 

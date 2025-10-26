@@ -6,6 +6,8 @@ use App\Enums\Priority;
 use App\Models\Inspection;
 use App\Models\Sparepart;
 use App\Models\Appointment;
+use App\Models\DamageSparepart;
+use App\Services\SparepartCatalogService;
 use Livewire\Component;
 
 class ReportInspection extends Component
@@ -16,7 +18,6 @@ class ReportInspection extends Component
     // Form fields
     public string $report = '';
     public string $sparepartSearch = '';
-    public array $selectedSpareparts = [];
     public array $sparepartPriorities = [];
     
     public $sparepartSearchResults = [];
@@ -27,7 +28,7 @@ class ReportInspection extends Component
 
         $this->appointment = Appointment::find($inspection->appointment_id);
         
-        // Load existing damage spareparts
+        // Load existing damage spareparts priorities
         $this->loadExistingDamageSpareparts();
     }
 
@@ -38,34 +39,86 @@ class ReportInspection extends Component
             return;
         }
 
-        $this->sparepartSearchResults = Sparepart::where('name', 'like', '%' . $this->sparepartSearch . '%')
-            ->limit(10)
-            ->get()
-            ->toArray();
+        // Get vehicle information for compatibility filtering
+        $vehicle = $this->appointment->vehicle;
+        $vehicleMake = $vehicle->make;
+        $vehicleModel = $vehicle->model;
+        $vehicleYear = $vehicle->year;
+
+        // First try to search in the catalog service with vehicle compatibility
+        $catalogService = new SparepartCatalogService();
+        $catalogResults = $catalogService->searchSpareparts(
+            $this->sparepartSearch, 
+            $vehicleMake, 
+            $vehicleModel, 
+            $vehicleYear, 
+            null, 
+            10
+        );
+        
+        if (!empty($catalogResults)) {
+            // Convert catalog results to database records
+            $this->sparepartSearchResults = $this->convertCatalogResultsToDatabaseRecords($catalogResults);
+        } else {
+            // Fallback to database search with vehicle compatibility
+            $this->sparepartSearchResults = Sparepart::where('name', 'like', '%' . $this->sparepartSearch . '%')
+                ->where(function($query) use ($vehicleMake, $vehicleModel, $vehicleYear) {
+                    $query->where(function($q) use ($vehicleMake, $vehicleModel, $vehicleYear) {
+                        $q->where('vehicle_make', $vehicleMake)
+                          ->where('vehicle_model', $vehicleModel);
+                        
+                        if ($vehicleYear) {
+                            $q->where(function($yearQuery) use ($vehicleYear) {
+                                $yearQuery->whereNull('year_range')
+                                         ->orWhere('year_range', 'like', '%' . $vehicleYear . '%');
+                            });
+                        }
+                    });
+                })
+                ->limit(10)
+                ->get()
+                ->toArray();
+        }
     }
 
     public function selectSparepart($sparepartId)
     {
-        $sparepart = Sparepart::find($sparepartId);
-        
-        if ($sparepart && !in_array($sparepartId, $this->selectedSpareparts)) {
-            $this->selectedSpareparts[] = $sparepartId;
-            $this->sparepartPriorities[$sparepartId] = Priority::MEDIUM->value;
-        }
+        DamageSparepart::create([
+            'inspection_id' => $this->inspection->id,
+            'sparepart_id' => $sparepartId,
+            'priority' => Priority::MEDIUM->value,
+        ]);
         
         $this->sparepartSearch = '';
         $this->sparepartSearchResults = [];
+        
+        // Refresh the damage spareparts priorities
+        $this->loadExistingDamageSpareparts();
     }
 
     public function removeSparepart($sparepartId)
     {
-        $this->selectedSpareparts = array_filter($this->selectedSpareparts, fn($id) => $id !== $sparepartId);
-        unset($this->sparepartPriorities[$sparepartId]);
+        // Delete the DamageSparepart record from database
+        DamageSparepart::where('inspection_id', $this->inspection->id)
+            ->where('sparepart_id', $sparepartId)
+            ->delete();
+        
+        // Refresh the damage spareparts priorities
+        $this->loadExistingDamageSpareparts();
     }
 
     public function updatePriority($sparepartId, $priority)
     {
+        // Update the priority in the database
+        DamageSparepart::where('inspection_id', $this->inspection->id)
+            ->where('sparepart_id', $sparepartId)
+            ->update(['priority' => $priority]);
+        
+        // Update local state
         $this->sparepartPriorities[$sparepartId] = $priority;
+        
+        // Refresh the damage spareparts priorities
+        $this->loadExistingDamageSpareparts();
     }
 
     public function saveReport()
@@ -80,24 +133,9 @@ class ReportInspection extends Component
             'completed_at' => now(),
         ]);
 
-        // Save damage spareparts
-        foreach ($this->selectedSpareparts as $sparepartId) {
-            $this->inspection->damageSpareparts()->updateOrCreate(
-                ['sparepart_id' => $sparepartId],
-                [
-                    'priority' => $this->sparepartPriorities[$sparepartId] ?? Priority::MEDIUM->value,
-                ]
-            );
-        }
-
-        // Remove spareparts that are no longer selected
-        $this->inspection->damageSpareparts()
-            ->whereNotIn('sparepart_id', $this->selectedSpareparts)
-            ->delete();
-
         session()->flash('message', 'Inspection report saved successfully!');
         
-        return redirect()->route('dashboard.inspection-center');
+        return redirect()->route('dashboard.vehicle-inspection-center');
     }
 
     private function loadExistingDamageSpareparts()
@@ -105,7 +143,6 @@ class ReportInspection extends Component
         $existingDamageSpareparts = $this->inspection->damageSpareparts()->with('sparepart')->get();
         
         foreach ($existingDamageSpareparts as $damageSparepart) {
-            $this->selectedSpareparts[] = $damageSparepart->sparepart_id;
             $this->sparepartPriorities[$damageSparepart->sparepart_id] = $damageSparepart->priority->value;
         }
         
@@ -114,13 +151,46 @@ class ReportInspection extends Component
         }
     }
 
-    public function getSelectedSparepartsProperty()
+    public function getDamageSparepartsProperty()
     {
-        if (empty($this->selectedSpareparts)) {
-            return collect();
+        return DamageSparepart::where('inspection_id', $this->inspection->id)
+            ->with('sparepart')
+            ->get();
+    }
+
+    public function getPriorityForSparepart($sparepartId)
+    {
+        return $this->sparepartPriorities[$sparepartId] ?? 'medium';
+    }
+
+    /**
+     * Convert catalog results to database records
+     */
+    private function convertCatalogResultsToDatabaseRecords($catalogResults)
+    {
+        $databaseRecords = [];
+        
+        foreach ($catalogResults as $catalogPart) {
+            // Create or find sparepart in database
+            $sparepart = Sparepart::updateOrCreate(
+                ['number' => $catalogPart['part_number']],
+                [
+                    'name' => $catalogPart['name'],
+                    'description' => $catalogPart['description'] ?? null,
+                    'brand' => $catalogPart['brand'] ?? null,
+                    'vehicle_make' => $catalogPart['vehicle_make'] ?? null,
+                    'vehicle_model' => $catalogPart['vehicle_model'] ?? null,
+                    'year_range' => $catalogPart['year_range'] ?? null,
+                    'category' => $catalogPart['category'] ?? null,
+                    'price_range' => $catalogPart['price_range'] ?? null,
+                    'availability' => $catalogPart['availability'] ?? 'In Stock',
+                ]
+            );
+            
+            $databaseRecords[] = $sparepart->toArray();
         }
         
-        return Sparepart::whereIn('id', $this->selectedSpareparts)->get();
+        return $databaseRecords;
     }
 
     public function render()
