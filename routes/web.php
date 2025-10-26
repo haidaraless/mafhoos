@@ -5,6 +5,7 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
+use App\Livewire\Settings\SparepartCatalog;
 use App\Livewire\Dashboard\VehicleInspectionCenter;
 use App\Livewire\Dashboard\SparepartsSupplier;
 use App\Livewire\Dashboard\AutoRepairWorkshop;
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
+    Route::get('settings/sparepart-catalog', SparepartCatalog::class)->name('settings.sparepart-catalog');
 
     Route::get('settings/two-factor', TwoFactor::class)
         ->middleware(
@@ -53,5 +55,5 @@ Route::middleware(['auth'])->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/vehicles.php';
-require __DIR__.'/appointments.php';
 require __DIR__.'/inspections.php';
+require __DIR__.'/appointments.php';
