@@ -27,7 +27,7 @@ class PayFeesController extends Controller
         $paymentId = request('id');
 
         if (!$paymentId) {
-            return redirect()->route('appointments.index')->with('error', 'Missing payment reference.');
+            return redirect()->route('dashboard.vehicle-owner')->with('error', 'Missing payment reference.');
         }
 
         try {
@@ -36,7 +36,7 @@ class PayFeesController extends Controller
                 ->get("https://api.moyasar.com/v1/payments/{$paymentId}");
 
             if (!$response->successful()) {
-                return redirect()->route('appointments.index')->with('error', 'Payment not found.');
+                return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment not found.');
             }
 
             $payment = $response->json();
@@ -44,13 +44,13 @@ class PayFeesController extends Controller
             $appointmentId = $payment['metadata']['appointment_id'] ?? null;
 
             if (!$appointmentId) {
-                return redirect()->route('appointments.index')->with('error', 'Invalid payment metadata.');
+                return redirect()->route('dashboard.vehicle-owner')->with('error', 'Invalid payment metadata.');
             }
 
             $appointment = Appointment::find($appointmentId);
 
             if (!$appointment) {
-                return redirect()->route('appointments.index')->with('error', 'Appointment not found.');
+                return redirect()->route('dashboard.vehicle-owner')->with('error', 'Appointment not found.');
             }
 
             if ($payment['status'] === 'paid') {
@@ -78,11 +78,11 @@ class PayFeesController extends Controller
                             ->send(new AppointmentConfirmation($appointment, $fee));
                     }
                 }
-                return redirect()->route('appointments.index')->with('success', 'Payment completed successfully! Your appointment has been confirmed and you will receive an email confirmation shortly.');
+                return redirect()->route('dashboard.vehicle-owner')->with('success', 'Payment completed successfully! Your appointment has been confirmed and you will receive an email confirmation shortly.');
             }
-            return redirect()->route('appointments.index')->with('error', 'Payment failed.');
+            return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment failed.');
         } catch (\Exception $e) {
-            return redirect()->route('appointments.index')->with('error', 'Payment verification failed: ' . $e->getMessage());
+            return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment verification failed: ' . $e->getMessage());
         }
     }
 
