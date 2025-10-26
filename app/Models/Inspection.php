@@ -44,4 +44,9 @@ class Inspection extends Model
     {
         return $this->hasMany(DamageSparepart::class);
     }
+
+    public function quotationRequests(): HasMany
+    {
+        return $this->hasMany(QuotationRequest::class);
+    }
 }

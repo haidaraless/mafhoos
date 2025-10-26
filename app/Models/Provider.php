@@ -33,4 +33,14 @@ class Provider extends Model
     {
         return $this->hasMany(Appointment::class);
     }
+
+    public function quotationProviders(): HasMany
+    {
+        return $this->hasMany(QuotationProvider::class);
+    }
+
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class);
+    }
 }
