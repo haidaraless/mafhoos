@@ -88,11 +88,9 @@
                                     </button>
                                 @elseif($appointment->status->value === 'confirmed')
                                     <button 
-                                        wire:click="completeAppointment('{{ $appointment->id }}')"
-                                        wire:confirm="Are you sure you want to mark this appointment as completed?"
-                                        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
-                                    >
-                                        Complete
+                                        wire:click="startInspection('{{ $appointment->id }}')"
+                                        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                                        Start Inspection
                                     </button>
                                 @endif
                                 

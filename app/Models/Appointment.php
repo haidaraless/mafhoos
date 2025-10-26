@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
-use App\Enums\AccountType;
 
 class Appointment extends Model
 {
@@ -59,6 +58,11 @@ class Appointment extends Model
     public function fees(): HasMany
     {
         return $this->hasMany(Fee::class);
+    }
+
+    public function getInspectionType(): string
+    {
+        return ucfirst(str_replace('-', ' ', $this->inspection_type->value))    ;
     }
 
     public static function createDraftAppointment(): Appointment

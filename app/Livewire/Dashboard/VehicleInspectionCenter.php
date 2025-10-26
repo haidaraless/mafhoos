@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Enums\AppointmentStatus;
 use App\Enums\ProviderType;
 use App\Models\Appointment;
+use App\Models\Inspection;
 use App\Models\Provider;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -63,7 +64,7 @@ class VehicleInspectionCenter extends Component
         $this->dispatch('appointment-confirmed', $appointmentId);
     }
 
-    public function completeAppointment($appointmentId)
+    public function startInspection($appointmentId)
     {
         $appointment = Appointment::find($appointmentId);
         
@@ -72,13 +73,21 @@ class VehicleInspectionCenter extends Component
             return;
         }
 
-        $appointment->update([
-            'status' => AppointmentStatus::COMPLETED,
-            'completed_at' => now()
-        ]);
+        // Create inspection record if it doesn't exist
+        $inspection = Inspection::firstOrCreate(
+            ['appointment_id' => $appointment->id],
+            [
+                'number' => 'INS-' . strtoupper(substr($appointment->id, -8)),
+                'type' => $appointment->inspection_type,
+                'technician_id' => Auth::id(),
+                'provider_id' => $appointment->provider_id,
+                'vehicle_id' => $appointment->vehicle_id,
+                'started_at' => now(),
+            ]
+        );
 
-        $this->loadInspectionAppointments();
-        $this->dispatch('appointment-completed', $appointmentId);
+        // Redirect to the inspection report creation page
+        return $this->redirect(route('inspections.report', $inspection), true);
     }
 
     public function cancelAppointment($appointmentId)
