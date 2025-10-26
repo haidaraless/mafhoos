@@ -26,6 +26,26 @@ class Appointment extends Model
         'completed_at' => 'datetime',
     ];
 
+    public function scopeConfirmed($query)
+    {
+        return $query->where('status', AppointmentStatus::CONFIRMED->value);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', AppointmentStatus::PENDING->value);
+    }
+
+    public function scopeCancelled($query)
+    {
+        return $query->where('status', AppointmentStatus::CANCELLED->value);
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', AppointmentStatus::COMPLETED->value);
+    }
+
     public function provider(): BelongsTo
     {
         return $this->belongsTo(Provider::class);
@@ -41,16 +61,25 @@ class Appointment extends Model
         return $this->hasMany(Fee::class);
     }
 
-    public static function createDraftAppointment(string $vehicleId=null): Appointment
+    public static function createDraftAppointment(): Appointment
     {
-        $user = User::find(Auth::user()->id);
-
-        if (Auth::user()->currentAccount->type !== AccountType::VEHICLE_OWNER) {
-            return abort(403, 'You are not authorized');
+        if (! Auth::user()->currentAccount->isUser()) {
+            abort(403, 'You are not authorized');
         }
+
         return self::create([
-            'vehicle_id' => $vehicleId,
             'status' => AppointmentStatus::PENDING->value,
+        ]);
+    }
+
+    public static function createAppointmentViaVehicle(Vehicle $vehicle): Appointment
+    {
+        if (! Auth::user()->currentAccount->isUser()) {
+            abort(403, 'You are not authorized');
+        }
+
+        return self::create([
+            'vehicle_id' => $vehicle->id,
         ]);
     }
 }

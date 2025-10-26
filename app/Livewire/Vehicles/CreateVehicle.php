@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Vehicles;
 
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +79,8 @@ class CreateVehicle extends Component
             ]);
 
             # create draft appointment and redirect to select inspection center
-            $appointment = Appointment::createDraftAppointment($vehicle->id);
+            $appointment = Appointment::createAppointmentViaVehicle($vehicle);
+            
             return $this->redirect(route('appointments.inspection-center.select', $appointment), true);
 
         } catch (\Exception $e) {
@@ -326,6 +327,6 @@ class CreateVehicle extends Component
 
     public function render()
     {
-        return view('livewire.create-vehicle');
+        return view('livewire.vehicles.create-vehicle');
     }
 }

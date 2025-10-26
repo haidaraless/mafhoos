@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Enums\AccountType;
 use App\Enums\ProviderType;
 use App\Models\Account;
 use App\Models\City;
@@ -32,7 +31,6 @@ class ProviderSetupSeeder extends Seeder
                 'email' => 'riyadh.inspection@example.com',
                 'location' => 'King Fahd Road, Riyadh',
                 'type' => ProviderType::VEHICLE_INSPECTION_CENTER,
-                'account_type' => AccountType::VEHICLE_INSPECTION_CENTER,
                 'user_name' => 'Ahmed Al-Rashid',
                 'user_email' => 'ahmed.rashid@example.com',
             ],
@@ -43,7 +41,6 @@ class ProviderSetupSeeder extends Seeder
                 'email' => 'riyadh.repair@example.com',
                 'location' => 'Al-Hamra District, Riyadh',
                 'type' => ProviderType::AUTO_REPAIR_WORKSHOP,
-                'account_type' => AccountType::AUTO_REPAIR_WORKSHOP,
                 'user_name' => 'Mohammed Al-Sheikh',
                 'user_email' => 'mohammed.sheikh@example.com',
             ],
@@ -54,7 +51,6 @@ class ProviderSetupSeeder extends Seeder
                 'email' => 'riyadh.spareparts@example.com',
                 'location' => 'Industrial Area, Riyadh',
                 'type' => ProviderType::SPARE_PARTS_SUPPLIER,
-                'account_type' => AccountType::SPARE_PARTS_SUPPLIER,
                 'user_name' => 'Omar Al-Mansouri',
                 'user_email' => 'omar.mansouri@example.com',
             ],
@@ -65,7 +61,6 @@ class ProviderSetupSeeder extends Seeder
                 'email' => 'riyadh.services@example.com',
                 'location' => 'Al-Aziziyah District, Riyadh',
                 'type' => ProviderType::VEHICLE_INSPECTION_CENTER,
-                'account_type' => AccountType::VEHICLE_INSPECTION_CENTER,
                 'user_name' => 'Khalid Al-Zahrani',
                 'user_email' => 'khalid.zahrani@example.com',
             ],
@@ -76,7 +71,6 @@ class ProviderSetupSeeder extends Seeder
                 'email' => 'riyadh.autocenter@example.com',
                 'location' => 'Quba District, Riyadh',
                 'type' => ProviderType::AUTO_REPAIR_WORKSHOP,
-                'account_type' => AccountType::AUTO_REPAIR_WORKSHOP,
                 'user_name' => 'Saeed Al-Ghamdi',
                 'user_email' => 'saeed.ghamdi@example.com',
             ],
@@ -93,34 +87,28 @@ class ProviderSetupSeeder extends Seeder
                 ]
             );
 
+            // Create provider
+            $provider = Provider::create([
+                'city_id' => $riyadh->id,
+                'name' => $providerData['name'],
+                'commercial_record' => $providerData['commercial_record'],
+                'mobile' => $providerData['mobile'],
+                'email' => $providerData['email'],
+                'location' => $providerData['location'],
+                'type' => $providerData['type']->value,
+            ]);
+
             // Create account for this user
-            $account = Account::query()->firstOrCreate(
-                [
-                    'user_id' => $user->id,
-                    'type' => $providerData['account_type']->value,
-                ],
-                []
-            );
+            $account = Account::create([
+                    'accountable_id' => $provider->id,
+                    'accountable_type' => Provider::class,
+                ]);
 
             // Set this account as current for the user
             if (!$user->current_account_id) {
                 $user->current_account_id = $account->id;
                 $user->save();
             }
-
-            // Create provider
-            Provider::query()->firstOrCreate(
-                [ 'account_id' => $account->id ],
-                [
-                    'city_id' => $riyadh->id,
-                    'name' => $providerData['name'],
-                    'commercial_record' => $providerData['commercial_record'],
-                    'mobile' => $providerData['mobile'],
-                    'email' => $providerData['email'],
-                    'location' => $providerData['location'],
-                    'type' => $providerData['type']->value,
-                ]
-            );
         }
     }
 

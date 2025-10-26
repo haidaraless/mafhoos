@@ -14,10 +14,9 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-					@php($provider = \App\Models\Provider::query()->where('account_id', optional(auth()->user()?->currentAccount)->id)->first())
-					@if($provider)
+					@if(Auth::user()->currentAccount->isProvider())
                         <flux:navlist.item icon="calendar" :href="route('appointments.index')" :current="request()->routeIs('appointments.index')" wire:navigate>{{ __('Appointments') }}</flux:navlist.item>
-						<flux:navlist.item icon="clock" :href="route('providers.available-times.manage', $provider)" :current="request()->routeIs('providers.available-times.manage')" wire:navigate>{{ __('Available Times') }}</flux:navlist.item>
+						<flux:navlist.item icon="clock" :href="route('providers.available-times.manage')" :current="request()->routeIs('providers.available-times.manage')" wire:navigate>{{ __('Available Times') }}</flux:navlist.item>
 					@endif
                 </flux:navlist.group>
             </flux:navlist>

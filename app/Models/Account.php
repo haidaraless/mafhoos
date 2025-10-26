@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\AccountType;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;   
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Account extends Model
@@ -15,12 +13,18 @@ class Account extends Model
 
     protected $guarded = [];
 
-    protected $casts = [
-        'type' => AccountType::class,
-    ];
-
     public function accountable(): MorphTo
     {
         return $this->morphTo();
+    }
+    
+    public function isProvider(): bool
+    {
+        return $this->accountable_type === Provider::class;
+    }
+
+    public function isUser(): bool
+    {
+        return $this->accountable_type === User::class;
     }
 }

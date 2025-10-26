@@ -8,6 +8,7 @@ use App\Models\AvailableTime;
 use App\Models\Provider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use App\Enums\ProviderType;
 use Livewire\Component;
 
 class ManageAvailableTimes extends Component
@@ -19,10 +20,18 @@ class ManageAvailableTimes extends Component
 
     public ?string $newDay = null;
 
-    public function mount(Provider $provider): void
+    public function mount(): void
     {
-        abort_unless($provider->account && $provider->account->user_id === Auth::id(), 403);
-        $this->provider = $provider;
+        $this->provider = Provider::find(Auth::user()->currentAccount->accountable_id);
+
+        if (is_null($this->provider)) {
+            abort(403, 'You are not authorized to access this page');
+        }
+
+        if ($this->provider->type !== ProviderType::VEHICLE_INSPECTION_CENTER) {
+            abort(403, 'You are not authorized to access this page');       
+        }
+
         $this->loadSlots();
     }
 
