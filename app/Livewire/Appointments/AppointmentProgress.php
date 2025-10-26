@@ -8,6 +8,7 @@ use Livewire\Component;
 class AppointmentProgress extends Component
 {
     public $appointmentId;
+    public $autoQuotationRequest = false;
 
     protected $listeners = [
         'appointment-updated' => '$refresh',
@@ -18,6 +19,7 @@ class AppointmentProgress extends Component
     public function mount(Appointment $appointment)
     {
         $this->appointmentId = $appointment->id;
+        $this->autoQuotationRequest = $appointment->auto_quotation_request ?? false;
     }
 
     public function handleAppointmentCompleted()
@@ -30,6 +32,17 @@ class AppointmentProgress extends Component
     {
         // Handle edit appointment logic
         $this->dispatch('edit-appointment-requested', $appointmentId);
+    }
+
+    public function updatedAutoQuotationRequest()
+    {
+        // Update the appointment with the new auto quotation request value
+        $appointment = Appointment::find($this->appointmentId);
+        if ($appointment) {
+            $appointment->update([
+                'auto_quotation_request' => $this->autoQuotationRequest
+            ]);
+        }
     }
 
     public function render()

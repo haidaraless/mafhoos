@@ -3,7 +3,10 @@
 namespace App\Livewire\Dashboard;
 
 use App\Enums\ProviderType;
+use App\Enums\QuotationRequestStatus;
+use App\Enums\QuotationType;
 use App\Models\Provider;
+use App\Models\QuotationRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -12,6 +15,8 @@ class SparepartsSupplier extends Component
 {
     public Collection $quotationRequests;
     public Provider $provider;
+
+    protected $listeners = ['refresh-quotation-requests' => 'loadQuotationRequests'];
 
     public function mount()
     {
@@ -36,9 +41,21 @@ class SparepartsSupplier extends Component
             return;
         }
 
-        // TODO: Implement quotation requests when the feature is added
-        // For now, return empty collection
-        $this->quotationRequests = collect();
+        $providerId = $this->provider->id;
+        
+        $this->quotationRequests = QuotationRequest::whereHas('providers', function ($query) use ($providerId) {
+            $query->where('provider_id', $providerId);
+        })
+        ->where('status', QuotationRequestStatus::OPEN)
+        ->where('type', QuotationType::SPARE_PARTS)
+        ->with([
+            'inspection.appointment.vehicle.user',
+            'inspection.damageSpareparts.sparepart',
+            'quotations' => function ($query) use ($providerId) {
+                $query->where('provider_id', $providerId);
+            }
+        ])
+        ->get();
     }
 
     public function render()

@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Enums\QuotationRequestStatus;
+use App\Enums\QuotationType;
 use App\Models\Provider;
 use App\Models\QuotationRequest;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,6 +14,8 @@ class AutoRepairWorkshop extends Component
 {
     public Collection $quotationRequests;
     public Provider $provider;
+
+    protected $listeners = ['refresh-quotation-requests' => 'loadQuotationRequests'];
 
     public function mount()
     {
@@ -26,7 +29,17 @@ class AutoRepairWorkshop extends Component
         
         $this->quotationRequests = QuotationRequest::whereHas('providers', function ($query) use ($providerId) {
             $query->where('provider_id', $providerId);
-        })->where('status', QuotationRequestStatus::OPEN)->get();
+        })
+        ->where('status', QuotationRequestStatus::OPEN)
+        ->where('type', QuotationType::REPAIR)
+        ->with([
+            'inspection.appointment.vehicle.user',
+            'inspection.damageSpareparts.sparepart',
+            'quotations' => function ($query) use ($providerId) {
+                $query->where('provider_id', $providerId);
+            }
+        ])
+        ->get();
     }
 
     public function render()

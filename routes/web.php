@@ -10,6 +10,8 @@ use App\Livewire\Dashboard\VehicleInspectionCenter;
 use App\Livewire\Dashboard\SparepartsSupplier;
 use App\Livewire\Dashboard\AutoRepairWorkshop;
 use App\Livewire\Dashboard\VehicleOwner;
+use App\Livewire\Quotations\ViewQuotationRequest;
+use App\Livewire\Quotations\BrowseQuotations;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\DashboardController;
@@ -30,6 +32,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/providers')->group(function () {
         Route::get('/available-times', ManageAvailableTimes::class)->name('providers.available-times.manage');
     });
+
+    Route::get('/quotation-requests', BrowseQuotations::class)->name('quotation-requests.browse');
+    Route::get('/quotation-requests/{quotationRequestId}', ViewQuotationRequest::class)->name('quotation-requests.view');
 });
 
 Route::middleware(['auth'])->group(function () {

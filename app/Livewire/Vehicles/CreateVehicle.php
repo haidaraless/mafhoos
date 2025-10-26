@@ -161,11 +161,11 @@ class CreateVehicle extends Component
             "decoder": {
                 "make": {
                 "desc": "Make",
-                "value": "Audi"
+                "value": "Toyota"
                 },
                 "model": {
                 "desc": "Model",
-                "value": "Q5"
+                "value": "Camry"
                 },
                 "model_year": {
                 "desc": "Model year",

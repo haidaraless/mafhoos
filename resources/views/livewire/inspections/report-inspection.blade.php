@@ -190,23 +190,6 @@
             @endif
         </div>
 
-        <!-- Auto Quotation Request Checkbox -->
-        <div class="mb-6">
-            <div class="flex items-center">
-                <input
-                    type="checkbox"
-                    wire:model="appointment.auto_quotation_request"
-                    id="auto_quotation_request"
-                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label for="auto_quotation_request" class="ml-2 block text-sm text-gray-900">
-                    Automatically create quotation requests after inspection completion
-                </label>
-            </div>
-            <p class="mt-1 text-xs text-gray-500">
-                This will automatically create quotation requests for spare parts (if damaged parts are found) and repairs.
-            </p>
-        </div>
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center">
