@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
 use App\Models\Vehicle;
+use App\Models\Inspection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -14,11 +15,13 @@ class VehicleOwner extends Component
     public Collection $vehicles;
     public Collection $draftAppointments;
     public Collection $upcomingAppointments;
+    public Collection $completedInspections;
 
     public function mount()
     {
         $this->loadVehicles();
         $this->loadAppointments();
+        $this->loadCompletedInspections();
     }
 
     public function loadVehicles()
@@ -39,6 +42,15 @@ class VehicleOwner extends Component
         $this->upcomingAppointments = Appointment::confirmed()->whereIn('vehicle_id', $this->vehicles->pluck('id'))   
             ->where('scheduled_at', '>', now())
             ->orderBy('scheduled_at', 'asc')
+            ->get();
+    }
+
+    public function loadCompletedInspections()
+    {
+        $this->completedInspections = Inspection::whereIn('vehicle_id', $this->vehicles->pluck('id'))
+            ->whereNotNull('completed_at')
+            ->with(['vehicle', 'provider', 'appointment'])
+            ->orderBy('completed_at', 'desc')
             ->get();
     }
 
@@ -72,6 +84,11 @@ class VehicleOwner extends Component
 
         $this->loadAppointments();
         $this->dispatch('appointment-cancelled', $appointmentId);
+    }
+
+    public function viewInspection($inspectionId)
+    {
+        return $this->redirect(route('inspections.view', $inspectionId), true);
     }
 
     public function viewAppointment($appointmentId)

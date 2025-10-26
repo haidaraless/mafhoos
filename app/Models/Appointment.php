@@ -23,6 +23,7 @@ class Appointment extends Model
         'confirmed_at' => 'datetime',
         'cancelled_at' => 'datetime',
         'completed_at' => 'datetime',
+        'auto_quotation_request' => 'boolean',
     ];
 
     public function scopeConfirmed($query)

@@ -4,10 +4,13 @@ namespace App\Livewire\Inspections;
 
 use App\Enums\AppointmentStatus;
 use App\Enums\Priority;
+use App\Enums\QuotationRequestStatus;
+use App\Enums\QuotationType;
 use App\Models\Inspection;
 use App\Models\Sparepart;
 use App\Models\Appointment;
 use App\Models\DamageSparepart;
+use App\Models\QuotationRequest;
 use App\Services\SparepartCatalogService;
 use App\Mail\InspectionReportReady;
 use Illuminate\Support\Facades\Mail;
@@ -34,6 +37,11 @@ class ReportInspection extends Component
         
         // Load existing damage spareparts priorities
         $this->loadExistingDamageSpareparts();
+    }
+
+    public function updatedAppointmentAutoQuotationRequest()
+    {
+        $this->appointment->save();
     }
 
     public function updatedSparepartSearch()
@@ -159,19 +167,51 @@ class ReportInspection extends Component
             'completed_at' => now()
         ]);
 
+        // Create automatic quotation requests if enabled
+        if ($this->appointment->auto_quotation_request) {
+            $this->createAutomaticQuotationRequests();
+        }
+
         // Send email notification to vehicle owner
         try {
             Mail::to($this->appointment->vehicle->user->email)
                 ->send(new InspectionReportReady($this->inspection, $this->appointment));
             
-            session()->flash('message', 'Inspection completed successfully! Email notification sent to vehicle owner.');
+            $message = 'Inspection completed successfully! Email notification sent to vehicle owner.';
+            if ($this->appointment->auto_quotation_request) {
+                $message .= ' Quotation requests have been automatically created.';
+            }
+            session()->flash('message', $message);
         } catch (\Exception $e) {
             // Log the error but don't fail the completion
             Log::error('Failed to send inspection report ready email: ' . $e->getMessage());
-            session()->flash('message', 'Inspection completed successfully! (Email notification failed to send)');
+            $message = 'Inspection completed successfully! (Email notification failed to send)';
+            if ($this->appointment->auto_quotation_request) {
+                $message .= ' Quotation requests have been automatically created.';
+            }
+            session()->flash('message', $message);
         }
         
         return redirect()->route('dashboard.vehicle-inspection-center');
+    }
+
+    private function createAutomaticQuotationRequests()
+    {
+        // Create spare parts quotation request if there are damaged spareparts
+        if ($this->inspection->damageSpareparts->count() > 0) {
+            QuotationRequest::create([
+                'inspection_id' => $this->inspection->id,
+                'type' => QuotationType::SPARE_PARTS,
+                'status' => QuotationRequestStatus::OPEN,
+            ]);
+        }
+
+        // Always create repair quotation request
+        QuotationRequest::create([
+            'inspection_id' => $this->inspection->id,
+            'type' => QuotationType::REPAIR,
+            'status' => QuotationRequestStatus::OPEN,
+        ]);
     }
 
     private function loadExistingDamageSpareparts()

@@ -17,5 +17,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('/inspections')->group(function () {
         Route::get('{inspection}', ReportInspection::class)->name('inspections.report');
+        Route::get('{inspection}/view', \App\Livewire\Inspections\ViewInspection::class)->name('inspections.view');
     });
 });

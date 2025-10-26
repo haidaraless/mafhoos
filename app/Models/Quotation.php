@@ -2,29 +2,31 @@
 
 namespace App\Models;
 
-use App\Enums\Priority;
+use App\Enums\QuotationType;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class DamageSparepart extends Model
+class Quotation extends Model
 {
     use HasUlids;
 
     protected $guarded = [];
 
     protected $casts = [
-        'priority' => Priority::class,
+        'type' => QuotationType::class,
+        'total' => 'decimal:2',
     ];
 
-    public function inspection(): BelongsTo
+    public function provider(): BelongsTo
     {
-        return $this->belongsTo(Inspection::class);
+        return $this->belongsTo(Provider::class);
     }
 
-    public function sparepart(): BelongsTo
+    public function quotationRequest(): BelongsTo
     {
-        return $this->belongsTo(Sparepart::class);
+        return $this->belongsTo(QuotationRequest::class);
     }
 
     public function quotationSpareparts(): HasMany
