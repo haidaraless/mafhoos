@@ -1,53 +1,69 @@
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
-
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
-
-    <form method="POST" wire:submit="login" class="flex flex-col gap-6">
-        <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
-            required
-            autofocus
-            autocomplete="email"
-            placeholder="email@example.com"
-        />
-
-        <!-- Password -->
-        <div class="relative">
-            <flux:input
-                wire:model="password"
-                :label="__('Password')"
-                type="password"
-                required
-                autocomplete="current-password"
-                :placeholder="__('Password')"
-                viewable
-            />
-
-            @if (Route::has('password.request'))
-                <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </flux:link>
-            @endif
+<div class="flex flex-col justify-between w-full h-full">
+    <div class="grid grid-cols-1 gap-12">
+        <div class="col-span-1 max-w-lg">
+            <h1 class="text-5xl text-dark-lavender font-bold">
+                {{ __('Log in to your account') }}
+            </h1>
         </div>
+        <!-- Session Status -->
+        <x-auth-session-status :status="session('status')" />
 
-        <!-- Remember Me -->
-        <flux:checkbox wire:model="remember" :label="__('Remember me')" />
+        <form method="POST" wire:submit="login" class="col-span-1 flex flex-col gap-4">
+            <label for="email" class="flex items-center gap-4 p-4 max-w-xl text-rose-quartz hover:text-green-500 @error('email') text-rose-500 @enderror bg-rose-quartz/10 hover:bg-white transition-all ease-in-out duration-300 cursor-pointer rounded-2xl">
+                @svg('phosphor-envelope-simple-light', 'size-10')
+                <div class="flex flex-col w-full">
+                    <h4 class="text-lg text-dark-lavender font-medium">{{ __('Email Address') }}</h4>
+                    <input type="email" name="email" id="email" wire:model="email" required autofocus autocomplete="email" placeholder="example@example.com" class="w-full text-2xl text-dark-lavender placeholder:text-pale-dogwood font-semibold focus:outline-none focus:ring-0 focus:border-none"/>
+                    @error('email')
+                        <span class="mt-0.5 text-xs text-rose-500">{{ $message }}</span>
+                    @enderror
+                </div>
+            </label>
 
-        <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full" data-test="login-button">
-                {{ __('Log in') }}
-            </flux:button>
-        </div>
-    </form>
+            <label for="password" class="flex items-center gap-4 p-4 max-w-xl text-rose-quartz hover:text-green-500 @error('password') text-rose-500 @enderror bg-rose-quartz/10 hover:bg-white transition-all ease-in-out duration-300 cursor-pointer rounded-2xl">
+                @svg('phosphor-password-light', 'size-10')
+                <div class="flex flex-col w-full">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg text-dark-lavender font-medium">{{ __('Password') }}</h4>
+                        @if (Route::has('password.request'))
+                            <flux:link class="text-sm" :href="route('password.request')" wire:navigate>
+                                {{ __('Forgot your password?') }}
+                            </flux:link>
+                        @endif
+                    </div>
+                    <input type="password" name="password" id="password" wire:model="password" required autocomplete="current-password" placeholder="********" class="w-full text-2xl text-dark-lavender placeholder:text-pale-dogwood font-semibold focus:outline-none focus:ring-0 focus:border-none"/>
+                    @error('password')
+                        <span class="mt-0.5 text-xs text-rose-500">{{ $message }}</span>
+                    @enderror
+                </div>
+            </label>
 
+            <label class="flex items-center gap-2 max-w-xl text-dark-lavender">
+                <input type="checkbox" wire:model="remember" class="size-4 rounded border-rose-quartz text-light-lavender focus:ring-0" />
+                <span class="text-sm">{{ __('Remember me') }}</span>
+            </label>
+
+            <button type="submit" class="flex items-center gap-4 p-4 max-w-xl min-h-24 text-sm text-white bg-light-lavender hover:bg-dark-lavender transition-all ease-in-out duration-300 cursor-pointer rounded-2xl">
+                <div class="flex flex-col w-full text-left">
+                    <h4 class="text-2xl font-semibold">{{ __('Log in') }}</h4>
+                    <span wire:loading.remove wire:target="login" class="text-pale-dogwood">{{ __('Enter your email and password to continue') }}</span>
+                    <span wire:loading wire:target="login" class="text-pale-dogwood">{{ __('Logging in...') }}</span>
+                </div>
+                <span wire:loading wire:target="login">
+                    <svg class="animate-spin size-10 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </span>
+                <span wire:loading.remove wire:target="login">
+                    @svg('phosphor-arrow-right-light', 'size-10')
+                </span>
+            </button>
+        </form>
+    </div>
     @if (Route::has('register'))
-        <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
-            <span>{{ __('Don\'t have an account?') }}</span>
+        <div class="flex items-center gap-2">
+            <span>{{ __("Don't have an account?") }}</span>
             <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
         </div>
     @endif
