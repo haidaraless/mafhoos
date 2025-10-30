@@ -12,7 +12,7 @@ class SparepartCatalogService
 
     public function __construct()
     {
-        $this->csvPath = storage_path('app/spareparts_catalog.csv');
+        $this->csvPath = public_path('spareparts_catalog.csv');
         $this->loadCatalogData();
     }
 
