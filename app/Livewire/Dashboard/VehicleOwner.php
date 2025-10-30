@@ -63,7 +63,7 @@ class VehicleOwner extends Component
             $q->where('user_id', Auth::user()->id);
         })
         ->orderBy('created_at', 'desc')
-        ->with(['inspection.appointment.vehicle', 'status', 'type'])
+        ->with(['inspection.appointment.vehicle'])
         ->get();
     }
 

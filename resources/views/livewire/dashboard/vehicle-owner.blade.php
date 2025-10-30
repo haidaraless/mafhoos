@@ -49,50 +49,50 @@
     </div>
 
     <!-- Banner/Action Section: Add Vehicle and Action Buttons -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-16 px-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-16 border-y border-light-lavender/20 py-16">
         <!-- Main Banner Card -->
-        <div class="md:col-span-2 flex flex-col md:flex-row bg-alabaster rounded-2xl p-8 items-center justify-between">
+        <div
+            class="md:col-span-3 flex flex-col md:flex-row border border-light-lavender rounded-2xl p-8 items-center justify-between">
             <div class="flex-1">
                 <h2 class="text-3xl font-extrabold font-montserrat text-dark-lavender mb-2">Don’t know where to start?
                 </h2>
-                <p class="text-base text-gray-600 mb-6">Register your vehicle to get started with inspections and
-                    quotation requests.</p>
+                <p class="text-base text-gray-600 mb-6">Register your vehicle to get started with inspections
+                    andquotation requests.</p>
                 <a href="{{ route('vehicles.create') }}"
-                    class="inline-flex items-center gap-2 px-6 py-3 text-dark-lavender hover:text-alabaster bg-pale-dogwood hover:bg-light-lavender text-base font-bold font-montserrat rounded-full transition">
-                    <span>Add Vehicle</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
+                    class="inline-flex items-center justify-between gap-16 px-6 py-3 border border-light-lavender text-dark-lavender text-base font-medium font-montserrat rounded-full">
+                    <div class="flex items-center gap-2">
+                        @svg('phosphor-car', 'size-5 text-sky-500')
+                        <span>Create a Vehicle</span>
+                    </div>
+                    @svg('phosphor-arrow-right-light', 'size-6')
                 </a>
-            </div>
-            <div class="hidden md:flex w-40 h-32 items-center justify-center">
-                <!-- Optional: Place an SVG illustration of a car or onboarding here for extra visual (or a placeholder div) -->
-                <svg width="120" height="96" viewBox="0 0 120 96" fill="none">
-                    <rect width="120" height="96" rx="20" fill="#F3F4F6" />
-                    <path d="M35 72h50v4a4 4 0 0 1-4 4H39a4 4 0 0 1-4-4v-4Z" fill="#D1D5DB" />
-                    <rect x="40" y="56" width="40" height="16" rx="8" fill="#9CA3AF" />
-                    <circle cx="48" cy="80" r="8" fill="#FDA4AF" />
-                    <circle cx="72" cy="80" r="8" fill="#60A5FA" />
-                </svg>
             </div>
         </div>
         <!-- Right-Aligned Buttons -->
-        <div class="flex flex-col gap-4 justify-start">
+        <div class="col-span-1 flex flex-col gap-4 justify-start">
             <a href="{{ route('appointments.create') }}"
-                class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold font-montserrat text-base rounded-full shadow hover:bg-blue-700 transition">
-                <span>Create Appointment</span>
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+                class="inline-flex items-center justify-between w-full px-6 py-3 border border-light-lavender text-dark-lavender text-base font-medium font-montserrat rounded-full">
+                <div class="flex items-center gap-2">
+                    @svg('phosphor-calendar-plus', 'size-5 text-violet-500')
+                    <span>Create Inspection Appointment</span>
+                </div>
+                @svg('phosphor-arrow-right-light', 'size-6')
             </a>
             <a href="{{ route('quotation-requests.browse') }}"
-                class="inline-flex items-center justify-center px-6 py-3 bg-purple-600 text-white font-semibold font-montserrat text-base rounded-full shadow hover:bg-purple-700 transition">
-                <span>Request Quotation</span>
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+                class="inline-flex items-center justify-between w-full px-6 py-3 border border-light-lavender text-dark-lavender text-base font-medium font-montserrat rounded-full">
+                <div class="flex items-center gap-2">
+                    @svg('phosphor-calculator', 'size-5 text-amber-500')
+                    <span>Request a Spare Parts Quotation</span>
+                </div>
+                @svg('phosphor-arrow-right-light', 'size-6')
+            </a>
+            <a href="{{ route('quotation-requests.browse') }}"
+                class="inline-flex items-center justify-between w-full px-6 py-3 border border-light-lavender text-dark-lavender text-base font-medium font-montserrat rounded-full">
+                <div class="flex items-center gap-2">
+                    @svg('phosphor-wrench', 'size-5 text-green-500')
+                    <span>Request a Repair Workshop Quotation</span>
+                </div>
+                @svg('phosphor-arrow-right-light', 'size-6')
             </a>
         </div>
     </div>
@@ -153,14 +153,13 @@
         @endif
     </div>
 
-    <!-- Vehicles Section -->
+    {{-- <!-- Vehicles Section -->
     @if ($vehicles->count() > 0)
         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div class="flex items-center justify-between p-6">
                 <div class="flex items-center space-x-3">
                     <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
@@ -485,5 +484,5 @@
                 @endforeach
             </div>
         </div>
-    @endif
+    @endif --}}
 </div>

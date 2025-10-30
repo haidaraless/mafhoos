@@ -99,7 +99,7 @@
                     <flux:navlist.item icon="calendar" :href="route('appointments.index')"
                         :current="request()->routeIs('appointments.index')" wire:navigate>{{ __('My Appointments') }}
                     </flux:navlist.item>
-                    <flux:navlist.item icon="clock" :href="route('providers.available-times.manage', $provider)"
+                    <flux:navlist.item icon="clock" :href="route('providers.available-times.manage')"
                         :current="request()->routeIs('providers.available-times.manage')" wire:navigate>
                         {{ __('Manage Available Times') }}</flux:navlist.item>
                 @endif
