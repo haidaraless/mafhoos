@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap');
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -51,6 +52,14 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+}
+
+body, html {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+* {
+  font-family: inherit;
 }
 
 [data-flux-field]:not(ui-radio, ui-checkbox) {

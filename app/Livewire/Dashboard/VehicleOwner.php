@@ -9,6 +9,7 @@ use App\Models\Inspection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\QuotationRequest;
 
 class VehicleOwner extends Component
 {
@@ -16,12 +17,14 @@ class VehicleOwner extends Component
     public Collection $draftAppointments;
     public Collection $upcomingAppointments;
     public Collection $completedInspections;
+    public Collection $quotationRequests;
 
     public function mount()
     {
         $this->loadVehicles();
         $this->loadAppointments();
         $this->loadCompletedInspections();
+        $this->loadQuotationRequests();
     }
 
     public function loadVehicles()
@@ -52,6 +55,16 @@ class VehicleOwner extends Component
             ->with(['vehicle', 'provider', 'appointment'])
             ->orderBy('completed_at', 'desc')
             ->get();
+    }
+
+    public function loadQuotationRequests()
+    {
+        $this->quotationRequests = QuotationRequest::whereHas('inspection.appointment.vehicle', function($q) {
+            $q->where('user_id', Auth::user()->id);
+        })
+        ->orderBy('created_at', 'desc')
+        ->with(['inspection.appointment.vehicle', 'status', 'type'])
+        ->get();
     }
 
     public function continueDraftAppointment($appointmentId)
