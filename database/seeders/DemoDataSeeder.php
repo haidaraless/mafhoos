@@ -23,9 +23,6 @@ class DemoDataSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ensure we have providers seeded first
-        $this->call(ProviderSetupSeeder::class);
-
         // Create a technician user
         $technician = User::query()->firstOrCreate(
             ['email' => 'technician@example.com'],
@@ -85,6 +82,7 @@ class DemoDataSeeder extends Seeder
             $scheduledAt = Carbon::now()->addDays(rand(0, 10))->addHours(rand(8, 18));
 
             $appointment = Appointment::create([
+                'user_id' => $user->id,
                 'status' => AppointmentStatus::CONFIRMED->value,
                 'vehicle_id' => $vehicle->id,
                 'provider_id' => $provider->id,

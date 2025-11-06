@@ -1,5 +1,5 @@
 <div class="flex items-center justify-center w-full py-12">
-    <div class="grid grid-cols-3 overflow-hidden border border-neutral-300 rounded-2xl">
+    <div class="grid grid-cols-3 overflow-hidden border border-dashed border-neutral-300 rounded-2xl">
         <!-- Main Content -->
         <div class="col-span-2 grid grid-cols-1 overflow-hidden">
             <div class="col-span-1 flex flex-col gap-6 p-3 md:p-6 bg-neutral-50 border-b border-neutral-300">
@@ -22,19 +22,19 @@
                         wire:click="selectInspectionType('{{ $inspectionType->value }}')"
                         class="flex items-center justify-between border-t border-neutral-300 dark:border-white/10 p-4 bg-white dark:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer {{ $appointment->inspection_type === $inspectionType->value ? 'border-blue-500 bg-blue-50 dark:bg-white/10' : '' }}"
                     >
-                        <div class="flex items-start gap-3">
+                        <div class="flex items-center gap-3">
                             @php
                                 $icon = 'phosphor-wrench'; $iconColor = 'text-green-500';
                                 if ($inspectionType === \App\Enums\InspectionType::ENGINE_INSPECTION) { $icon = 'phosphor-engine'; $iconColor = 'text-violet-500'; }
                                 if ($inspectionType === \App\Enums\InspectionType::UNDERCARRIAGE_INSPECTION) { $icon = 'phosphor-car-simple'; $iconColor = 'text-sky-500'; }
                                 if ($inspectionType === \App\Enums\InspectionType::COMPREHENSIVE_INSPECTION) { $icon = 'phosphor-clipboard-text'; $iconColor = 'text-amber-500'; }
                             @endphp
-                            @svg($icon, 'size-5 '.$iconColor)
+                            @svg($icon, 'size-7 '.$iconColor)
                             <div>
-                                <h4 class="font-medium text-neutral-900 dark:text-white capitalize">
+                                <h4 class="text-xl font-semibold text-neutral-900 dark:text-white capitalize">
                                     {{ str_replace('-', ' ', $inspectionType->value) }}
                                 </h4>
-                                <p class="text-sm text-neutral-600 dark:text-white/70 mt-1">
+                                <p class="text-sm text-neutral-600 dark:text-white/70">
                                     @switch($inspectionType)
                                         @case(\App\Enums\InspectionType::UNDERCARRIAGE_INSPECTION)
                                             Complete undercarriage examination
