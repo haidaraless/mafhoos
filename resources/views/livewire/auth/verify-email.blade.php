@@ -1,14 +1,16 @@
-<div class="flex flex-col justify-between w-full h-full">
-    <div class="grid grid-cols-1 gap-12">
-        <div class="col-span-1 max-w-lg">
-            <h1 class="text-5xl text-dark-lavender font-bold">
-                {{ __('Verify your email') }}
-            </h1>
+<div class="flex items-center justify-center w-full h-full">
+    <div class="grid grid-cols-1 overflow-hidden border border-neutral-300 rounded-2xl">
+        <div class="col-span-1 flex items-center justify-between gap-20 p-6 bg-neutral-50 border-b border-neutral-300">
+            <div class="flex flex-col">
+                <h1 class="text-3xl text-neutral-800 font-bold">{{ __('Verify your email') }}</h1>
+                <p class="text-neutral-600">{{ __('We just sent you a verification link') }}</p>
+            </div>
+            @svg('phosphor-envelope-simple-light', 'size-12 text-orange-500')
         </div>
 
-        <div class="col-span-1 flex flex-col gap-4 max-w-xl">
-            <div class="p-4 text-rose-quartz bg-rose-quartz/10 rounded-2xl">
-                <p class="text-lg text-dark-lavender">
+        <div class="col-span-1 flex flex-col gap-4">
+            <div class="px-6 py-4 text-neutral-800 bg-white">
+                <p class="text-lg text-neutral-800">
                     {{ __('Please verify your email address by clicking on the link we just emailed to you.') }}
                 </p>
             </div>
@@ -21,12 +23,12 @@
                 </div>
             @endif
 
-            <div class="flex items-center gap-4">
-                <button type="button" wire:click="sendVerification" class="flex items-center gap-4 p-4 min-h-20 text-sm text-white bg-light-lavender hover:bg-dark-lavender transition-all ease-in-out duration-300 cursor-pointer rounded-2xl">
+            <div class="flex items-center gap-4 px-6 py-4 border-t border-neutral-300">
+                <button type="button" wire:click="sendVerification" class="flex items-center gap-16 px-6 py-4 min-h-20 text-sm text-white bg-neutral-800 hover:bg-neutral-900 transition-all ease-in-out duration-300 cursor-pointer">
                     <span class="text-left">
                         <h4 class="text-2xl font-semibold">{{ __('Resend verification email') }}</h4>
-                        <span wire:loading.remove wire:target="sendVerification" class="text-pale-dogwood">{{ __('We will send another verification link') }}</span>
-                        <span wire:loading wire:target="sendVerification" class="text-pale-dogwood">{{ __('Sending...') }}</span>
+                        <span wire:loading.remove wire:target="sendVerification" class="text-neutral-400">{{ __('We will send another verification link') }}</span>
+                        <span wire:loading wire:target="sendVerification" class="text-neutral-400">{{ __('Sending...') }}</span>
                     </span>
                     <span wire:loading wire:target="sendVerification">
                         <svg class="animate-spin size-10 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -38,7 +40,6 @@
                         @svg('phosphor-arrow-right-light', 'size-10')
                     </span>
                 </button>
-
                 <flux:link class="text-sm cursor-pointer" wire:click="logout">
                     {{ __('Log out') }}
                 </flux:link>

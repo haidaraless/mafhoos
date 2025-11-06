@@ -1,6 +1,6 @@
 <div class="flex items-center justify-center w-full h-full">
     <div class="grid grid-cols-1 overflow-hidden border border-neutral-300 rounded-2xl">
-        <div class="col-span-1 p-8 bg-neutral-50 border-b border-neutral-300">
+        <div class="col-span-1 p-6 bg-neutral-50 border-b border-neutral-300">
             <h1 class="text-3xl text-neutral-800 font-bold">Create Vehicle</h1>
             <p class="text-neutral-600">Enter a VIN to automatically retrieve vehicle information</p>
         </div>
@@ -32,9 +32,9 @@
 
             <!-- VIN Input Form and Result → vertical stack (details under form) -->
             <div class="flex flex-col w-full">
-                <form wire:submit.prevent="lookupVehicle" class="flex flex-col w-full">m
+                <form wire:submit.prevent="lookupVehicle" class="flex flex-col w-full">
                     <label for="vin"
-                        class="flex items-center gap-4 p-4 text-neutral-800 hover:text-green-500 bg-white hover:bg-white transition-all ease-in-out duration-300 cursor-pointer">
+                        class="flex items-center gap-4 px-6 py-4 text-neutral-800 hover:text-green-500 bg-white hover:bg-white transition-all ease-in-out duration-300 cursor-pointer">
                         @svg('phosphor-car-light', 'size-10')
                         <div class="flex flex-col w-full">
                             <h4 class="text-lg text-neutral-800 font-medium">Vehicle VIN</h4>
@@ -52,9 +52,9 @@
                             wire:loading.attr="disabled" wire:target="lookupVehicle">
                             <div class="flex flex-col w-full text-left">
                                 <h4 class="text-2xl font-semibold">Lookup Vehicle</h4>
-                                <span wire:loading.remove wire:target="lookupVehicle" class="text-pale-dogwood">Fetch
+                                <span wire:loading.remove wire:target="lookupVehicle" class="text-neutral-400">Fetch
                                     vehicle information by VIN</span>
-                                <span wire:loading wire:target="lookupVehicle" class="text-pale-dogwood">Looking
+                                <span wire:loading wire:target="lookupVehicle" class="text-neutral-400">Looking
                                     up...</span>
                             </div>
                             <span wire:loading wire:target="lookupVehicle">
@@ -170,22 +170,24 @@
                         </div>
                         <div class="grid grid-cols-3 mt-6">
                             <button type="button"
-                                class="col-span-2 flex items-center justify-between gap-2 px-6 py-3 text-lg text-white font-semibold bg-neutral-800 hover:bg-neutral-900 transition-all ease-in-out duration-300 cursor-pointer"
+                                class="col-span-2 flex items-center justify-between px-6 py-4 text-sm text-white font-normal bg-neutral-800 hover:bg-neutral-900 transition-all ease-in-out duration-300 cursor-pointer"
                                 wire:click="createVehicle" wire:loading.attr="disabled" wire:target="createVehicle">
-                                <div class="flex items-center gap-2">
-                                    @svg('phosphor-check', 'size-5')
-                                    <span wire:loading.remove wire:target="createVehicle">Create Vehicle</span>
-                                    <span wire:loading wire:target="createVehicle">Creating...</span>
+                                <div class="flex items-center gap-4">
+                                    @svg('phosphor-check', 'size-7')
+                                    <div class="flex flex-col w-full text-left">
+                                        <h4 class="text-2xl font-semibold">Create Vehicle</h4>
+                                        <span wire:loading.remove wire:target="createVehicle" class="-mt-1">Create your new vehicle</span>
+                                        <span wire:loading wire:target="createVehicle">Creating...</span>
+                                    </div>
                                 </div>
                                 <span wire:loading.remove wire:target="createVehicle">
-                                    @svg('phosphor-arrow-right-light', 'size-5')
+                                    @svg('phosphor-arrow-right-light', 'size-6')
                                 </span>
                             </button>
                             <button type="button"
-                                class="col-span-1 flex items-center gap-2 px-6 py-3 text-sm text-white bg-rose-500 hover:bg-rose-600 transition-all ease-in-out duration-300 cursor-pointer"
+                                class="col-span-1 flex items-center justify-center px-6 py-3 text-sm text-white font-medium bg-orange-500 hover:bg-orange-600 transition-all ease-in-out duration-300 cursor-pointer"
                                 wire:click="$set('showVehicleData', false)">
-                                @svg('phosphor-x-light', 'size-4')
-                                <span>Cancel</span>                                
+                                <span>No, I will do it later</span>                                
                             </button>
                         </div>
                     </div>

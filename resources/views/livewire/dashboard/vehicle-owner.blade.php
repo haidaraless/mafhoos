@@ -52,16 +52,16 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-4 lg:px-16">
         <!-- Main Banner Card -->
         <div
-            class="md:col-span-3 flex flex-col md:flex-row border border-neutral-300 dark:border-white/10 rounded-2xl p-6 lg:p-8 items-center justify-between">
-            <div class="flex-1">
-                <h2 class="text-3xl font-extrabold font-montserrat text-neutral-800 dark:text-white mb-2">Don’t know where to start?
-                </h2>
-                <p class="text-base text-neutral-600 dark:text-white/70 mb-6">Register your vehicle to get started with inspections
-                    andquotation requests.</p>
+            class="md:col-span-3 flex flex-col gap-6 lg:gap-8 p-6 lg:p-8 bg-orange-200 rounded-2xl">
+            <div class="flex flex-col">
+                <h2 class="text-3xl font-extrabold font-montserrat text-orange-950 dark:text-white">Don’t know where to start?</h2>
+                <p class="text-base text-orange-800">Register your vehicle to get started with inspections andquotation requests.</p>
+            </div>
+            <div class="flex">
                 <a href="{{ route('vehicles.create') }}"
-                    class="inline-flex items-center justify-between gap-16 px-6 py-3 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-base font-medium font-montserrat rounded-full">
+                        class="inline-flex items-center justify-between gap-16 px-6 py-3 bg-white text-neutral-800 dark:text-white text-base font-medium font-montserrat rounded-full">
                     <div class="flex items-center gap-2">
-                        @svg('phosphor-car', 'size-5 text-sky-500')
+                        @svg('phosphor-car', 'size-5 text-orange-500')
                         <span>Create a Vehicle</span>
                     </div>
                     @svg('phosphor-arrow-right-light', 'size-6')
@@ -179,7 +179,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-dark-lavender">My Vehicles</h3>
+        <h3 class="text-lg font-semibold text-neutral-800 dark:text-white">My Vehicles</h3>
                         <p class="text-sm text-gray-600">Your registered vehicles</p>
                     </div>
                 </div>
@@ -200,7 +200,7 @@
                                 </svg>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-medium text-dark-lavender">{{ $vehicle->name }}</h4>
+                                <h4 class="font-medium text-neutral-800 dark:text-white">{{ $vehicle->name }}</h4>
                                 <p class="text-sm text-gray-600">{{ $vehicle->year }} {{ $vehicle->make }}</p>
                             </div>
                         </div>
@@ -244,7 +244,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-dark-lavender">Draft Appointments</h3>
+                        <h3 class="text-lg font-semibold text-neutral-800 dark:text-white">Draft Appointments</h3>
                         <p class="text-sm text-gray-600">Complete your pending appointment bookings</p>
                     </div>
                 </div>
@@ -259,7 +259,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <div class="flex items-center space-x-3 mb-2">
-                                    <h4 class="font-medium text-dark-lavender">{{ $appointment->vehicle->name }}</h4>
+                                    <h4 class="font-medium text-neutral-800 dark:text-white">{{ $appointment->vehicle->name }}</h4>
                                     <span class="text-sm text-gray-500">#{{ $appointment->id }}</span>
                                 </div>
 
@@ -352,7 +352,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-dark-lavender">Upcoming Appointments</h3>
+                        <h3 class="text-lg font-semibold text-neutral-800 dark:text-white">Upcoming Appointments</h3>
                         <p class="text-sm text-gray-600">Your confirmed upcoming inspections</p>
                     </div>
                 </div>
@@ -367,7 +367,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <div class="flex items-center space-x-3 mb-2">
-                                    <h4 class="font-medium text-dark-lavender">{{ $appointment->vehicle->name }}</h4>
+                                    <h4 class="font-medium text-neutral-800 dark:text-white">{{ $appointment->vehicle->name }}</h4>
                                     <span class="text-sm text-gray-500">#{{ $appointment->id }}</span>
                                 </div>
 
@@ -431,7 +431,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-dark-lavender">Completed Inspections</h3>
+                        <h3 class="text-lg font-semibold text-neutral-800 dark:text-white">Completed Inspections</h3>
                         <p class="text-sm text-gray-600">View your inspection reports and request quotations</p>
                     </div>
                 </div>
@@ -446,7 +446,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <div class="flex items-center space-x-3 mb-2">
-                                    <h4 class="font-medium text-dark-lavender">{{ $inspection->vehicle->name }}</h4>
+                                    <h4 class="font-medium text-neutral-800 dark:text-white">{{ $inspection->vehicle->name }}</h4>
                                     <span class="text-sm text-gray-500">#{{ $inspection->number }}</span>
                                 </div>
 
