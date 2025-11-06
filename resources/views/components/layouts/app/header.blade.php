@@ -5,14 +5,20 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white dark:bg-dark-lavender">
-    <flux:header class="bg-white dark:bg-dark-lavender">
+<body class="min-h-screen font-montserrat text-zinc-800 bg-white antialiased dark:text-white dark:bg-neutral-950">
+    <flux:header class="bg-white dark:bg-neutral-950">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
         <a href="{{ route('dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0"
             wire:navigate>
             <x-app-logo />
         </a>
+
+        @auth
+            <div class="max-lg:hidden">
+                <livewire:account-switcher />
+            </div>
+        @endauth
 
         <flux:navbar class="-mb-px max-lg:hidden">
             <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
