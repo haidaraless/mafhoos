@@ -2,7 +2,7 @@
     <div class="grid grid-cols-1 overflow-hidden border border-neutral-300 rounded-2xl">
         <div class="col-span-1 flex items-center justify-between gap-20 p-6 bg-neutral-50 border-b border-neutral-300">
             <div class="flex flex-col">
-                <h1 class="text-3xl text-neutral-800 font-bold">{{ __('Verify your email') }}</h1>
+                <h1 class="text-2xl md:text-3xl text-neutral-800 font-bold">{{ __('Verify your email') }}</h1>
                 <p class="text-neutral-600">{{ __('We just sent you a verification link') }}</p>
             </div>
             @svg('phosphor-envelope-simple-light', 'size-12 text-orange-500')

@@ -3,12 +3,31 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="index,follow">
+        <meta name="author" content="{{ config('app.name') }} Team">
+        <meta name="description" content="{{ __('Streamline vehicle inspections, quotations, and repairs — all in one place.') }}">
 
-        <title>{{ env('APP_NAME') }}</title>
+        <link rel="canonical" href="{{ url()->current() }}">
+
+        <title>{{ config('app.name') }}</title>
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+        <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)">
+        <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="{{ config('app.name') }}">
+        <meta property="og:description" content="{{ __('Streamline vehicle inspections, quotations, and repairs — all in one place.') }}">
+        <meta property="og:image" content="{{ asset('apple-touch-icon.png') }}">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ config('app.name') }}">
+        <meta name="twitter:description" content="{{ __('Streamline vehicle inspections, quotations, and repairs — all in one place.') }}">
+        <meta name="twitter:image" content="{{ asset('apple-touch-icon.png') }}">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,10 +47,10 @@
         <!-- Top Navigation -->
         <header class="w-full">
             <div class="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between">
-                <a href="{{ route('home') }}" class="text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all ease-in-out duration-300" wire:navigate>
+                <a href="{{ route('home') }}" class="text-neutral-900 hover:text-neutral-950 dark:hover:text-white transition-all ease-in-out duration-300" wire:navigate>
                     <span class="flex items-center gap-2">
                         <x-app-logo-icon />
-                        <span class="text-2xl tracking-tighter font-semibold uppercase">mafhoos</span>
+                        <span class="text-2xl tracking-tighter font-light uppercase">mafhoos</span>
                     </span>
                     <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
                 </a>
@@ -40,7 +59,7 @@
                         @svg('phosphor-sign-in-light', 'size-4')
                         <span>{{ __('Log in') }}</span>
                     </a>
-                    <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-neutral-800 text-white rounded-full text-sm transition-all">
+                    <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-neutral-800 text-white rounded-full text-sm transition-all">
                         <span>{{ __('Create account') }}</span>
                         @svg('phosphor-arrow-right-light', 'size-4')
                     </a>
@@ -52,7 +71,7 @@
         <section class="relative overflow-hidden">
             <div class="mx-auto max-w-7xl px-6 pt-8 pb-16 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                 <div class="flex flex-col gap-6">
-                    <span class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full bg-neutral-200 dark:bg-white/10 text-neutral-700 dark:text-white w-max">
+                    <span class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1 rounded-full bg-orange-200 dark:bg-white/10 text-orange-700 dark:text-white w-max">
                         @svg('phosphor-calendar-check', 'size-4')
                         <span>{{ __('Inspections • Quotations • Repairs') }}</span>
                     </span>
@@ -63,7 +82,7 @@
                         {{ __('Book inspections, track reports, and request quotations from trusted providers. mafhoos simplifies every step.') }}
                     </p>
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                        <a href="{{ route('register') }}" class="inline-flex items-center justify-between gap-6 px-6 py-3 bg-indigo-600 hover:bg-neutral-800 text-white text-base font-medium rounded-full">
+                        <a href="{{ route('register') }}" class="inline-flex items-center justify-between gap-6 px-6 py-3 bg-orange-600 hover:bg-neutral-800 text-white text-base font-medium rounded-full">
                             <span>{{ __('Get started free') }}</span>
                             @svg('phosphor-arrow-right-light', 'size-6')
                         </a>
@@ -216,7 +235,7 @@
                         </div>
                         @svg('phosphor-arrow-right-light', 'size-6')
                     </a>
-                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-6 py-3 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-base font-medium rounded-full">
+                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-6 py-3 border border-orange-900 dark:border-white/20 text-orange-900 dark:text-white text-base font-medium rounded-full">
                         @svg('phosphor-sign-in-light', 'size-5')
                         <span>{{ __('I already have an account') }}</span>
                     </a>
