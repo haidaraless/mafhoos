@@ -1,25 +1,24 @@
-<div class="flex items-center justify-center w-full h-full">
+<div class="flex items-center justify-center w-full py-12">
     <div class="grid grid-cols-1 overflow-hidden border border-neutral-300 rounded-2xl">
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3 text-neutral-800 dark:text-white">
-                <span class="inline-flex items-center justify-center size-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-300">
-                    @svg('phosphor-car', 'size-6')
-                </span>
-                <h2 class="text-2xl font-extrabold">Select Vehicle</h2>
+        <div class="col-span-1 flex flex-col gap-6 p-3 md:p-6 bg-neutral-50 border-b border-neutral-300">
+            @svg('phosphor-car-light', 'size-10 md:size-12 text-orange-500')
+            <div class="flex flex-col">
+                <h1 class="text-2xl md:text-3xl text-neutral-800 font-bold">Select Vehicle</h1>
+                <p class="text-neutral-600">Choose a vehicle to continue with your appointment</p>
+                @if($appointment->vehicle_id)
+                    <span class="mt-1 text-sm text-neutral-600 dark:text-white/70">
+                        <span class="font-medium">Current:</span> {{ $appointment->vehicle->name ?? ($appointment->vehicle->make . ' ' . $appointment->vehicle->model) }}
+                    </span>
+                @endif
             </div>
-            @if($appointment->vehicle_id)
-                <div class="text-sm text-neutral-600 dark:text-white/70">
-                    <span class="font-medium">Current:</span> {{ $appointment->vehicle->name ?? ($appointment->vehicle->make . ' ' . $appointment->vehicle->model) }}
-                </div>
-            @endif
         </div>
         
         @if($vehicles->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1">
                 @foreach($vehicles as $vehicle)
-                    <div class="border border-neutral-300 dark:border-white/10 rounded-2xl p-4 bg-white dark:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer {{ $appointment->vehicle_id === $vehicle->id ? 'border-blue-500 bg-blue-50 dark:bg-white/10' : '' }}"
+                    <div class="flex items-center justify-between border-t border-neutral-300 dark:border-white/10 p-4 bg-white dark:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer {{ $appointment->vehicle_id === $vehicle->id ? 'border-blue-500 bg-blue-50 dark:bg-white/10' : '' }}"
                             wire:click="selectVehicle('{{ $vehicle->id }}')">
-                        <div class="flex flex-col h-full">
+                        <div class="flex flex-col">
                             <div class="flex items-center mb-3">
                                 @svg('phosphor-car', 'size-5 text-sky-500 mr-2')
                                 <h3 class="text-lg font-semibold text-neutral-800 dark:text-white">{{ $vehicle->name ?? ($vehicle->make . ' ' . $vehicle->model) }}</h3>
@@ -48,27 +47,20 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="mt-4 pt-3 border-t border-neutral-200 dark:border-white/10">
-                                @if($appointment->vehicle_id === $vehicle->id)
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        Selected
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        Click to Select
-                                    </span>
-                                @endif
-                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            @if($appointment->vehicle_id === $vehicle->id)
+                                @svg('phosphor-check-circle', 'size-7 text-green-600')
+                            @else
+                                @svg('phosphor-circle', 'size-7 text-neutral-400')
+                            @endif
                         </div>
                     </div>
                 @endforeach
             </div>
             
             <!-- Create New Vehicle Link -->
-            <div class="mt-6 pt-6 border-t border-neutral-200 dark:border-white/10">
+            <div class="py-6 border-t border-neutral-200 dark:border-white/10">
                 <div class="text-center">
                     <p class="text-neutral-600 dark:text-white/70 mb-4">Don't see your vehicle?</p>
                     <a href="{{ route('vehicles.create') }}" class="inline-flex items-center px-4 py-2 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-sm font-medium rounded-full hover:bg-white/70 dark:hover:bg-white/10 transition-colors duration-200">

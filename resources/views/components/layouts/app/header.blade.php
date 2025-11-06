@@ -6,33 +6,36 @@
 </head>
 
 <body class="min-h-screen font-montserrat text-neutral-800 bg-white antialiased dark:text-white dark:bg-neutral-950">
-    <flux:header class="h-20 bg-white dark:bg-neutral-950 border-b border-neutral-300 dark:border-neutral-700">
+    <flux:header container class="h-20 bg-white dark:bg-neutral-950 border-b border-neutral-300 dark:border-neutral-700">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
         <div class="flex items-center gap-4 max-lg:hidden">
 
-            <a href="{{ route('dashboard') }}" class="flex items-center"
-                wire:navigate>
-                <x-app-logo />
+            <a href="{{ route('dashboard') }}" class="text-neutral-900 hover:text-neutral-950 dark:hover:text-white transition-all ease-in-out duration-300" wire:navigate>
+                <span class="flex items-center gap-2">
+                    <x-app-logo-icon />
+                    <span class="text-2xl tracking-tighter font-light uppercase">mafhoos</span>
+                </span>
+                <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
             </a>
-            @auth
+            {{-- @auth
                 <div class="max-lg:hidden">
                     <livewire:account-switcher />
                 </div>
-            @endauth
+            @endauth --}}
 
         </div>
 
-        <flux:spacer />
+        {{-- <flux:spacer /> --}}
 
-        {{-- <flux:navbar class="-mb-px max-lg:hidden">
+        {{-- <flux:navbar class="max-lg:hidden">
             <flux:navbar.item :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                 wire:navigate>
                 {{ __('Dashboard') }}
             </flux:navbar.item>
-        </flux:navbar>
+        </flux:navbar> --}}
 
-        <flux:spacer /> --}}
+        <flux:spacer />
 
         <!-- Desktop User Menu -->
         <flux:dropdown position="top" align="end">
@@ -117,7 +120,9 @@
         </flux:navlist> --}}
     </flux:sidebar>
 
-    {{ $slot }}
+    <div class="container mx-auto">
+        {{ $slot }}
+    </div>
 
     @fluxScripts
 </body>

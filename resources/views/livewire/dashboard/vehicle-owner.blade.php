@@ -1,12 +1,6 @@
 <div class="grid grid-cols-1 gap-6 lg:gap-8">
-    {{-- <!-- Hero Banner/Header Section -->
-    <div class="flex flex-col gap-2 bg-neutral-800 h-64 px-4 py-12 sm:px-6 md:p-16">
-        <h1 class="w-96 text-5xl font-extrabold text-white">Welcome, {{ Auth::user()->name }}!</h1>
-        <p class="text-xl text-white font-normal">Get started with your vehicle inspections and quotations.</p>
-    </div> --}}
-
     <!-- Quick Stats Cards Row -->
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 lg:px-16 pt-6 lg:pt-8">
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 lg:pt-8">
         <!-- Vehicle Stat Card -->
         <div class="grid grid-cols-1 gap-6 border border-neutral-300 dark:border-white/10 p-6 rounded-2xl">
             <div class="flex items-center gap-6 text-neutral-800 dark:text-white">
@@ -49,7 +43,7 @@
     </div>
 
     <!-- Banner/Action Section: Add Vehicle and Action Buttons -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-4 lg:px-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- Main Banner Card -->
         <div
             class="md:col-span-3 flex flex-col gap-6 lg:gap-8 p-6 lg:p-8 bg-orange-200 rounded-2xl">
@@ -76,31 +70,29 @@
                     @svg('phosphor-calendar-plus', 'size-5 text-violet-500')
                     <span>Create Inspection Appointment</span>
                 </div>
-                @svg('phosphor-arrow-right-light', 'size-6')
+                @svg('phosphor-arrow-right-light', 'size-5')
             </a>
             <a href="{{ route('quotation-requests.browse') }}"
                 class="inline-flex items-center justify-between w-full px-6 py-3 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-base font-medium font-montserrat rounded-full">
                 <div class="flex items-center gap-2">
                     @svg('phosphor-calculator', 'size-5 text-amber-500')
-                    <span>Request a Spare Parts Quotation</span>
+                    <span>Request a Spare Parts Quote</span>
                 </div>
-                @svg('phosphor-arrow-right-light', 'size-6')
+                @svg('phosphor-arrow-right-light', 'size-5')
             </a>
             <a href="{{ route('quotation-requests.browse') }}"
                 class="inline-flex items-center justify-between w-full px-6 py-3 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-base font-medium font-montserrat rounded-full">
                 <div class="flex items-center gap-2">
                     @svg('phosphor-wrench', 'size-5 text-green-500')
-                    <span>Request a Repair Workshop Quotation</span>
+                    <span>Request a Repair Workshop Quote</span>
                 </div>
-                @svg('phosphor-arrow-right-light', 'size-6')
+                @svg('phosphor-arrow-right-light', 'size-5')
             </a>
         </div>
     </div>
 
-    <div class="border-t border-neutral-300 dark:border-white/10"></div>
-
     <!-- Quotation Requests Section (modern cards) -->
-    <div class="px-4 sm:px-6 lg:px-16">
+    <div>
         <h2 class="text-2xl font-extrabold font-montserrat mb-4 text-neutral-800 dark:text-white">Your Quotation Requests</h2>
         @if ($quotationRequests->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -162,8 +154,8 @@
             </div>
         @else
             <div class="border border-neutral-300 dark:border-white/20 text-base text-neutral-800 dark:text-white/70 text-center py-12 rounded-xl">
-                No quotation
-                requests yet.</div>
+                <span>{{ __('No quotation requests yet.') }}</span>
+            </div>
         @endif
     </div>
 

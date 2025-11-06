@@ -1,66 +1,40 @@
-<div class="w-full p-6">
-    <div class="flex flex-col lg:flex-row gap-6">
-        <!-- Main Content -->
-        <div class="flex-1">
-
+<div class="flex items-center justify-center w-full py-12">
+    <div class="grid grid-cols-3 overflow-hidden border border-neutral-300 rounded-2xl">
             <!-- Inspection Centers Selection -->
-            <div class="border border-neutral-300 dark:border-white/10 rounded-2xl p-6 bg-white dark:bg-white/5">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3 text-neutral-800 dark:text-white">
-                        <span class="inline-flex items-center justify-center size-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-300">
-                            @svg('phosphor-buildings', 'size-6')
-                        </span>
-                        <h2 class="text-2xl font-extrabold">Select Inspection Center</h2>
+            <div class="col-span-2 grid grid-cols-1 overflow-hidden">
+                <div class="col-span-1 flex flex-col gap-6 p-3 md:p-6 bg-neutral-50 border-b border-neutral-300">
+                    @svg('phosphor-buildings-light', 'size-10 md:size-12 text-orange-500')
+                    <div class="flex flex-col">
+                        <h1 class="text-2xl md:text-3xl text-neutral-800 font-bold">Select Inspection Center</h1>
+                        <p class="text-neutral-600">Choose a center that works best for you</p>
+                        @if($appointment->provider_id)
+                            <span class="mt-1 text-sm text-neutral-600 dark:text-white/70">
+                                <span class="font-medium">Current:</span> {{ $appointment->provider->name }}
+                            </span>
+                        @endif
                     </div>
-                    @if($appointment->provider_id)
-                        <div class="text-sm text-neutral-600 dark:text-white/70">
-                            <span class="font-medium">Current:</span> {{ $appointment->provider->name }}
-                        </div>
-                    @endif
                 </div>
-                
-        
+
         @if($centers->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1">
                 @foreach($centers as $center)
-                    <div class="border {{ $appointment->provider_id === $center->id ? 'border-blue-500 bg-blue-50 dark:bg-white/10' : 'border-neutral-300 dark:border-white/10' }} rounded-2xl p-4 bg-white dark:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                    <div class="flex items-center justify-between border-t border-neutral-300 dark:border-white/10 p-4 bg-white dark:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer {{ $appointment->provider_id === $center->id ? 'border-blue-500 bg-blue-50 dark:bg-white/10' : '' }}"
                          wire:click="selectCenter('{{ $center->id }}')">
-                        <div class="flex flex-col h-full">
+                        <div class="flex flex-col">
                             <h3 class="text-lg font-semibold text-neutral-800 dark:text-white mb-2">{{ $center->name }}</h3>
-                            <div class="space-y-2 text-sm text-neutral-600 dark:text-white/70 flex-grow">
+                            <div class="space-y-2 text-sm text-neutral-600 dark:text-white/70">
                                 <div class="flex items-center">
                                     @svg('phosphor-map-pin', 'size-4 mr-2 text-sky-500')
                                     <span>{{ $center->location ?? 'Location not specified' }}</span>
                                 </div>
-                                <div class="flex items-center">
-                                    @svg('phosphor-phone', 'size-4 mr-2 text-green-500')
-                                    <span>{{ $center->mobile }}</span>
-                                </div>
-                                <div class="flex items-center">
-                                    @svg('phosphor-envelope-simple', 'size-4 mr-2 text-violet-500')
-                                    <span>{{ $center->email }}</span>
-                                </div>
-                                @if($center->commercial_record)
-                                    <div class="flex items-center">
-                                        @svg('phosphor-identification-badge', 'size-4 mr-2 text-amber-500')
-                                        <span>CR: {{ $center->commercial_record }}</span>
-                                    </div>
-                                @endif
                             </div>
-                            <div class="mt-4 pt-3 border-t border-neutral-200 dark:border-white/10">
-                                @if($appointment->provider_id === $center->id)
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        Selected
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        Click to Select
-                                    </span>
-                                @endif
-                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            @if($appointment->provider_id === $center->id)
+                                @svg('phosphor-check-circle', 'size-7 text-green-600')
+                            @else
+                                @svg('phosphor-circle', 'size-7 text-neutral-400')
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -80,12 +54,7 @@
                 <p class="text-neutral-500 text-sm">You can change your selection above</p>
             </div>
         @endif
-            </div>
         </div>
-
-        <!-- Progress Sidebar -->
-        <div class="lg:w-80">
-            @livewire('appointments.appointment-progress', ['appointment' => $appointment], key('progress-' . $appointment->id))
-        </div>
+        @livewire('appointments.appointment-progress', ['appointment' => $appointment], key('progress-' . $appointment->id))
     </div>
 </div>
