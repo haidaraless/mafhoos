@@ -9,7 +9,7 @@
                 <a href="{{ route('home') }}" class="absolute top-0 left-0 text-neutral-900 hover:text-neutral-950 dark:hover:text-white transition-all ease-in-out duration-300" wire:navigate>
                     <span class="flex items-center gap-2">
                         <x-app-logo-icon />
-                        <span class="text-3xl tracking-tighter font-light uppercase">mafhoos</span>
+                        <span class="text-2xl tracking-tighter font-light uppercase">mafhoos</span>
                     </span>
                     <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
                 </a>

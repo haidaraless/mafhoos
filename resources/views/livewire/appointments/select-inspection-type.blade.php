@@ -2,11 +2,16 @@
     <div class="flex flex-col lg:flex-row gap-6">
         <!-- Main Content -->
         <div class="flex-1">
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="border border-neutral-300 dark:border-white/10 rounded-2xl p-6 bg-white dark:bg-white/5">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Select Inspection Type</h2>
+                    <div class="flex items-center gap-3 text-neutral-800 dark:text-white">
+                        <span class="inline-flex items-center justify-center size-10 rounded-xl bg-green-500/10 text-green-600 dark:text-green-300">
+                            @svg('phosphor-wrench', 'size-6')
+                        </span>
+                        <h2 class="text-2xl font-extrabold">Select Inspection Type</h2>
+                    </div>
                     @if($appointment->inspection_type)
-                        <div class="text-sm text-gray-600">
+                        <div class="text-sm text-neutral-600 dark:text-white/70">
                             <span class="font-medium">Current:</span> {{ ucfirst(str_replace('-', ' ', $appointment->inspection_type->value)) }}
                         </div>
                     @endif
@@ -14,21 +19,20 @@
                 
                 
                 <div class="space-y-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Choose Your Inspection Type</h3>
+                    <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Choose Your Inspection Type</h3>
         
         <div class="grid gap-3">
             @foreach($inspectionTypes as $inspectionType)
                 <button 
                     wire:click="selectInspectionType('{{ $inspectionType->value }}')"
-                    class="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                    {{ $appointment->inspection_type === $inspectionType->value ? 'border-blue-500 bg-blue-50' : '' }}"
+                    class="w-full text-left p-4 border rounded-2xl transition-colors duration-200 focus:outline-none {{ $appointment->inspection_type === $inspectionType->value ? 'border-blue-500 bg-blue-50 dark:bg-white/10' : 'border-neutral-300 dark:border-white/10 bg-white dark:bg-white/5 hover:-translate-y-0.5' }}"
                 >
                     <div class="flex items-center justify-between">
                         <div>
-                            <h4 class="font-medium text-gray-900 capitalize">
+                            <h4 class="font-medium text-neutral-900 dark:text-white capitalize">
                                 {{ str_replace('-', ' ', $inspectionType->value) }}
                             </h4>
-                            <p class="text-sm text-gray-600 mt-1">
+                            <p class="text-sm text-neutral-600 dark:text-white/70 mt-1">
                                 @switch($inspectionType)
                                     @case(\App\Enums\InspectionType::UNDERCARRIAGE_INSPECTION)
                                         Complete undercarriage examination
@@ -43,11 +47,7 @@
                             </p>
                         </div>
                         @if($appointment->inspection_type === $inspectionType->value)
-                            <div class="text-blue-600">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
+                            <span class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-300">Selected</span>
                         @endif
                     </div>
                 </button>

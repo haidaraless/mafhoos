@@ -11,9 +11,9 @@
 
         <title>{{ config('app.name') }}</title>
 
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/apple-touch-icon.png" type="image/png">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="shortcut icon" href="/apple-touch-icon.png" type="image/png">
 
         <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)">
         <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
@@ -86,7 +86,7 @@
                             <span>{{ __('Get started free') }}</span>
                             @svg('phosphor-arrow-right-light', 'size-6')
                         </a>
-                        <a href="{{ route('login') }}" class="inline-flex items-center justify-between gap-3 px-6 py-3 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-base font-medium rounded-full hover:bg-white/70 dark:hover:bg-white/10 transition-all">
+                        <a href="{{ route('login') }}" class="inline-flex items-center gap-3 px-6 py-3 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-base font-medium rounded-full hover:bg-white/70 dark:hover:bg-white/10 transition-all">
                             @svg('phosphor-play-circle', 'size-5 text-violet-500')
                             <span>{{ __('View my dashboard') }}</span>
                         </a>
@@ -108,7 +108,7 @@
                             <div class="grid grid-cols-1 gap-4 border border-neutral-200 dark:border-white/10 rounded-2xl p-4">
                                 <div class="flex items-center gap-3 text-neutral-800 dark:text-white">
                                     @svg('phosphor-car', 'size-6 text-sky-500')
-                                    <span class="font-semibold">{{ __('My Vehicles') }}</span>
+                                    <span class="font-semibold">{{ __('Vehicles') }}</span>
                                 </div>
                                 <p class="text-3xl font-extrabold text-neutral-900 dark:text-white">2</p>
                             </div>
@@ -227,15 +227,15 @@
                     <h3 class="text-2xl md:text-3xl font-extrabold text-orange-950 dark:text-white">{{ __('Ready to get started?') }}</h3>
                     <p class="text-base text-orange-800">{{ __('Join mafhoos today and handle inspections, quotes, and repairs seamlessly.') }}</p>
                 </div>
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('register') }}" class="inline-flex items-center justify-between gap-16 px-6 py-3 bg-white text-neutral-800 dark:text-white text-base font-medium rounded-full">
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <a href="{{ route('register') }}" class="inline-flex items-center justify-between gap-4 md:gap-16 px-3 md:px-6 py-3 bg-white text-neutral-800 dark:text-white text-base leading-none font-medium rounded-full">
                         <div class="flex items-center gap-2">
                             @svg('phosphor-user-plus', 'size-5 text-amber-500')
                             <span>{{ __('Create a free account') }}</span>
                         </div>
                         @svg('phosphor-arrow-right-light', 'size-6')
                     </a>
-                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-6 py-3 border border-orange-900 dark:border-white/20 text-orange-900 dark:text-white text-base font-medium rounded-full">
+                    <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-3 md:px-6 py-3 border border-orange-900 dark:border-white/20 text-orange-900 dark:text-white text-base leading-none font-medium rounded-full">
                         @svg('phosphor-sign-in-light', 'size-5')
                         <span>{{ __('I already have an account') }}</span>
                     </a>

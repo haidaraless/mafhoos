@@ -1,17 +1,17 @@
 <div class="flex items-center justify-center w-full h-full">
     <div class="grid grid-cols-1 overflow-hidden border border-neutral-300 rounded-2xl">
-        <div class="col-span-1 flex items-center justify-between gap-20 p-6 bg-neutral-50 border-b border-neutral-300">
+        <div class="col-span-1 flex flex-col gap-6 p-3 md:p-6 bg-neutral-50 border-b border-neutral-300">
+            @svg('phosphor-lock-key-open-light', 'size-10 md:size-12 text-orange-500')
             <div class="flex flex-col">
                 <h1 class="text-2xl md:text-3xl text-neutral-800 font-bold">{{ __('Forgot password') }}</h1>
-                <p class="text-neutral-600">{{ __('We will email you a reset link') }}</p>
+                <p class="text-neutral-600">{{ __('Enter your email to receive a password reset link') }}</p>
             </div>
-            @svg('phosphor-lock-key-open-light', 'size-12 text-orange-500')
         </div>
         <!-- Session Status -->
         <x-auth-session-status :status="session('status')" />
 
         <form method="POST" wire:submit="sendPasswordResetLink" class="grid grid-cols-1">
-            <label for="email" class="flex items-center gap-4 px-6 py-4 text-neutral-800 hover:text-green-500 @error('email') text-rose-500 @enderror bg-white hover:bg-white transition-all ease-in-out duration-300 cursor-pointer">
+            <label for="email" class="flex items-center gap-2 md:gap-4 px-3 md:px-6 py-4 hover:text-green-500 @error('email') text-rose-500 @enderror bg-white hover:bg-white transition-all ease-in-out duration-300 cursor-pointer">
                 @svg('phosphor-envelope-simple-light', 'size-6 md:size-10')
                 <div class="flex flex-col w-full">
                     <h4 class="text-lg text-neutral-800 font-medium">{{ __('Email Address') }}</h4>

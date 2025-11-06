@@ -5,14 +5,19 @@
             <!-- Header Section -->
             <div class="text-neutral-800 mb-6">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-3xl font-bold">Select Inspection Date & Time</h1>
-                        <p class="text-neutral-600 mt-2 text-lg">Choose your preferred date and time for the inspection with {{ $appointment->provider->name }}</p>
-                        @if($appointment->scheduled_at)
-                            <div class="mt-2 text-sm text-gray-600">
-                                <span class="font-medium">Current:</span> {{ $appointment->scheduled_at->format('l, F j, Y') }} at {{ $appointment->scheduled_at->format('g:i A') }}
-                            </div>
-                        @endif
+                    <div class="flex items-center gap-3">
+                        <span class="inline-flex items-center justify-center size-10 rounded-xl bg-violet-500/10 text-violet-600">
+                            @svg('phosphor-calendar-dots', 'size-6')
+                        </span>
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-extrabold">Select Inspection Date & Time</h1>
+                            <p class="text-neutral-600 dark:text-white/70 mt-1 md:mt-2 text-sm md:text-lg">Choose your preferred date and time for the inspection with {{ $appointment->provider->name }}</p>
+                            @if($appointment->scheduled_at)
+                                <div class="mt-2 text-sm text-gray-600">
+                                    <span class="font-medium">Current:</span> {{ $appointment->scheduled_at->format('l, F j, Y') }} at {{ $appointment->scheduled_at->format('g:i A') }}
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     <div class="hidden md:block">
                         <svg class="w-16 h-16 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,8 +48,8 @@
         <!-- Available Days Section -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-gray-900">Available Days</h2>
-                <div class="text-sm text-gray-500">
+                <h2 class="text-2xl font-extrabold text-neutral-900 dark:text-white">Available Days</h2>
+                <div class="text-sm text-neutral-600 dark:text-white/70">
                     Select a day to view available times
                 </div>
             </div>
@@ -73,11 +78,11 @@
 
         <!-- Selection Summary & Confirm Button -->
         @if($selectedDate && $selectedTime)
-            <div class="mt-8 p-6 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl shadow-sm">
+            <div class="mt-8 p-6 border border-neutral-300 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                     <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Selected Appointment</h3>
-                        <div class="flex items-center text-gray-700">
+                        <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-2">Selected Appointment</h3>
+                        <div class="flex items-center text-neutral-700 dark:text-white/80">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
@@ -89,7 +94,7 @@
                     <div class="flex-shrink-0">
                         <button 
                             wire:click="confirmSelection"
-                            class="w-full lg:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            class="w-full lg:w-auto px-8 py-3 bg-neutral-800 text-white rounded-full hover:bg-neutral-900 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                         >
                             Confirm Selection
                         </button>
