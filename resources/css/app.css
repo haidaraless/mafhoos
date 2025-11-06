@@ -26,12 +26,6 @@
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
     --color-accent-foreground: var(--color-white);
-
-    --color-dark-lavender: #22223B;
-    --color-light-lavender: #4A4E69;
-    --color-rose-quartz: #9A8C98;
-    --color-pale-dogwood: #C9ADA7;
-    --color-alabaster: #F2E9E4;
 }
 
 @layer theme {

@@ -4,7 +4,7 @@
         <div class="flex-1">
 
             <!-- Vehicle Selection -->
-            <div class="bg-white">
+            <div class="bg-blue-400">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">Select Vehicle</h2>
                     @if($appointment->vehicle_id)

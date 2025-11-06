@@ -1,6 +1,6 @@
-<div>
+<div class="border border-neutral-300 rounded-lg">
     <flux:dropdown position="bottom" align="start">
-        <flux:button variant="ghost" class="h-10 px-2">
+        <flux:button variant="ghost" class="h-8">
             @php
                 $currentAccount = collect($accounts)->firstWhere('id', $currentAccountId);
             @endphp
