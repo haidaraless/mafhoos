@@ -82,3 +82,27 @@
 - Git / GitHub
 
 **Branching Strategy:**
+Local Repository (Developer Machine)
+↓
+Feature Branches (Backend & Frontend for each feature)
+↓ (Regular commits)
+Development Branch (Development / Testing)
+↓ (Pull Request required before merge)
+Main Branch (Production)
+↓ (High-level PR required before merge)
+
+---
+
+## **QA Processes**
+
+### **Testing Tools**
+- **Postman** – for API testing  
+- **Pest** – for unit testing  
+- **PSR-4** – for PHP code styling standards  
+
+### **Testing Strategy**
+- Write **Pest** tests for every feature to ensure correctness and reliability of the business logic.
+
+### **Deployment Pipeline**
+- Deploy on **DigitalOcean Droplet** via **Laravel Forge**, ensuring successful deployment and automatic rollback on failure.
+
