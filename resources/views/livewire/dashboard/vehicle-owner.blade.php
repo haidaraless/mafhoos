@@ -29,17 +29,11 @@
                 </a>
             </div>
         </div>
-        <div class="grid grid-cols-1 border-b border-neutral-500 dark:border-neutral-500">
-            <div class="col-span-1 flex items-center min-h-36 px-6">
-                <span class="text-2xl font-extrabold font-montserrat text-neutral-950 dark:text-white">No inspections scheduled</span>
-            </div>
-        </div>
         <div class="flex flex-col gap-6 lg:gap-8 p-6 bg-neutral-50">
             <div class="w-1 h-16 bg-neutral-950 dark:bg-white"></div>
-
             <div class="flex flex-col gap-2">
                 <h2 class="text-3xl font-extrabold font-montserrat text-neutral-950 dark:text-white">Don’t know where to start?</h2>
-                <p class="text-base text-neutral-800">Register your vehicle to get started with inspections andquotation requests.</p>
+                <p class="text-base text-neutral-800">Register your vehicle to get started with inspections and quotation requests.</p>
             </div>
             <div class="flex w-full mt-20">
                 <a href="{{ route('vehicles.create') }}"
@@ -147,33 +141,4 @@
             </div>
         </div>
     </div>
-    <!-- Drafts Stat Card -->
-    {{-- <div class="grid grid-cols-1 gap-2 border border-neutral-300 dark:border-white/10 p-6 rounded-2xl">
-        <div class="flex items-center gap-6 text-neutral-800 dark:text-white">
-            @svg('phosphor-clock', 'size-8 text-blue-500')
-            <span class="text-2xl">{{ __('Draft Appointments') }}</span>
-        </div>
-        <div>
-            <p class="text-2xl font-extrabold text-neutral-800 dark:text-white">{{ $draftAppointments->count() }}</p>
-        </div>
-    </div>
-    <div class="grid grid-cols-1 gap-2 border border-neutral-300 dark:border-white/10 p-6 rounded-2xl">
-        <div class="flex items-center gap-6 text-neutral-800 dark:text-white">
-            @svg('phosphor-calendar-dots', 'size-8 text-violet-500')
-            <span class="text-2xl">{{ __('Upcoming Appointments') }}</span>
-        </div>
-        <div>
-            <p class="text-2xl font-extrabold text-neutral-800 dark:text-white">{{ $upcomingAppointments->count() }}</p>
-        </div>
-    </div>
-    <!-- Completed Stat Card -->
-    <div class="grid grid-cols-1 gap-2 border border-neutral-300 dark:border-white/10 p-6 rounded-2xl">
-        <div class="flex items-center gap-6 text-neutral-800 dark:text-white">
-            @svg('phosphor-calendar-check', 'size-8 text-orange-500')
-            <span class="text-2xl">{{ __('Completed Inspections') }}</span>
-        </div>
-        <div>
-            <p class="text-2xl font-extrabold text-neutral-800 dark:text-white">{{ $completedInspections->count() }}</p>
-        </div>
-    </div> --}}
 </div>

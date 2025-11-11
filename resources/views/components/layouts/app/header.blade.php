@@ -20,9 +20,8 @@
             </a>
             @svg('phosphor-minus', 'size-6')
             <div class="flex items-center gap-8 text-base font-medium">
-                <span>Appointments</span>
-                <span>Quotations</span>
-                <span>Repairs</span>
+                <a href="{{ route('appointments.index') }}" wire:navigate class="text-neutral-900 hover:text-orange-600 transition-colors duration-200">Appointments</a>
+                <a href="{{ route('quotation-requests.browse') }}" wire:navigate class="text-neutral-900 hover:text-orange-600 transition-colors duration-200">Quotations</a>
             </div>
             {{-- @auth
                 <div class="max-lg:hidden">
@@ -46,10 +45,10 @@
         <!-- Desktop User Menu -->
         <div class="flex items-center gap-8">
             @svg('phosphor-bell-light', 'size-8')
-            
+
             <flux:dropdown position="top" align="end">
                 <flux:profile class="cursor-pointer" :initials="auth()->user()->initials()" />
-    
+
                 <flux:menu>
                     <flux:menu.radio.group>
                         <div class="p-0 text-sm font-normal">
@@ -60,7 +59,7 @@
                                         {{ auth()->user()->initials() }}
                                     </span>
                                 </span>
-    
+
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                     <span class="truncate text-xs">{{ auth()->user()->email }}</span>
@@ -68,16 +67,16 @@
                             </div>
                         </div>
                     </flux:menu.radio.group>
-    
+
                     <flux:menu.separator />
-    
+
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}
                         </flux:menu.item>
                     </flux:menu.radio.group>
-    
+
                     <flux:menu.separator />
-    
+
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">

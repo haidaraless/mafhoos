@@ -1,7 +1,8 @@
 <?php
 
+use App\Livewire\Inspections\ViewInspection;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Inspections\ReportInspection;    
+use App\Livewire\Inspections\ReportInspection;
 /*
 |--------------------------------------------------------------------------
 | Inspections Routes
@@ -17,6 +18,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('/inspections')->group(function () {
         Route::get('{inspection}', ReportInspection::class)->name('inspections.report');
-        Route::get('{inspection}/view', \App\Livewire\Inspections\ViewInspection::class)->name('inspections.view');
+        Route::get('{inspection}/view', ViewInspection::class)->name('inspections.view');
     });
 });

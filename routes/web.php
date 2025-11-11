@@ -12,6 +12,7 @@ use App\Livewire\Dashboard\AutoRepairWorkshop;
 use App\Livewire\Dashboard\VehicleOwner;
 use App\Livewire\Quotations\ViewQuotationRequest;
 use App\Livewire\Quotations\BrowseQuotations;
+use App\Livewire\Quotations\ProvideQuotation;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\DashboardController;
@@ -35,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/quotation-requests', BrowseQuotations::class)->name('quotation-requests.browse');
     Route::get('/quotation-requests/{quotationRequestId}', ViewQuotationRequest::class)->name('quotation-requests.view');
+    Route::get('/quotation-requests/{quotationRequestId}/provide-quote', ProvideQuotation::class)->name('quotation-requests.provide-quote');
 });
 
 Route::middleware(['auth'])->group(function () {
