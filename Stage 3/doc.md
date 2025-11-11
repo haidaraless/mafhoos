@@ -32,26 +32,25 @@
 ## **Data Flow Diagrams (DFD)**
 
 ### **Vehicle Owner**
-*(Shows the process of booking, inspection, and receiving reports.)*
+![VO](VO.png)
 
 ### **Inspection Technician**
-*(Illustrates the inspection approval and report submission workflow.)*
-
+![IT](IT.png)
 ### **Workshop Repair Estimator**
-*(Displays how workshops receive and respond to repair quotations.)*
-
+![WRE](WRE.png)
 ### **Spare Parts Sales Representative**
-*(Shows flow of quotation requests and responses for spare parts.)*
+![SSR](SSR.png)
 
 ---
 
 ## **Entity Relationship Diagram (ERD)**
-*(To be inserted – represents relationships between entities such as Users, Vehicles, Appointments, Inspections, Quotations, and Reports.)*
+![ER](ER.png)
+
 
 ---
 
 ## **Sequence Diagram**
-*(To be inserted – depicts the interaction between user roles and system components during main processes such as booking, inspection, and quotation.)*
+![WRE](SQ.png)
 
 ---
 
@@ -83,3 +82,27 @@
 - Git / GitHub
 
 **Branching Strategy:**
+Local Repository (Developer Machine)
+↓
+Feature Branches (Backend & Frontend for each feature)
+↓ (Regular commits)
+Development Branch (Development / Testing)
+↓ (Pull Request required before merge)
+Main Branch (Production)
+↓ (High-level PR required before merge)
+
+---
+
+## **QA Processes**
+
+### **Testing Tools**
+- **Postman** – for API testing  
+- **Pest** – for unit testing  
+- **PSR-4** – for PHP code styling standards  
+
+### **Testing Strategy**
+- Write **Pest** tests for every feature to ensure correctness and reliability of the business logic.
+
+### **Deployment Pipeline**
+- Deploy on **DigitalOcean Droplet** via **Laravel Forge**, ensuring successful deployment and automatic rollback on failure.
+
