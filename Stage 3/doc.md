@@ -24,7 +24,8 @@
 ---
 
 ## **Architecture Diagram**
-*(To be inserted – represents the system structure and communication flow between components.)*
+![AD](AD.png)
+
 
 ---
 
