@@ -32,26 +32,25 @@
 ## **Data Flow Diagrams (DFD)**
 
 ### **Vehicle Owner**
-*(Shows the process of booking, inspection, and receiving reports.)*
+![VO](VO.png)
 
 ### **Inspection Technician**
-*(Illustrates the inspection approval and report submission workflow.)*
-
+![IT](IT.png)
 ### **Workshop Repair Estimator**
-*(Displays how workshops receive and respond to repair quotations.)*
-
+![WRE](WRE.png)
 ### **Spare Parts Sales Representative**
-*(Shows flow of quotation requests and responses for spare parts.)*
+![SSR](SSR.png)
 
 ---
 
 ## **Entity Relationship Diagram (ERD)**
-*(To be inserted – represents relationships between entities such as Users, Vehicles, Appointments, Inspections, Quotations, and Reports.)*
+![ER](ER.png)
+
 
 ---
 
 ## **Sequence Diagram**
-*(To be inserted – depicts the interaction between user roles and system components during main processes such as booking, inspection, and quotation.)*
+![WRE](SQ.png)
 
 ---
 
