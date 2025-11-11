@@ -10,6 +10,7 @@ use App\Models\Fee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -54,6 +55,7 @@ class PayFeesController extends Controller
             }
 
             if ($payment['status'] === 'paid') {
+
                 if (!Fee::where('payment_id', $payment['id'])->exists()) {
                     $inspectionPrice = $this->getInspectionPrice($appointment->inspection_type);
                     $fee = Fee::create([
@@ -66,21 +68,30 @@ class PayFeesController extends Controller
                         'paid_at' => now(),
                     ]);
 
-                    // Update appointment status to confirmed
-                    $appointment->update([
-                        'status' => AppointmentStatus::CONFIRMED,
-                        'confirmed_at' => now(),
-                    ]);
-
-                    // Send confirmation email to the vehicle owner
-                    if ($appointment->vehicle && $appointment->vehicle->user) {
-                        Mail::to($appointment->vehicle->user->email)
-                            ->send(new AppointmentConfirmation($appointment, $fee));
-                    }
+                    Log::info('Fee created: ' . $fee->id);
                 }
+
+                // Update appointment status to confirmed
+                $appointment->update([
+                    'status' => AppointmentStatus::CONFIRMED,
+                    'confirmed_at' => now(),
+                ]);
+
+                // Send confirmation email to the vehicle owner
+                if ($appointment->vehicle && $appointment->vehicle->user) {
+                    Mail::to($appointment->vehicle->user->email)
+                        ->send(new AppointmentConfirmation($appointment, $fee));
+                }
+
+                Log::info('Payment completed successfully!');
+
                 return redirect()->route('dashboard.vehicle-owner')->with('success', 'Payment completed successfully! Your appointment has been confirmed and you will receive an email confirmation shortly.');
             }
+
+            Log::info('Payment failed.');
+
             return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment failed.');
+
         } catch (\Exception $e) {
             return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment verification failed: ' . $e->getMessage());
         }

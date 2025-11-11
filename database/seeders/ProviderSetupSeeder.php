@@ -8,11 +8,12 @@ use App\Models\City;
 use App\Models\Provider;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ProviderSetupSeeder extends Seeder
 {
     /**
-     * Seed 5 different demo providers in Riyadh, each with their own user.
+     * Seed 10 providers for each provider type in Riyadh, each with their own user.
      */
     public function run(): void
     {
@@ -21,90 +22,59 @@ class ProviderSetupSeeder extends Seeder
             ['name' => 'Riyadh'],
             ['name' => 'Riyadh']
         );
+        
+        $this->seedProvidersOfType($riyadh->id, ProviderType::VEHICLE_INSPECTION_CENTER);
+        $this->seedProvidersOfType($riyadh->id, ProviderType::AUTO_REPAIR_WORKSHOP);
+        $this->seedProvidersOfType($riyadh->id, ProviderType::SPARE_PARTS_SUPPLIER);
+    }
 
-        // Demo providers data - all in Riyadh
-        $providersData = [
-            [
-                'name' => 'Al-Riyadh Vehicle Inspection Center',
-                'commercial_record' => 'CR-001',
-                'mobile' => '+966501234567',
-                'email' => 'riyadh.inspection@example.com',
-                'location' => 'King Fahd Road, Riyadh',
-                'type' => ProviderType::VEHICLE_INSPECTION_CENTER,
-                'user_name' => 'Ahmed Al-Rashid',
-                'user_email' => 'ahmed.rashid@example.com',
-            ],
-            [
-                'name' => 'Riyadh Auto Repair Workshop',
-                'commercial_record' => 'CR-002',
-                'mobile' => '+966502345678',
-                'email' => 'riyadh.repair@example.com',
-                'location' => 'Al-Hamra District, Riyadh',
-                'type' => ProviderType::AUTO_REPAIR_WORKSHOP,
-                'user_name' => 'Mohammed Al-Sheikh',
-                'user_email' => 'mohammed.sheikh@example.com',
-            ],
-            [
-                'name' => 'Riyadh Spare Parts Supplier',
-                'commercial_record' => 'CR-003',
-                'mobile' => '+966503456789',
-                'email' => 'riyadh.spareparts@example.com',
-                'location' => 'Industrial Area, Riyadh',
-                'type' => ProviderType::SPARE_PARTS_SUPPLIER,
-                'user_name' => 'Omar Al-Mansouri',
-                'user_email' => 'omar.mansouri@example.com',
-            ],
-            [
-                'name' => 'Riyadh Vehicle Services',
-                'commercial_record' => 'CR-004',
-                'mobile' => '+966504567890',
-                'email' => 'riyadh.services@example.com',
-                'location' => 'Al-Aziziyah District, Riyadh',
-                'type' => ProviderType::VEHICLE_INSPECTION_CENTER,
-                'user_name' => 'Khalid Al-Zahrani',
-                'user_email' => 'khalid.zahrani@example.com',
-            ],
-            [
-                'name' => 'Riyadh Auto Center',
-                'commercial_record' => 'CR-005',
-                'mobile' => '+966505678901',
-                'email' => 'riyadh.autocenter@example.com',
-                'location' => 'Quba District, Riyadh',
-                'type' => ProviderType::AUTO_REPAIR_WORKSHOP,
-                'user_name' => 'Saeed Al-Ghamdi',
-                'user_email' => 'saeed.ghamdi@example.com',
-            ],
-        ];
+    protected function seedProvidersOfType(string $cityId, ProviderType $type): void
+    {
+        for ($i = 1; $i <= 10; $i++) {
+            $companySlug = Str::slug(match ($type) {
+                ProviderType::VEHICLE_INSPECTION_CENTER => 'Riyadh Vehicle Inspection Center',
+                ProviderType::AUTO_REPAIR_WORKSHOP => 'Riyadh Auto Repair Workshop',
+                ProviderType::SPARE_PARTS_SUPPLIER => 'Riyadh Spare Parts Supplier',
+            });
 
-        foreach ($providersData as $providerData) {
-            // Create a new user for this provider
+            $providerName = match ($type) {
+                ProviderType::VEHICLE_INSPECTION_CENTER => "Riyadh Vehicle Inspection Center #{$i}",
+                ProviderType::AUTO_REPAIR_WORKSHOP => "Riyadh Auto Repair Workshop #{$i}",
+                ProviderType::SPARE_PARTS_SUPPLIER => "Riyadh Spare Parts Supplier #{$i}",
+            };
+
+            $userName = match ($type) {
+                ProviderType::VEHICLE_INSPECTION_CENTER => "Inspector {$i} Riyadh",
+                ProviderType::AUTO_REPAIR_WORKSHOP => "Mechanic {$i} Riyadh",
+                ProviderType::SPARE_PARTS_SUPPLIER => "Supplier {$i} Riyadh",
+            };
+
+            $userEmail = $companySlug . "-user{$i}@example.com";
+
             $user = User::query()->firstOrCreate(
-                ['email' => $providerData['user_email']],
+                ['email' => $userEmail],
                 [
-                    'name' => $providerData['user_name'],
-                    'email' => $providerData['user_email'],
-                    'password' => bcrypt('password'), // Default password
+                    'name' => $userName,
+                    'email' => $userEmail,
+                    'password' => bcrypt('password'),
                 ]
             );
 
-            // Create provider
             $provider = Provider::create([
-                'city_id' => $riyadh->id,
-                'name' => $providerData['name'],
-                'commercial_record' => $providerData['commercial_record'],
-                'mobile' => $providerData['mobile'],
-                'email' => $providerData['email'],
-                'location' => $providerData['location'],
-                'type' => $providerData['type']->value,
+                'city_id' => $cityId,
+                'name' => $providerName,
+                'commercial_record' => 'CR-' . str_pad((string)($type->value[0] === 'v' ? 1 : ($type->value[0] === 'a' ? 2 : 3)) . $i, 3, '0', STR_PAD_LEFT),
+                'mobile' => '+9665' . str_pad((string)random_int(10000000, 99999999), 8, '0', STR_PAD_LEFT),
+                'email' => $companySlug . ".{$i}@example.com",
+                'location' => 'Riyadh',
+                'type' => $type->value,
             ]);
 
-            // Create account for this user
             $account = Account::create([
-                    'accountable_id' => $provider->id,
-                    'accountable_type' => Provider::class,
-                ]);
+                'accountable_id' => $provider->id,
+                'accountable_type' => Provider::class,
+            ]);
 
-            // Set this account as current for the user
             if (!$user->current_account_id) {
                 $user->current_account_id = $account->id;
                 $user->save();

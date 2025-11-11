@@ -113,10 +113,10 @@
                                     View Details
                                 </a>
                                 @if($request->quotations->count() === 0)
-                                    <button wire:click="$dispatch('open-quotation-modal', { quotationRequestId: '{{ $request->id }}' })" 
-                                            class="px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-lg hover:bg-green-200 transition-colors duration-200">
+                                    <a href="{{ route('quotation-requests.provide-quote', $request->id) }}"
+                                       class="px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-lg hover:bg-green-200 transition-colors duration-200">
                                         Provide Quote
-                                    </button>
+                                    </a>
                                 @else
                                     <span class="px-4 py-2 bg-blue-100 text-blue-700 text-sm font-medium rounded-lg">
                                         Quote Provided
@@ -139,6 +139,5 @@
         </div>
     @endif
 
-    <!-- Quotation Modal -->
-    @livewire('quotations.quotation-modal')
+    <!-- Quotation Modal removed in favor of page-based quoting -->
 </div>

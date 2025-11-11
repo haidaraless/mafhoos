@@ -14,7 +14,7 @@ class SelectInspectionCenter extends Component
 
     public function mount(): void
     {
-        $this->centers = Provider::where('type', ProviderType::VEHICLE_INSPECTION_CENTER)->get();
+        $this->centers = Provider::where('type', ProviderType::VEHICLE_INSPECTION_CENTER)->get()->take(5);
     }
 
     public function selectCenter($providerId)

@@ -46,6 +46,11 @@ class Appointment extends Model
         return $query->where('status', AppointmentStatus::COMPLETED->value);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function provider(): BelongsTo
     {
         return $this->belongsTo(Provider::class);
@@ -72,7 +77,14 @@ class Appointment extends Model
             abort(403, 'You are not authorized');
         }
 
+        $appointment = self::where('user_id', Auth::user()->id)->where('status', AppointmentStatus::PENDING->value)->first();
+
+        if ($appointment) {
+            return $appointment;
+        }
+
         return self::create([
+            'user_id' => Auth::user()->id,
             'status' => AppointmentStatus::PENDING->value,
         ]);
     }
@@ -84,7 +96,9 @@ class Appointment extends Model
         }
 
         return self::create([
+            'user_id' => Auth::user()->id,
             'vehicle_id' => $vehicle->id,
+            'status' => AppointmentStatus::PENDING->value,
         ]);
     }
 }

@@ -17,15 +17,17 @@ class CreateRepairQuotation extends Component
     public $total = '';
     public $notes = '';
     public $showModal = false;
+    public bool $inline = false;
 
     protected $rules = [
         'total' => 'required|numeric|min:0.01',
         'notes' => 'nullable|string|max:1000',
     ];
 
-    public function mount(QuotationRequest $quotationRequest)
+    public function mount(QuotationRequest $quotationRequest, bool $inline = false)
     {
         $this->quotationRequest = $quotationRequest;
+        $this->inline = $inline;
     }
 
     public function openModal()

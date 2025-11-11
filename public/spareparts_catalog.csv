@@ -1,0 +1,105 @@
+part_number,name,description,brand,vehicle_make,vehicle_model,year_range,category,price_range,availability
+TC-AF-001,Air Filter,Engine air filter for improved performance,Denso,Toyota,Camry,2015-2023,Engine,15-25,In Stock
+TC-OF-002,Oil Filter,High-efficiency oil filter,Bosch,Toyota,Camry,2015-2023,Engine,8-15,In Stock
+TC-BPF-003,Brake Pads Front,Ceramic front brake pads,Akebono,Toyota,Camry,2015-2023,Brakes,45-70,In Stock
+TC-BPR-004,Brake Pads Rear,Ceramic rear brake pads,Akebono,Toyota,Camry,2015-2023,Brakes,40-65,In Stock
+TC-SP-005,Spark Plugs,Iridium spark plugs set of 4,NGK,Toyota,Camry,2015-2023,Engine,28-45,In Stock
+TC-RAD-006,Radiator,Aluminum radiator assembly,Denso,Toyota,Camry,2015-2021,Cooling,180-260,Limited
+TC-WP-007,Water Pump,OE-spec water pump,Aisin,Toyota,Camry,2015-2023,Cooling,65-120,In Stock
+TC-FP-008,Fuel Pump,In-tank fuel pump assembly,Delphi,Toyota,Camry,2015-2020,Fuel,120-220,Limited
+TC-ALT-009,Alternator,120A alternator remanufactured,Denso,Toyota,Camry,2015-2020,Electrical,180-300,In Stock
+TC-STA-010,Starter,High-torque starter motor,Denso,Toyota,Camry,2015-2020,Electrical,140-240,In Stock
+TC-SAF-011,Shock Absorber Front,Front gas strut KYB,KYB,Toyota,Camry,2015-2023,Suspension,85-140,In Stock
+TC-SAR-012,Shock Absorber Rear,Rear gas shock KYB,KYB,Toyota,Camry,2015-2023,Suspension,70-120,In Stock
+TC-TRE-013,Tie Rod End,Outer tie rod end pair,Moog,Toyota,Camry,2015-2023,Suspension,40-80,In Stock
+TC-CA-014,Control Arm,Front lower control arm with bushings,Moog,Toyota,Camry,2015-2021,Suspension,110-190,Limited
+TC-HL-015,Headlight,Left headlight assembly (halogen),TYC,Toyota,Camry,2018-2021,Lighting,160-260,In Stock
+TC-TL-016,Taillight,Right taillight assembly,TYC,Toyota,Camry,2018-2021,Lighting,120-200,In Stock
+TC-BAT-017,Battery,AGM 55D23L 12V battery,ACDelco,Toyota,Camry,2015-2023,Electrical,110-180,In Stock
+TC-SB-018,Serpentine Belt,Multi-rib accessory drive belt,Gates,Toyota,Camry,2015-2023,Engine,18-35,In Stock
+TC-TB-019,Timing Belt,High-strength timing belt,Gates,Toyota,Camry,2015-2017,Engine,60-110,Limited
+TC-CAB-020,Cabin Air Filter,HEPA cabin filter,WIX,Toyota,Camry,2015-2023,Engine,12-22,In Stock
+TC-WIP-021,Windshield Wipers,24"/18" beam wiper set,Bosch,Toyota,Camry,2015-2023,Exterior,18-32,In Stock
+TC-O2-022,Oxygen Sensor,Upstream O2 sensor,Denso,Toyota,Camry,2015-2021,Exhaust,65-120,In Stock
+TC-MAF-023,MAF Sensor,Mass air flow sensor,Denso,Toyota,Camry,2015-2021,Electrical,90-160,Limited
+TC-TBOD-024,Throttle Body,Electronic throttle body,Denso,Toyota,Camry,2015-2020,Engine,220-340,Limited
+TC-INJ-025,Fuel Injector,Set of 4 fuel injectors,Hitachi,Toyota,Camry,2015-2020,Fuel,140-260,In Stock
+HA-AF-001,Air Filter,Engine air filter for improved performance,Denso,Honda,Accord,2015-2023,Engine,15-25,In Stock
+HA-OF-002,Oil Filter,High-efficiency oil filter,Bosch,Honda,Accord,2015-2023,Engine,8-15,In Stock
+HA-BPF-003,Brake Pads Front,Ceramic front brake pads,Akebono,Honda,Accord,2015-2023,Brakes,45-70,In Stock
+HA-BPR-004,Brake Pads Rear,Ceramic rear brake pads,Akebono,Honda,Accord,2015-2023,Brakes,40-65,In Stock
+HA-SP-005,Spark Plugs,Iridium spark plugs set of 4,NGK,Honda,Accord,2015-2023,Engine,28-45,In Stock
+HA-RAD-006,Radiator,Aluminum radiator assembly,Denso,Honda,Accord,2015-2021,Cooling,180-260,Limited
+HA-WP-007,Water Pump,OE-spec water pump,Aisin,Honda,Accord,2015-2023,Cooling,65-120,In Stock
+HA-FP-008,Fuel Pump,In-tank fuel pump assembly,Delphi,Honda,Accord,2015-2020,Fuel,120-220,Limited
+HA-ALT-009,Alternator,120A alternator remanufactured,Denso,Honda,Accord,2015-2020,Electrical,180-300,In Stock
+HA-STA-010,Starter,High-torque starter motor,Denso,Honda,Accord,2015-2020,Electrical,140-240,In Stock
+HA-SAF-011,Shock Absorber Front,Front gas strut KYB,KYB,Honda,Accord,2015-2023,Suspension,85-140,In Stock
+HA-SAR-012,Shock Absorber Rear,Rear gas shock KYB,KYB,Honda,Accord,2015-2023,Suspension,70-120,In Stock
+HA-TRE-013,Tie Rod End,Outer tie rod end pair,Moog,Honda,Accord,2015-2023,Suspension,40-80,In Stock
+HA-CA-014,Control Arm,Front lower control arm with bushings,Moog,Honda,Accord,2015-2021,Suspension,110-190,Limited
+HA-HL-015,Headlight,Left headlight assembly (halogen),TYC,Honda,Accord,2018-2021,Lighting,160-260,In Stock
+HA-TL-016,Taillight,Right taillight assembly,TYC,Honda,Accord,2018-2021,Lighting,120-200,In Stock
+HA-BAT-017,Battery,Group 51R 12V battery,ACDelco,Honda,Accord,2015-2023,Electrical,110-180,In Stock
+HA-SB-018,Serpentine Belt,Multi-rib accessory drive belt,Gates,Honda,Accord,2015-2023,Engine,18-35,In Stock
+HA-TC-019,Timing Chain,OE-spec timing chain kit,Cloyes,Honda,Accord,2015-2023,Engine,220-380,Limited
+HA-CAB-020,Cabin Air Filter,HEPA cabin filter,WIX,Honda,Accord,2015-2023,Engine,12-22,In Stock
+HA-WIP-021,Windshield Wipers,26"/18" beam wiper set,Bosch,Honda,Accord,2015-2023,Exterior,18-32,In Stock
+HA-O2-022,Oxygen Sensor,Upstream O2 sensor,Denso,Honda,Accord,2015-2021,Exhaust,65-120,In Stock
+HA-MAF-023,MAF Sensor,Mass air flow sensor,Denso,Honda,Accord,2015-2021,Electrical,90-160,Limited
+HA-TBOD-024,Throttle Body,Electronic throttle body,Denso,Honda,Accord,2015-2020,Engine,220-340,Limited
+HA-INJ-025,Fuel Injector,Set of 4 fuel injectors,Hitachi,Honda,Accord,2015-2020,Fuel,140-260,In Stock
+FF-AF-001,Air Filter,High-flow air filter,Motorcraft,Ford,F-150,2015-2023,Engine,18-28,In Stock
+FF-OF-002,Oil Filter,OEM oil filter FL-500S,Motorcraft,Ford,F-150,2015-2023,Engine,9-16,In Stock
+FF-BPF-003,Brake Pads Front,Semi-metallic front pads,Wagner,Ford,F-150,2015-2023,Brakes,50-85,In Stock
+FF-BPR-004,Brake Pads Rear,Semi-metallic rear pads,Wagner,Ford,F-150,2015-2023,Brakes,45-75,In Stock
+FF-SP-005,Spark Plugs,Iridium spark plugs set of 6,Motorcraft,Ford,F-150,2015-2020,Engine,36-72,In Stock
+FF-RAD-006,Radiator,Heavy-duty radiator,Spectra Premium,Ford,F-150,2015-2020,Cooling,240-380,Limited
+FF-WP-007,Water Pump,OE-spec water pump,Gates,Ford,F-150,2015-2020,Cooling,70-140,In Stock
+FF-FP-008,Fuel Pump,High-pressure fuel pump,Bosch,Ford,F-150,2015-2020,Fuel,220-420,Limited
+FF-ALT-009,Alternator,200A alternator,Motorcraft,Ford,F-150,2015-2020,Electrical,240-420,In Stock
+FF-STA-010,Starter,High-torque starter,Motorcraft,Ford,F-150,2015-2020,Electrical,160-280,In Stock
+FF-SAF-011,Shock Absorber Front,Front gas strut Monroe,Monroe,Ford,F-150,2015-2023,Suspension,95-160,In Stock
+FF-SAR-012,Shock Absorber Rear,Rear gas shock Monroe,Monroe,Ford,F-150,2015-2023,Suspension,80-130,In Stock
+FF-TRE-013,Tie Rod End,Outer tie rod ends,Moog,Ford,F-150,2015-2023,Suspension,50-95,In Stock
+FF-CA-014,Control Arm,Front upper control arm with ball joint,Moog,Ford,F-150,2015-2020,Suspension,150-240,Limited
+FF-HL-015,Headlight,Left headlight LED,Anzo,Ford,F-150,2018-2020,Lighting,280-480,Limited
+FF-TL-016,Taillight,Right taillight LED,Anzo,Ford,F-150,2018-2020,Lighting,220-360,Limited
+FF-BAT-017,Battery,Group 65 AGM 12V,Motorcraft,Ford,F-150,2015-2023,Electrical,150-240,In Stock
+FF-SB-018,Serpentine Belt,HD multi-rib belt,Gates,Ford,F-150,2015-2023,Engine,22-42,In Stock
+FF-TC-019,Timing Chain,Timing chain kit 5.0L,Cloyes,Ford,F-150,2015-2020,Engine,260-520,Limited
+FF-CAB-020,Cabin Air Filter,HEPA cabin filter,WIX,Ford,F-150,2015-2023,Engine,14-24,In Stock
+FF-WIP-021,Windshield Wipers,22"/22" beam wiper set,Bosch,Ford,F-150,2015-2023,Exterior,20-36,In Stock
+FF-O2-022,Oxygen Sensor,Upstream O2 sensor,Bosch,Ford,F-150,2015-2020,Exhaust,70-130,In Stock
+FF-MAF-023,MAF Sensor,Mass air flow sensor,Bosch,Ford,F-150,2015-2020,Electrical,110-180,Limited
+FF-TBOD-024,Throttle Body,Electronic throttle body,Bosch,Ford,F-150,2015-2020,Engine,240-380,Limited
+FF-INJ-025,Fuel Injector,Set of 6 fuel injectors,Bosch,Ford,F-150,2015-2020,Fuel,210-360,In Stock
+TC-ROT-026,Brake Rotors Front,Front brake rotors pair,Brembo,Toyota,Camry,2015-2023,Brakes,120-220,In Stock
+TC-ROT-027,Brake Rotors Rear,Rear brake rotors pair,Brembo,Toyota,Camry,2015-2023,Brakes,100-190,In Stock
+HA-ROT-026,Brake Rotors Front,Front brake rotors pair,Brembo,Honda,Accord,2015-2023,Brakes,120-220,In Stock
+HA-ROT-027,Brake Rotors Rear,Rear brake rotors pair,Brembo,Honda,Accord,2015-2023,Brakes,100-190,In Stock
+FF-ROT-026,Brake Rotors Front,Front brake rotors pair,Brembo,Ford,F-150,2015-2023,Brakes,180-320,In Stock
+FF-ROT-027,Brake Rotors Rear,Rear brake rotors pair,Brembo,Ford,F-150,2015-2023,Brakes,160-280,In Stock
+TC-EXH-028,Exhaust Muffler,Stainless steel muffler,MagnaFlow,Toyota,Camry,2015-2020,Exhaust,220-360,Limited
+HA-EXH-028,Exhaust Muffler,Stainless steel muffler,MagnaFlow,Honda,Accord,2015-2020,Exhaust,220-360,Limited
+FF-EXH-028,Exhaust Muffler,Stainless steel muffler,MagnaFlow,Ford,F-150,2015-2020,Exhaust,280-460,Limited
+TC-CAL-029,Brake Caliper Front,Front caliper loaded,Cardone,Toyota,Camry,2015-2020,Brakes,110-190,In Stock
+HA-CAL-029,Brake Caliper Front,Front caliper loaded,Cardone,Honda,Accord,2015-2020,Brakes,110-190,In Stock
+FF-CAL-029,Brake Caliper Front,Front caliper loaded,Cardone,Ford,F-150,2015-2020,Brakes,140-240,In Stock
+TC-AC-030,AC Compressor,Air conditioning compressor,Denso,Toyota,Camry,2015-2020,Electrical,280-480,Limited
+HA-AC-030,AC Compressor,Air conditioning compressor,Denso,Honda,Accord,2015-2020,Electrical,280-480,Limited
+FF-AC-030,AC Compressor,Air conditioning compressor,Denso,Ford,F-150,2015-2020,Electrical,320-540,Limited
+TC-ALT-031,Alternator (Hybrid),Hybrid-spec alternator,Denso,Toyota,Camry,2018-2020,Electrical,260-420,Limited
+HA-ALT-031,Alternator (Hybrid),Hybrid-spec alternator,Denso,Honda,Accord,2018-2020,Electrical,260-420,Limited
+TC-HUB-032,Wheel Hub Assembly Front,Front hub with bearing,Timken,Toyota,Camry,2015-2020,Suspension,130-210,In Stock
+HA-HUB-032,Wheel Hub Assembly Front,Front hub with bearing,Timken,Honda,Accord,2015-2020,Suspension,130-210,In Stock
+FF-HUB-032,Wheel Hub Assembly Front,Front hub with bearing,Timken,Ford,F-150,2015-2020,Suspension,180-280,In Stock
+TC-STR-033,Steering Rack,Power steering rack assembly,Aisin,Toyota,Camry,2015-2020,Suspension,420-720,Limited
+HA-STR-033,Steering Rack,Power steering rack assembly,Aisin,Honda,Accord,2015-2020,Suspension,420-720,Limited
+FF-STR-033,Steering Rack,Electric power steering rack,Bosch,Ford,F-150,2015-2020,Suspension,680-980,Limited
+TC-MIR-034,Side Mirror Left,Heated powered mirror left,TYC,Toyota,Camry,2018-2021,Exterior,90-160,In Stock
+HA-MIR-034,Side Mirror Left,Heated powered mirror left,TYC,Honda,Accord,2018-2021,Exterior,90-160,In Stock
+FF-MIR-034,Side Mirror Left,Heated powered mirror left,TYC,Ford,F-150,2018-2020,Exterior,120-200,In Stock
+TC-AXL-035,CV Axle Front Left,Front left CV axle,Cardone,Toyota,Camry,2015-2020,Suspension,140-240,In Stock
+HA-AXL-035,CV Axle Front Left,Front left CV axle,Cardone,Honda,Accord,2015-2020,Suspension,140-240,In Stock
+FF-AXL-035,CV Axle Front Left,Front left CV axle,Cardone,Ford,F-150,2015-2020,Suspension,180-320,In Stock

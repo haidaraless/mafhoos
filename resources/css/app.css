@@ -47,6 +47,14 @@
     }
 }
 
+body, html {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+* {
+  font-family: inherit;
+}
+
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }

@@ -23,13 +23,15 @@
         </div>
     </div>
 
-    <!-- Create Quotation Button -->
-    <div class="mb-6">
-        <button wire:click="openModal" 
-                class="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors duration-200">
-            Create Repair Quotation
-        </button>
-    </div>
+    @if(!$inline)
+        <!-- Create Quotation Button -->
+        <div class="mb-6">
+            <button wire:click="openModal" 
+                    class="px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors duration-200">
+                Create Repair Quotation
+            </button>
+        </div>
+    @endif
 
     <!-- Existing Quotations -->
     @if($quotations->count() > 0)
@@ -77,8 +79,47 @@
         </div>
     @endif
 
+    <!-- Inline Create Form (no modal) -->
+    @if($inline)
+        <div class="bg-white rounded-lg border border-gray-200 p-6">
+            <div class="mt-1">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Create Repair Quotation</h3>
+                </div>
+                <form wire:submit="createQuotation">
+                    <div class="mb-4">
+                        <label for="total" class="block text-sm font-medium text-gray-700 mb-2">Total Amount (SAR)</label>
+                        <input type="number" 
+                               wire:model="total" 
+                               step="0.01" 
+                               min="0.01"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                               placeholder="Enter total quotation amount">
+                        @error('total') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+                        <textarea wire:model="notes" 
+                                  rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                  placeholder="Add any additional notes or details about the repair work"></textarea>
+                        @error('notes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    
+                    <div class="flex items-center justify-end space-x-3">
+                        <button type="submit" 
+                                class="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700 transition-colors duration-200">
+                            Create Quotation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+
     <!-- Create Quotation Modal -->
-    @if($showModal)
+    @if($showModal && !$inline)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                 <div class="mt-3">

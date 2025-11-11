@@ -20,6 +20,7 @@ class CreateSparepartsQuotation extends Component
     public $notes = '';
     public $showModal = false;
     public $damageSpareparts;
+    public bool $inline = false;
 
     protected $rules = [
         'sparepartPrices.*' => 'required|numeric|min:0.01',
@@ -42,9 +43,10 @@ class CreateSparepartsQuotation extends Component
         return $rules;
     }
 
-    public function mount(QuotationRequest $quotationRequest)
+    public function mount(QuotationRequest $quotationRequest, bool $inline = false)
     {
         $this->quotationRequest = $quotationRequest;
+        $this->inline = $inline;
         $this->loadDamageSpareparts();
         $this->initializePrices();
     }
