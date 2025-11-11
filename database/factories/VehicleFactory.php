@@ -19,11 +19,10 @@ class VehicleFactory extends Factory
         return [
             'user_id' => \App\Models\User::factory(),
             'vin' => $this->faker->regexify('[A-HJ-NPR-Z0-9]{17}'),
-            'make' => $this->faker->randomElement(['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Audi']),
+            'name' => $this->faker->word(),
             'model' => $this->faker->word(),
-            'year' => $this->faker->numberBetween(1990, 2024),
-            'color' => $this->faker->colorName(),
-            'plate_number' => $this->faker->regexify('[A-Z]{3}[0-9]{4}'),
+            'year' => (string) $this->faker->numberBetween(1990, 2024),
+            'make' => $this->faker->randomElement(['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Audi']),
         ];
     }
 }
