@@ -1,6 +1,6 @@
 <div class="flex items-center justify-center w-full h-full">
     <div class="grid grid-cols-1 overflow-hidden border border-neutral-300 rounded-2xl">
-        <div class="col-span-1 flex flex-col gap-6 p-3 md:p-6 bg-neutral-50 border-b border-neutral-300">
+        <div class="col-span-1 flex flex-col gap-6 p-3 md:p-6 bg-white border-b border-neutral-300">
             @svg('phosphor-user-plus-light', 'size-10 md:size-12 text-orange-500')
             <div class="flex flex-col">
                 <h1 class="text-2xl md:text-3xl text-neutral-800 font-bold">{{ __('Create your account') }}</h1>

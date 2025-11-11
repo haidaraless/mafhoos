@@ -54,7 +54,7 @@
                     currency: 'SAR',
                     description: 'Vehicle Inspection Fee - {{ str_replace('-', ' ', $appointment->inspection_type->value ?? $appointment->inspection_type) }}',
                     publishable_api_key: '{{ config('services.moyasar.publishable_key') }}',
-                    callback_url: '{{ route('appointments.fees.callback.controller') }}',
+                    callback_url: '{{ route('appointments.fees.callback') }}',
                     supported_networks: ['visa', 'mastercard', 'mada'],
                     methods: ['creditcard'],
                     metadata: {

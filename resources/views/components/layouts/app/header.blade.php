@@ -5,19 +5,25 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen font-montserrat text-neutral-800 bg-white antialiased dark:text-white dark:bg-neutral-950">
-    <flux:header container class="h-20 bg-white dark:bg-neutral-950 border-b border-neutral-300 dark:border-neutral-700">
+<body class="min-h-screen flex flex-col font-montserrat text-neutral-800 bg-white antialiased dark:text-white dark:bg-neutral-950">
+    <flux:header container class="h-36">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
-        <div class="flex items-center gap-4 max-lg:hidden">
+        <div class="flex items-center gap-8 max-lg:hidden">
 
-            <a href="{{ route('dashboard') }}" class="text-neutral-900 hover:text-neutral-950 dark:hover:text-white transition-all ease-in-out duration-300" wire:navigate>
-                <span class="flex items-center gap-2">
+            <a href="{{ route('dashboard') }}" wire:navigate>
+                <span class="flex items-center gap-2 text-orange-600">
                     <x-app-logo-icon />
-                    <span class="text-2xl tracking-tighter font-light uppercase">mafhoos</span>
+                    <span class="text-2xl tracking-tighter font-medium uppercase">mafhoos</span>
                 </span>
                 <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
             </a>
+            @svg('phosphor-minus', 'size-6')
+            <div class="flex items-center gap-8 text-base font-medium">
+                <span>Appointments</span>
+                <span>Quotations</span>
+                <span>Repairs</span>
+            </div>
             {{-- @auth
                 <div class="max-lg:hidden">
                     <livewire:account-switcher />
@@ -38,45 +44,49 @@
         <flux:spacer />
 
         <!-- Desktop User Menu -->
-        <flux:dropdown position="top" align="end">
-            <flux:profile class="cursor-pointer" :initials="auth()->user()->initials()" />
-
-            <flux:menu>
-                <flux:menu.radio.group>
-                    <div class="p-0 text-sm font-normal">
-                        <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-                            <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                <span
-                                    class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                    {{ auth()->user()->initials() }}
+        <div class="flex items-center gap-8">
+            @svg('phosphor-bell-light', 'size-8')
+            
+            <flux:dropdown position="top" align="end">
+                <flux:profile class="cursor-pointer" :initials="auth()->user()->initials()" />
+    
+                <flux:menu>
+                    <flux:menu.radio.group>
+                        <div class="p-0 text-sm font-normal">
+                            <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
+                                <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+                                    <span
+                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                        {{ auth()->user()->initials() }}
+                                    </span>
                                 </span>
-                            </span>
-
-                            <div class="grid flex-1 text-start text-sm leading-tight">
-                                <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
-                                <span class="truncate text-xs">{{ auth()->user()->email }}</span>
+    
+                                <div class="grid flex-1 text-start text-sm leading-tight">
+                                    <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
+                                    <span class="truncate text-xs">{{ auth()->user()->email }}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </flux:menu.radio.group>
-
-                <flux:menu.separator />
-
-                <flux:menu.radio.group>
-                    <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}
-                    </flux:menu.item>
-                </flux:menu.radio.group>
-
-                <flux:menu.separator />
-
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                        {{ __('Log Out') }}
-                    </flux:menu.item>
-                </form>
-            </flux:menu>
-        </flux:dropdown>
+                    </flux:menu.radio.group>
+    
+                    <flux:menu.separator />
+    
+                    <flux:menu.radio.group>
+                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}
+                        </flux:menu.item>
+                    </flux:menu.radio.group>
+    
+                    <flux:menu.separator />
+    
+                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                            {{ __('Log Out') }}
+                        </flux:menu.item>
+                    </form>
+                </flux:menu>
+            </flux:dropdown>
+        </div>
     </flux:header>
 
     <!-- Mobile Menu -->
@@ -120,9 +130,23 @@
         </flux:navlist> --}}
     </flux:sidebar>
 
-    <div class="container mx-auto">
+    <main class="container mx-auto flex-1 overflow-hidden border border-neutral-900 dark:border-neutral-700 rounded-4xl">
         {{ $slot }}
-    </div>
+    </main>
+    <footer class="flex items-center mt-auto h-20">
+        <div class="container mx-auto">
+            <div class="flex items-center justify-between px-10">
+                <span class="text-base tracking-tighter font-light">Mafhoos &copy; {{ date('Y') }}</span>
+                <div class="flex items-center gap-4 text-base tracking-tighter font-light">
+                    <a href="#" class="hover:text-orange-600 transition-all ease-in-out duration-300">About</a>
+                    <a href="#" class="hover:text-orange-600 transition-all ease-in-out duration-300">Terms</a>
+                    <a href="#" class="hover:text-orange-600 transition-all ease-in-out duration-300">Privacy</a>
+                    @svg('phosphor-minus-light', 'size-5')
+                    <a href="https://github.com/haidaraless/mafhoos" target="_blank" class="hover:text-orange-600 transition-all ease-in-out duration-300">v1.0.0</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     @fluxScripts
 </body>

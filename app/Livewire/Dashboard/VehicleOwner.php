@@ -13,6 +13,7 @@ use App\Models\QuotationRequest;
 
 class VehicleOwner extends Component
 {
+    public Vehicle $vehicle;
     public Collection $vehicles;
     public Collection $draftAppointments;
     public Collection $upcomingAppointments;
@@ -21,6 +22,7 @@ class VehicleOwner extends Component
 
     public function mount()
     {
+        $this->vehicle = Vehicle::whereUserId(Auth::user()->id)->first();
         $this->loadVehicles();
         $this->loadAppointments();
         $this->loadCompletedInspections();

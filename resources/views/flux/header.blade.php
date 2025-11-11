@@ -21,7 +21,7 @@
 
 <header {{ $attributes->class($classes) }} data-flux-header>
     @if ($container)
-        <div class="mx-auto w-full h-full container flex items-center">
+        <div class="mx-auto w-full h-full container flex items-center px-10">
             {{ $slot }}
         </div>
     @else
