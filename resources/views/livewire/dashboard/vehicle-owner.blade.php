@@ -1,4 +1,4 @@
-<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
     <!-- Vehicle Stat Card -->
     <div class="col-span-1 grid grid-cols-1 border-r border-neutral-900 dark:border-neutral-700">
         <div class="grid grid-cols-1 gap-6 border-b border-neutral-900 dark:border-neutral-700 p-6">
@@ -30,8 +30,8 @@
             </div>
         </div>
         <div class="grid grid-cols-1 border-b border-neutral-500 dark:border-neutral-500">
-            <div class="col-span-1 min-h-36 p-10">
-                vehicle 2
+            <div class="col-span-1 flex items-center min-h-36 px-6">
+                <span class="text-2xl font-extrabold font-montserrat text-neutral-950 dark:text-white">No inspections scheduled</span>
             </div>
         </div>
         <div class="flex flex-col gap-6 lg:gap-8 p-6 bg-neutral-50">
@@ -53,20 +53,27 @@
             </div>
         </div>
     </div>
-    <div class="col-span-3 grid grid-cols-1 gap-8">
-        <div class="grid grid-cols-1 gap-2 content-start">
-            <div class="flex items-center gap-2 pt-8">
+    <div class="col-span-3 grid grid-cols-1 gap-8 p-8">
+        <div class="grid grid-cols-1 gap-4 content-start">
+            <div class="col-span-1 flex items-center gap-2">
                 @svg('phosphor-clock-user', 'size-8 text-blue-500')
                 <span class="text-2xl">{{ __('Upcoming Appointments') }}</span>
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 content-start pl-10">
                 @forelse ($upcomingAppointments as $appointment)
-                    <div class="flex items-center gap-2">
-                        <span>{{ $appointment->provider->name }}</span>
+                    <div class="col-span-1 flex gap-4 border-b border-neutral-300 dark:border-neutral-700 pb-4">
+                        <div class="flex flex-col text-neutral-900">
+                            <span class="text-2xl font-extrabold">{{ $appointment->scheduled_at->format('H:i A') }}</span>
+                            <span class="text-lg font-normal">{{ $appointment->scheduled_at->format('M d, Y') }}</span>
+                        </div>
+                        <div class="grid grid-cols-1">
+                            <span>{{ $appointment->provider->name }}</span>
+                            <span>{{ $appointment->vehicle->name }}</span>
+                        </div>
                     </div>
                 @empty
                     <div class="flex text-base text-neutral-500 dark:text-white/20">
-                        <span>{{ __('_________ No upcoming appointments') }}</span>
+                        <span>{{ __('_________ No upcoming inspections scheduled') }}</span>
                     </div>
                 @endforelse
             </div>
