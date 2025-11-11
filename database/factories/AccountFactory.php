@@ -17,8 +17,8 @@ class AccountFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
-            'type' => $this->faker->randomElement(['vehicle-inspection-center', 'auto-repair-workshop', 'spare-parts-supplier', 'vehicle-owner']),
+            'accountable_type' => \App\Models\User::class,
+            'accountable_id' => \App\Models\User::factory(),
             'status' => 'active',
         ];
     }
