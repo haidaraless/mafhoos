@@ -1,13 +1,12 @@
 <div class="grid grid-cols-1 content-start min-h-full border-l border-neutral-900 dark:border-white/10">
     @if($appointment)
         <div class="flex flex-col gap-3 p-6">
-            <span class="inline-flex items-center justify-center size-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-300">
-                @svg('phosphor-calendar-dots', 'size-6')
-            </span>
-            <h3 class="text-lg font-extrabold">Appointment Details Review</h3>
+            
+            @svg('phosphor-calendar-dots', 'size-8 text-violet-600')
+            <h3 class="text-2xl">Appointment Details</h3>
             <div class="flex items-center gap-2 text-neutral-600 dark:text-white/70">
                 @svg('phosphor-hash-light', 'size-4')
-                <span class="font-medium">{{ $appointment->id }}</span>
+                <span class="font-medium">{{ $appointment->number }}</span>
             </div>
         </div>
 
@@ -131,14 +130,6 @@
             <div class="w-full bg-neutral-200 dark:bg-white/10 rounded-full h-2">
                 <div class="bg-gradient-to-r from-yellow-500 to-orange-500 h-2 rounded-full transition-all duration-300" style="width: {{ $progressPercentage }}%"></div>
             </div>
-        </div>
-    @else
-        <div class="text-center py-8">
-            <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 0a9 9 0 1118 0 9 9 0 01-18 0z"></path>
-            </svg>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Loading...</h3>
-            <p class="text-gray-500">Loading appointment details...</p>
         </div>
     @endif
 </div>

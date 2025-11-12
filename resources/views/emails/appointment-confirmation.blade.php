@@ -97,8 +97,8 @@
         <div class="appointment-details">
             <h3>Appointment Details</h3>
             <div class="detail-row">
-                <span class="detail-label">Appointment ID:</span>
-                <span class="detail-value">{{ $appointment->id }}</span>
+                <span class="detail-label">Appointment Number:</span>
+                <span class="detail-value">{{ $appointment->number }}</span>
             </div>
             <div class="detail-row">
                 <span class="detail-label">Inspection Type:</span>

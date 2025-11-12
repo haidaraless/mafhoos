@@ -48,9 +48,9 @@
         <header class="w-full">
             <div class="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between">
                 <a href="{{ route('home') }}" class="text-neutral-900 hover:text-neutral-950 dark:hover:text-white transition-all ease-in-out duration-300" wire:navigate>
-                    <span class="flex items-center gap-2">
+                    <span class="flex items-center gap-2 text-orange-600">
                         <x-app-logo-icon />
-                        <span class="text-2xl tracking-tighter font-light uppercase">mafhoos</span>
+                        <span class="text-2xl tracking-tighter font-medium uppercase">mafhoos</span>
                     </span>
                     <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
                 </a>

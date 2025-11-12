@@ -32,7 +32,7 @@
                             if ($inspectionType === \App\Enums\InspectionType::UNDERCARRIAGE_INSPECTION) { $icon = 'phosphor-car-simple'; $iconColor = 'text-sky-500'; }
                             if ($inspectionType === \App\Enums\InspectionType::COMPREHENSIVE_INSPECTION) { $icon = 'phosphor-clipboard-text'; $iconColor = 'text-amber-500'; }
                         @endphp
-                        @svg($icon, 'size-7 '.$iconColor)
+                        @svg($icon, 'size-10 '.$iconColor)
                         <div>
                             <h4 class="text-xl font-semibold text-neutral-900 dark:text-white capitalize">
                                 {{ str_replace('-', ' ', $inspectionType->value) }}

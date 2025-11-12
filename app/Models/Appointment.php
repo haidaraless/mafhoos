@@ -9,10 +9,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Appointment extends Model
 {
     use HasUlids;
+
+    private const NUMBER_PAD_LENGTH = 6;
+
+    protected static function booted(): void
+    {
+        static::creating(function (Appointment $appointment) {
+            if (! empty($appointment->number)) {
+                return;
+            }
+
+            $appointment->number = static::generateNextNumber();
+        });
+    }
 
     protected $guarded = [];
 
@@ -100,5 +114,27 @@ class Appointment extends Model
             'vehicle_id' => $vehicle->id,
             'status' => AppointmentStatus::PENDING->value,
         ]);
+    }
+
+    protected static function generateNextNumber(): string
+    {
+        return DB::transaction(function () {
+            do {
+                $number = sprintf('%010d%02d', now()->timestamp, random_int(0, 99));
+
+                $query = static::query()->where('number', $number);
+
+                if (self::supportsLockForUpdate()) {
+                    $query->lockForUpdate();
+                }
+            } while ($query->exists());
+
+            return $number;
+        }, 5);
+    }
+
+    private static function supportsLockForUpdate(): bool
+    {
+        return in_array(DB::getDriverName(), ['mysql', 'pgsql', 'sqlsrv'], true);
     }
 }

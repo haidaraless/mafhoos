@@ -80,7 +80,7 @@ class VehicleInspectionCenter extends Component
         $inspection = Inspection::firstOrCreate(
             ['appointment_id' => $appointment->id],
             [
-                'number' => 'INS-' . strtoupper(substr($appointment->id, -8)),
+                'number' => 'INS-' . $appointment->number,
                 'type' => $appointment->inspection_type,
                 'technician_id' => Auth::id(),
                 'provider_id' => $appointment->provider_id,

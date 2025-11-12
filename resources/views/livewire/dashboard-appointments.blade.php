@@ -119,7 +119,7 @@
                             <div class="flex-1">
                                 <div class="flex items-center space-x-3 mb-2">
                                     <h4 class="font-medium text-gray-900">{{ $appointment->vehicle->name }}</h4>
-                                    <span class="text-sm text-gray-500">#{{ $appointment->id }}</span>
+                                    <span class="text-sm text-gray-500">#{{ $appointment->number }}</span>
                                 </div>
                                 
                                 <div class="flex items-center space-x-4 text-sm text-gray-600">
