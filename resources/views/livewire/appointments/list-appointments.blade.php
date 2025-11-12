@@ -53,21 +53,128 @@
         </div>
 
         <!-- Statistics Section -->
-        <div class="grid grid-cols-1 p-8">
-            <div class="col-span-1 flex items-center gap-2">
+        <div class="grid grid-cols-1 p-8 space-y-6">
+            <div class="col-span-1 flex items-center justify-between gap-2">
+                <span class="text-2xl dark:text-white">Statistics</span>
                 @svg('phosphor-chart-bar', 'size-8 text-sky-500')
-                <h3 class="text-2xl dark:text-white">Statistics</h3>
             </div>
             
-            <!-- Statistics content can be added here -->
+            <!-- Selected Date Total -->
+            <div class="space-y-2">
+                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
+                    @svg('phosphor-calendar-check', 'size-4')
+                    <span>Selected Date</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-4xl font-bold text-neutral-900 dark:text-white">{{ $this->getTotalForSelectedDate() }}</span>
+                    <span class="text-sm text-neutral-500 dark:text-white/60">appointments</span>
+                </div>
+            </div>
+
+            <!-- Status Breakdown -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
+                    @svg('phosphor-stack', 'size-4')
+                    <span>Status Breakdown</span>
+                </div>
+                <div class="space-y-2">
+                    <!-- Pending -->
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-200 dark:border-yellow-500/20">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                            <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Pending</span>
+                        </div>
+                        <span class="text-lg font-bold text-yellow-700 dark:text-yellow-300">{{ $this->getStatusCount('pending') }}</span>
+                    </div>
+
+                    <!-- Confirmed -->
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Confirmed</span>
+                        </div>
+                        <span class="text-lg font-bold text-blue-700 dark:text-blue-300">{{ $this->getStatusCount('confirmed') }}</span>
+                    </div>
+
+                    <!-- Completed -->
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Completed</span>
+                        </div>
+                        <span class="text-lg font-bold text-green-700 dark:text-green-300">{{ $this->getStatusCount('completed') }}</span>
+                    </div>
+
+                    <!-- Cancelled -->
+                    @if($this->getStatusCount('cancelled') > 0)
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                            <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Cancelled</span>
+                        </div>
+                        <span class="text-lg font-bold text-red-700 dark:text-red-300">{{ $this->getStatusCount('cancelled') }}</span>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Peak Hour -->
+            @if($this->getPeakHour())
+            <div class="space-y-2 p-4 rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-500/10 dark:to-orange-500/5 border border-orange-200 dark:border-orange-500/20">
+                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-orange-700 dark:text-orange-300">
+                    @svg('phosphor-trend-up', 'size-4')
+                    <span>Peak Hour</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-orange-900 dark:text-orange-200">{{ $this->getPeakHour()['hour'] }}</span>
+                    <span class="text-lg text-orange-700 dark:text-orange-300">{{ $this->getPeakHour()['ampm'] }}</span>
+                    <span class="ml-auto text-sm text-orange-600 dark:text-orange-400">({{ $this->getPeakHour()['count'] }} {{ $this->getPeakHour()['count'] === 1 ? 'appointment' : 'appointments' }})</span>
+                </div>
+            </div>
+            @endif
+
+            <!-- Monthly Completion Rate -->
+            <div class="space-y-2 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
+                        @svg('phosphor-gauge', 'size-4')
+                        <span>Monthly Rate</span>
+                    </div>
+                    <span class="text-2xl font-bold text-neutral-900 dark:text-white">{{ $this->getCompletionRate() }}%</span>
+                </div>
+                <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2 overflow-hidden">
+                    <div 
+                        class="h-full bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-500"
+                        style="width: {{ $this->getCompletionRate() }}%"
+                    ></div>
+                </div>
+                <p class="text-xs text-neutral-500 dark:text-white/50">Completion rate for {{ $this->getMonthName() }}</p>
+            </div>
+
+            <!-- Today's Total -->
+            @php
+                $isToday = $selectedDate === now()->format('Y-m-d');
+            @endphp
+            @if($this->getTodayTotal() > 0 && !$isToday)
+            <div class="space-y-2 p-3 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20">
+                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-violet-700 dark:text-violet-300">
+                    @svg('phosphor-calendar-star', 'size-4')
+                    <span>Today</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-2xl font-bold text-violet-900 dark:text-violet-200">{{ $this->getTodayTotal() }}</span>
+                    <span class="text-sm text-violet-600 dark:text-violet-400">appointments scheduled</span>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 
     <!-- Right Section: Daily Schedule Timeline -->
     <div class="col-span-3 grid grid-cols-1 overflow-y-auto">
-        <div class="col-span-1 flex items-center gap-2 p-8">
-            @svg('phosphor-clock-user', 'size-8 text-blue-500')
+        <div class="col-span-1 flex items-center justify-between gap-2 p-8">
             <span class="text-2xl">{{ __('List of Appointments') }}</span>
+            @svg('phosphor-clock-user', 'size-8 text-blue-500')
         </div>
         @php
         $hours = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];

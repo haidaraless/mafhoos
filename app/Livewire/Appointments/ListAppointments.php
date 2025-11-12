@@ -110,6 +110,75 @@ class ListAppointments extends Component
         return Carbon::create($this->currentYear, $this->currentMonth, 1)->format('F');
     }
 
+    public function getTotalForSelectedDate()
+    {
+        return $this->appointments->count();
+    }
+
+    public function getStatusCount($status)
+    {
+        return $this->appointments->filter(fn($apt) => $apt->status->value === $status)->count();
+    }
+
+    public function getTodayTotal()
+    {
+        return $this->provider->appointments()
+            ->whereNotNull('scheduled_at')
+            ->whereDate('scheduled_at', now()->format('Y-m-d'))
+            ->count();
+    }
+
+    public function getPeakHour()
+    {
+        if ($this->appointments->isEmpty()) {
+            return null;
+        }
+
+        $hourCounts = [];
+        foreach ($this->appointments as $appointment) {
+            if ($appointment->scheduled_at) {
+                $hour = (int) $appointment->scheduled_at->format('H');
+                $hourCounts[$hour] = ($hourCounts[$hour] ?? 0) + 1;
+            }
+        }
+
+        if (empty($hourCounts)) {
+            return null;
+        }
+
+        $peakHour = array_search(max($hourCounts), $hourCounts);
+        $ampm = $peakHour >= 12 ? 'PM' : 'AM';
+        $displayHour = $peakHour > 12 ? $peakHour - 12 : ($peakHour == 0 ? 12 : $peakHour);
+        
+        return [
+            'hour' => $displayHour,
+            'ampm' => $ampm,
+            'count' => max($hourCounts),
+        ];
+    }
+
+    public function getCompletionRate()
+    {
+        $total = $this->provider->appointments()
+            ->whereNotNull('scheduled_at')
+            ->whereMonth('scheduled_at', $this->currentMonth)
+            ->whereYear('scheduled_at', $this->currentYear)
+            ->count();
+
+        if ($total === 0) {
+            return 0;
+        }
+
+        $completed = $this->provider->appointments()
+            ->whereNotNull('scheduled_at')
+            ->whereMonth('scheduled_at', $this->currentMonth)
+            ->whereYear('scheduled_at', $this->currentYear)
+            ->where('status', 'completed')
+            ->count();
+
+        return round(($completed / $total) * 100);
+    }
+
     public function render()
     {
         return view('livewire.appointments.list-appointments');
