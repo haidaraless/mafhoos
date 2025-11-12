@@ -3,8 +3,10 @@
 namespace App\Livewire\Dashboard;
 
 use App\Enums\AppointmentStatus;
+use App\Enums\FeeStatus;
 use App\Enums\ProviderType;
 use App\Models\Appointment;
+use App\Models\Fee;
 use App\Models\Inspection;
 use App\Models\Provider;
 use Illuminate\Database\Eloquent\Collection;
@@ -31,7 +33,7 @@ class VehicleInspectionCenter extends Component
             return;
         }
 
-        $this->provider = $currentAccount->accountable;
+        $this->provider = Provider::find($currentAccount->accountable_id);
         
         // Only load appointments for vehicle inspection centers
         if ($this->provider->type !== ProviderType::VEHICLE_INSPECTION_CENTER) {
@@ -39,8 +41,9 @@ class VehicleInspectionCenter extends Component
             return;
         }
 
-        // Get all inspection appointments for this provider
+        // Get today's inspection appointments for this provider
         $this->inspectionAppointments = Appointment::where('provider_id', $this->provider->id)
+            ->whereDate('scheduled_at', today())
             ->with(['vehicle', 'vehicle.user'])
             ->orderBy('scheduled_at', 'desc')
             ->get();
@@ -106,6 +109,89 @@ class VehicleInspectionCenter extends Component
 
         $this->loadInspectionAppointments();
         $this->dispatch('appointment-cancelled', $appointmentId);
+    }
+
+    public function getAppointmentsByStatusProperty()
+    {
+        if (!isset($this->provider)) {
+            return [];
+        }
+
+        $appointments = Appointment::where('provider_id', $this->provider->id)->get();
+        
+        $statusCounts = [
+            'pending' => 0,
+            'confirmed' => 0,
+            'completed' => 0,
+            'cancelled' => 0,
+        ];
+
+        foreach ($appointments as $appointment) {
+            $status = $appointment->status->value;
+            if (isset($statusCounts[$status])) {
+                $statusCounts[$status]++;
+            }
+        }
+
+        return $statusCounts;
+    }
+
+    public function getTotalFeesEarnedProperty()
+    {
+        if (!isset($this->provider)) {
+            return 0;
+        }
+
+        return Fee::whereHas('appointment', function ($query) {
+            $query->where('provider_id', $this->provider->id);
+        })
+        ->where('status', FeeStatus::PAID)
+        ->sum('amount');
+    }
+
+    public function getTodayAppointmentsProperty()
+    {
+        if (!isset($this->provider)) {
+            return 0;
+        }
+
+        return Appointment::where('provider_id', $this->provider->id)
+            ->whereDate('created_at', today())
+            ->count();
+    }
+
+    public function getYesterdayAppointmentsProperty()
+    {
+        if (!isset($this->provider)) {
+            return 0;
+        }
+
+        return Appointment::where('provider_id', $this->provider->id)
+            ->whereDate('created_at', today()->subDay())
+            ->count();
+    }
+
+    public function getThisWeekAppointmentsProperty()
+    {
+        if (!isset($this->provider)) {
+            return 0;
+        }
+
+        return Appointment::where('provider_id', $this->provider->id)
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->count();
+    }
+
+    public function getThisMonthAppointmentsProperty()
+    {
+        if (!isset($this->provider)) {
+            return 0;
+        }
+
+        return Appointment::where('provider_id', $this->provider->id)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
     }
 
     public function render()
