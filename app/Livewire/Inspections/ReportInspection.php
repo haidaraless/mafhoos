@@ -16,6 +16,8 @@ use App\Services\SparepartCatalogService;
 use App\Mail\InspectionReportReady;
 use App\Models\Provider;
 use App\Models\QuotationProvider;
+use App\Notifications\InspectionCompletedNotification;
+use App\Notifications\QuotationRequestCreatedNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -169,6 +171,10 @@ class ReportInspection extends Component
             'completed_at' => now()
         ]);
 
+        if ($this->appointment->user) {
+            $this->appointment->user->notify(new InspectionCompletedNotification($this->inspection));
+        }
+
         // Create automatic quotation requests if enabled
         if ($this->appointment->auto_quotation_request) {
             $this->createAutomaticQuotationRequests();
@@ -207,6 +213,8 @@ class ReportInspection extends Component
                 'status' => QuotationRequestStatus::OPEN,
             ]);
 
+            $this->notifyQuotationRequestCreated($qr1);
+
             # get providers that are spare parts suppliers in the same city as the inspection
             $qr1_providers = Provider::where('city_id', $this->inspection->provider->city_id)
                 ->where('type', ProviderType::SPARE_PARTS_SUPPLIER)
@@ -226,6 +234,8 @@ class ReportInspection extends Component
             'type' => QuotationType::REPAIR,
             'status' => QuotationRequestStatus::OPEN,
         ]);
+
+        $this->notifyQuotationRequestCreated($qr2);
 
         # get providers that are auto repair workshops in the same city as the inspection
         $qr2_providers = Provider::where('city_id', $this->inspection->provider->city_id)
@@ -263,6 +273,13 @@ class ReportInspection extends Component
     public function getPriorityForSparepart($sparepartId)
     {
         return $this->sparepartPriorities[$sparepartId] ?? 'medium';
+    }
+
+    private function notifyQuotationRequestCreated(QuotationRequest $quotationRequest): void
+    {
+        if ($this->appointment->user) {
+            $this->appointment->user->notify(new QuotationRequestCreatedNotification($quotationRequest));
+        }
     }
 
     /**

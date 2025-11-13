@@ -9,6 +9,7 @@ use App\Models\Inspection;
 use App\Models\Provider;
 use App\Models\QuotationProvider;
 use App\Models\QuotationRequest;
+use App\Notifications\QuotationRequestCreatedNotification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -54,6 +55,12 @@ class ViewInspection extends Component
             'type' => $quotationType,
             'status' => QuotationRequestStatus::OPEN,
         ]);
+
+        $owner = $quotationRequest->inspection->appointment->user ?? null;
+
+        if ($owner) {
+            $owner->notify(new QuotationRequestCreatedNotification($quotationRequest));
+        }
 
         # get providers that are auto repair workshops in the same city as the inspection
         $providers = Provider::where('city_id', $this->inspection->provider->city_id)

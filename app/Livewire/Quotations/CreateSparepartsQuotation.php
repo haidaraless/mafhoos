@@ -8,6 +8,7 @@ use App\Models\DamageSparepart;
 use App\Models\Quotation;
 use App\Models\QuotationRequest;
 use App\Models\QuotationSparepart;
+use App\Notifications\QuotationCreatedNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -91,6 +92,13 @@ class CreateSparepartsQuotation extends Component
             'notes' => $this->notes,
             'status' => 'draft',
         ]);
+
+        $this->quotationRequest->loadMissing('inspection.appointment.user');
+        $owner = $this->quotationRequest->inspection->appointment->user ?? null;
+
+        if ($owner) {
+            $owner->notify(new QuotationCreatedNotification($quotation));
+        }
 
         // Create quotation spareparts
         foreach ($this->sparepartPrices as $damageSparepartId => $price) {

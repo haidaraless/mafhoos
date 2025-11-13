@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AppointmentStatus;
-use App\Enums\InspectionType;
 use App\Mail\AppointmentConfirmation;
 use App\Models\Appointment;
 use App\Models\Fee;
 use App\Services\InspectionFeeService;
+use App\Notifications\AppointmentConfirmedNotification;
+use App\Notifications\FeePaidNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Http;
@@ -90,10 +91,19 @@ class PayFeesController extends Controller
                 }
 
                 // Update appointment status to confirmed
+                $wasConfirmed = $appointment->status === AppointmentStatus::CONFIRMED;
                 $appointment->update([
                     'status' => AppointmentStatus::CONFIRMED,
                     'confirmed_at' => now(),
                 ]);
+
+                if (! $wasConfirmed && $appointment->user) {
+                    $appointment->user->notify(new AppointmentConfirmedNotification($appointment));
+                }
+
+                if ($appointment->user) {
+                    $appointment->user->notify(new FeePaidNotification($appointment, $fee));
+                }
 
                 // Send confirmation email to the vehicle owner
                 if ($appointment->vehicle && $appointment->vehicle->user) {

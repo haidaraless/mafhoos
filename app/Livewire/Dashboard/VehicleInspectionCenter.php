@@ -9,6 +9,8 @@ use App\Models\Appointment;
 use App\Models\Fee;
 use App\Models\Inspection;
 use App\Models\Provider;
+use App\Notifications\AppointmentConfirmedNotification;
+use App\Notifications\InspectionStartedNotification;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -58,10 +60,15 @@ class VehicleInspectionCenter extends Component
             return;
         }
 
+        $wasConfirmed = $appointment->status === AppointmentStatus::CONFIRMED;
         $appointment->update([
             'status' => AppointmentStatus::CONFIRMED,
             'confirmed_at' => now()
         ]);
+
+        if (! $wasConfirmed && $appointment->user) {
+            $appointment->user->notify(new AppointmentConfirmedNotification($appointment));
+        }
 
         $this->loadInspectionAppointments();
         $this->dispatch('appointment-confirmed', $appointmentId);
@@ -88,6 +95,17 @@ class VehicleInspectionCenter extends Component
                 'started_at' => now(),
             ]
         );
+
+        $inspectionStarted = $inspection->wasRecentlyCreated;
+
+        if (! $inspection->started_at) {
+            $inspection->forceFill(['started_at' => now()])->save();
+            $inspectionStarted = true;
+        }
+
+        if ($inspectionStarted && $appointment->user) {
+            $appointment->user->notify(new InspectionStartedNotification($inspection));
+        }
 
         // Redirect to the inspection report creation page
         return $this->redirect(route('inspections.report', $inspection), true);

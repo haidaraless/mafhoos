@@ -55,7 +55,7 @@
 
         <!-- Desktop User Menu -->
         <div class="flex items-center gap-8">
-            @svg('phosphor-bell-light', 'size-8')
+            <livewire:notifications-menu />
 
             <flux:dropdown position="top" align="end">
                 <flux:profile class="cursor-pointer" :initials="auth()->user()->initials()" />

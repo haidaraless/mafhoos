@@ -6,6 +6,7 @@ use App\Enums\QuotationRequestStatus;
 use App\Mail\QuotationReceived;
 use App\Models\Quotation;
 use App\Models\QuotationRequest;
+use App\Notifications\QuotationCreatedNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -43,6 +44,13 @@ class CreateRepairQuotation extends Component
             'notes' => $this->notes,
             'status' => 'draft',
         ]);
+
+        $this->quotationRequest->loadMissing('inspection.appointment.user');
+        $owner = $this->quotationRequest->inspection->appointment->user ?? null;
+
+        if ($owner) {
+            $owner->notify(new QuotationCreatedNotification($quotation));
+        }
 
         $this->reset(['total', 'notes']);
         $this->resetErrorBag();
