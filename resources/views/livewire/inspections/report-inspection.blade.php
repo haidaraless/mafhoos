@@ -1,8 +1,8 @@
-<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
     <!-- Main Content - Form Only -->
-    <div class="col-span-3 grid grid-cols-1 gap-8 p-8">
+    <div class="col-span-2 grid grid-cols-1 gap-8 content-start border-r border-neutral-900 dark:border-neutral-700">
         <!-- Back Button -->
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 px-8 py-2 border-b border-neutral-900 dark:border-neutral-700">
             <a href="{{ route('dashboard.vehicle-inspection-center') }}" class="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-white hover:text-orange-500 transition-colors duration-200">
                 @svg('phosphor-arrow-left', 'size-5')
                 Back to Dashboard
@@ -10,7 +10,7 @@
         </div>
         
         <!-- Report Section -->
-        <div class="grid grid-cols-1 gap-4 content-start">
+        <div class="grid grid-cols-1 gap-4 content-start px-8">
             <div class="col-span-1 flex items-center gap-2">
                 @svg('phosphor-note', 'size-8 text-orange-500')
                 <span class="text-2xl">{{ __('Inspection Report') }}</span>
@@ -99,28 +99,7 @@
                                                         {{ $sparepart['brand'] }}
                                                     </span>
                                                 @endif
-                                                @if(isset($sparepart['availability']))
-                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium {{ $sparepart['availability'] === 'In Stock' ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300' }} rounded-full">
-                                                        @if($sparepart['availability'] === 'In Stock')
-                                                            @svg('phosphor-check-circle-light', 'size-3')
-                                                        @else
-                                                            @svg('phosphor-x-circle-light', 'size-3')
-                                                        @endif
-                                                        {{ $sparepart['availability'] }}
-                                                    </span>
-                                                @endif
                                             </div>
-                                        </div>
-                                        <div class="flex-shrink-0 flex flex-col items-end gap-2">
-                                            <div class="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400 font-semibold">
-                                                @svg('phosphor-check-circle-light', 'size-4')
-                                                Compatible
-                                            </div>
-                                            @if(isset($sparepart['price_range']))
-                                                <div class="text-sm font-semibold text-neutral-900 dark:text-white">
-                                                    ${{ $sparepart['price_range'] }}
-                                                </div>
-                                            @endif
                                         </div>
                                     </div>
                                 </button>
@@ -163,10 +142,11 @@
                                 @endif
                             </div>
                         </div>
+                        
                             @foreach($this->damageSpareparts as $damageSparepart)
                                 @php $sparepart = $damageSparepart->sparepart; @endphp
-                                <div class="col-span-1 flex gap-4 border-b border-neutral-300 dark:border-neutral-700 pb-4">
-                                    <div class="flex flex-col text-neutral-900 dark:text-white">
+                                <div class="w-full flex flex-col md:flex-row md:items-start md:justify-between gap-4 border-b border-neutral-300 dark:border-neutral-700 pb-4">
+                                    <div class="flex flex-col text-neutral-900 dark:text-white flex-1">
                                         <span class="text-2xl font-extrabold">{{ $sparepart->name }}</span>
                                         @if($sparepart->description)
                                             <span class="text-lg font-normal">{{ $sparepart->description }}</span>
@@ -182,7 +162,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-1 gap-2">
+                                    <div class="flex flex-col items-end gap-2 md:items-end md:text-right">
                                         <div class="flex items-center gap-1">
                                             <button
                                                 type="button"
@@ -228,7 +208,7 @@
     </div>
 
     <!-- Sidebar - Inspection & Appointment Information -->
-    <div class="col-span-1 grid grid-cols-1 border-r border-neutral-900 dark:border-neutral-700">
+    <div class="col-span-1 grid grid-cols-1">
         <!-- Inspection Details -->
         <div class="col-span-1 flex items-start justify-between border-b border-neutral-900 dark:border-neutral-700">
             <div class="flex flex-col gap-2 p-6">

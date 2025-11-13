@@ -29,7 +29,7 @@ class DemoDataSeeder extends Seeder
             [
                 'name' => 'Khalid Al-Mutairi',
                 'email' => 'khalid.alm@mafhoos.sa',
-                'password' => bcrypt('Mafhoos@123'),
+                'password' => bcrypt('password'),
             ]
         );
 
@@ -59,7 +59,7 @@ class DemoDataSeeder extends Seeder
                 [
                     'name' => $owner['name'],
                     'email' => $owner['email'],
-                    'password' => bcrypt('Mafhoos@123'),
+                    'password' => bcrypt('password'),
                 ]
             );
 

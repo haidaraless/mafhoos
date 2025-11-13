@@ -228,7 +228,7 @@ class ProviderSetupSeeder extends Seeder
                     [
                         'name' => $providerData['user']['name'],
                         'email' => $providerData['user']['email'],
-                        'password' => bcrypt('Mafhoos@123'),
+                        'password' => bcrypt('password'),
                     ]
                 );
 

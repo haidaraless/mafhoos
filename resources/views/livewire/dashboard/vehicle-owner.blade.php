@@ -18,14 +18,9 @@
                 <span>{{ $vehicle->vehicle_type }}</span>
             </div>
             <div class="flex items-center justify-center gap-6 mt-6">
-                <a href="{{  route('appointments.create') }}" class="flex items-center justify-center size-10 hover:scale-125 transition-all duration-300 border border-violet-500 dark:border-violet-500 text-violet-500 dark:text-white text-base font-medium font-montserrat rounded-full">
+                <a href="{{  route('appointments.create') }}" class="flex items-center gap-4 px-4 py-2 hover:scale-110 transition-all duration-300 border border-violet-500 dark:border-violet-500 text-violet-500 dark:text-white text-base font-medium font-montserrat rounded-full">
                     @svg('phosphor-calendar-plus-light', 'size-6')
-                </a>
-                <a href="" class="flex items-center justify-center size-10 hover:scale-125 transition-all duration-300 border border-fuchsia-500 dark:border-fuchsia-500 text-fuchsia-500 dark:text-white text-base font-medium font-montserrat rounded-full">
-                    @svg('phosphor-calculator-light', 'size-6')
-                </a>
-                <a href="" class="flex items-center justify-center size-10 hover:scale-125 transition-all duration-300 border border-green-500 dark:border-green-500 text-green-500 dark:text-white text-base font-medium font-montserrat rounded-full">
-                    @svg('phosphor-wrench-light', 'size-6')
+                    <span>Create Inspection Appointment</span>
                 </a>
             </div>
         </div>

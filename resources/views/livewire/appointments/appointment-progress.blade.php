@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 content-start min-h-full border border-neutral-200 dark:border-white/10 rounded-3xl bg-white dark:bg-neutral-900">
+<div class="grid grid-cols-1 content-start min-h-full bg-white dark:bg-neutral-900">
     @if($appointment)
         <div class="flex flex-col gap-3 p-6">
             @svg('phosphor-calendar-dots', 'size-8 text-violet-600')
