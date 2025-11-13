@@ -35,5 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('{appointment}/inspection-date', SelectInspectionDate::class)->name('appointments.inspection-date.select');
         Route::get('{appointment}/fees', [PayFeesController::class, 'show'])->name('appointments.fees.pay');
         Route::get('fees/callback', [PayFeesController::class, 'callback'])->name('appointments.fees.callback');
+        Route::get('fees/success', [PayFeesController::class, 'success'])->name('appointments.fees.success');
+        Route::get('fees/failure', [PayFeesController::class, 'failure'])->name('appointments.fees.failure');
     });
 });

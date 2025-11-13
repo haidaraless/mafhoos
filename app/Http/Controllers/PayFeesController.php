@@ -7,6 +7,7 @@ use App\Enums\InspectionType;
 use App\Mail\AppointmentConfirmation;
 use App\Models\Appointment;
 use App\Models\Fee;
+use App\Services\InspectionFeeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Http;
@@ -16,9 +17,16 @@ use Illuminate\Support\Facades\Mail;
 
 class PayFeesController extends Controller
 {
+    protected InspectionFeeService $inspectionFeeService;
+
+    public function __construct(InspectionFeeService $inspectionFeeService)
+    {
+        $this->inspectionFeeService = $inspectionFeeService;
+    }
+
     public function show(Appointment $appointment): View
     {
-        $inspectionPrice = $this->getInspectionPrice($appointment->inspection_type);
+        $inspectionPrice = $this->inspectionFeeService->getInspectionPrice($appointment->inspection_type);
 
         return view('appointments.fees', compact('appointment', 'inspectionPrice'));
     }
@@ -28,7 +36,9 @@ class PayFeesController extends Controller
         $paymentId = request('id');
 
         if (!$paymentId) {
-            return redirect()->route('dashboard.vehicle-owner')->with('error', 'Missing payment reference.');
+            return redirect()->route('appointments.fees.failure', [
+                'error' => 'Missing payment reference.'
+            ]);
         }
 
         try {
@@ -37,7 +47,9 @@ class PayFeesController extends Controller
                 ->get("https://api.moyasar.com/v1/payments/{$paymentId}");
 
             if (!$response->successful()) {
-                return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment not found.');
+                return redirect()->route('appointments.fees.failure', [
+                    'error' => 'Payment not found.'
+                ]);
             }
 
             $payment = $response->json();
@@ -45,19 +57,25 @@ class PayFeesController extends Controller
             $appointmentId = $payment['metadata']['appointment_id'] ?? null;
 
             if (!$appointmentId) {
-                return redirect()->route('dashboard.vehicle-owner')->with('error', 'Invalid payment metadata.');
+                return redirect()->route('appointments.fees.failure', [
+                    'error' => 'Invalid payment metadata.'
+                ]);
             }
 
             $appointment = Appointment::find($appointmentId);
 
             if (!$appointment) {
-                return redirect()->route('dashboard.vehicle-owner')->with('error', 'Appointment not found.');
+                return redirect()->route('appointments.fees.failure', [
+                    'error' => 'Appointment not found.'
+                ]);
             }
 
             if ($payment['status'] === 'paid') {
 
-                if (!Fee::where('payment_id', $payment['id'])->exists()) {
-                    $inspectionPrice = $this->getInspectionPrice($appointment->inspection_type);
+                $fee = Fee::where('payment_id', $payment['id'])->first();
+                
+                if (!$fee) {
+                    $inspectionPrice = $this->inspectionFeeService->getInspectionPrice($appointment->inspection_type);
                     $fee = Fee::create([
                         'appointment_id' => $appointment->id,
                         'description' => 'Vehicle Inspection Fee - ' . str_replace('-', ' ', $appointment->inspection_type->value ?? $appointment->inspection_type),
@@ -85,26 +103,49 @@ class PayFeesController extends Controller
 
                 Log::info('Payment completed successfully!');
 
-                return redirect()->route('dashboard.vehicle-owner')->with('success', 'Payment completed successfully! Your appointment has been confirmed and you will receive an email confirmation shortly.');
+                return redirect()->route('appointments.fees.success', [
+                    'appointment' => $appointment->id,
+                    'fee' => $fee->id
+                ]);
             }
 
             Log::info('Payment failed.');
 
-            return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment failed.');
+            return redirect()->route('appointments.fees.failure', [
+                'error' => 'Payment failed.'
+            ]);
 
         } catch (\Exception $e) {
-            return redirect()->route('dashboard.vehicle-owner')->with('error', 'Payment verification failed: ' . $e->getMessage());
+            return redirect()->route('appointments.fees.failure', [
+                'error' => 'Payment verification failed: ' . $e->getMessage()
+            ]);
         }
     }
 
-    private function getInspectionPrice($inspectionType): float
+    public function success(): View
     {
-        $type = is_string($inspectionType) ? InspectionType::from($inspectionType) : $inspectionType;
-        return match ($type) {
-            InspectionType::UNDERCARRIAGE_INSPECTION => 150.00,
-            InspectionType::ENGINE_INSPECTION => 200.00,
-            InspectionType::COMPREHENSIVE_INSPECTION => 300.00,
-        };
+        $appointmentId = request('appointment');
+        $feeId = request('fee');
+
+        $appointment = null;
+        $fee = null;
+
+        if ($appointmentId) {
+            $appointment = Appointment::find($appointmentId);
+        }
+
+        if ($feeId) {
+            $fee = Fee::find($feeId);
+        }
+
+        return view('payments.success', compact('appointment', 'fee'));
+    }
+
+    public function failure(): View
+    {
+        $errorMessage = request('error', 'Unfortunately, your payment could not be processed. Please try again or contact support if the problem persists.');
+
+        return view('payments.failure', compact('errorMessage'));
     }
 }
 

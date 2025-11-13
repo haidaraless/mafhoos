@@ -4,6 +4,7 @@ namespace App\Livewire\Appointments;
 
 use App\Enums\InspectionType;
 use App\Models\Appointment;
+use App\Services\InspectionFeeService;
 use Livewire\Component;
 
 class SelectInspectionType extends Component
@@ -20,6 +21,12 @@ class SelectInspectionType extends Component
         $this->dispatch('appointment-updated', $this->appointment->id);
         
         return $this->redirect(route('appointments.inspection-date.select', $this->appointment), true);
+    }
+
+    public function getInspectionPrice($inspectionType): float
+    {
+        $inspectionFeeService = app(InspectionFeeService::class);
+        return $inspectionFeeService->getInspectionPrice($inspectionType);
     }
 
     public function render()

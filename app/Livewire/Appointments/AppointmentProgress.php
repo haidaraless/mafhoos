@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Appointments;
 
+use App\Enums\InspectionType;
 use App\Models\Appointment;
+use App\Services\InspectionFeeService;
 use Livewire\Component;
 
 class AppointmentProgress extends Component
@@ -43,6 +45,12 @@ class AppointmentProgress extends Component
                 'auto_quotation_request' => $this->autoQuotationRequest
             ]);
         }
+    }
+
+    public function getInspectionPrice($inspectionType): float
+    {
+        $inspectionFeeService = app(InspectionFeeService::class);
+        return $inspectionFeeService->getInspectionPrice($inspectionType);
     }
 
     public function render()

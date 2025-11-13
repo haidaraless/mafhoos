@@ -1,17 +1,17 @@
 <div class="grid grid-cols-1 lg:grid-cols-4 content-start">
-    <div class="lg:col-span-1 space-y-6">
-        <div class="bg-white dark:bg-neutral-900 border-r border-neutral-900 dark:border-neutral-700 overflow-hidden">
-            <div class="flex items-center justify-between gap-3 p-6 border-b border-neutral-900 dark:border-neutral-700">
+    <div class="lg:col-span-1 bg-white dark:bg-neutral-900 border-r border-neutral-900 dark:border-neutral-700 overflow-hidden">
+        <div class="space-y-4">
+            <div class="flex flex-col gap-3 p-6 border-b border-neutral-900 dark:border-neutral-700">
                 <div class="space-y-1">
                     <span class="text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">Availability</span>
-                    <div class="flex items-center gap-2">
-                        @svg('phosphor-calendar-dots', 'size-7 text-violet-600')
+                    <div class="flex items-center justify-between gap-2">
                         <span class="text-2xl font-semibold text-neutral-900 dark:text-white">Manage Times</span>
+                        @svg('phosphor-calendar-dots', 'size-7 text-violet-600')
                     </div>
                 </div>
             </div>
 
-            <div class="p-6 space-y-6">
+            <div class="p-6 space-y-4">
                 <div>
                     <span class="text-base font-medium text-neutral-800 dark:text-white/60">Provider</span>
                     <div class="mt-1 text-2xl font-semibold text-neutral-900 dark:text-white">

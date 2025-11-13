@@ -1,4 +1,4 @@
-<div class="p-6 border-t border-neutral-300 dark:border-neutral-700">
+<div class="p-6">
     <div class="flex justify-between items-center mb-3">
         <div>
             <h3 class="text-2xl font-normal font-montserrat text-neutral-900 dark:text-white">{{ $displayDate->format('l, M j') }}</h3>

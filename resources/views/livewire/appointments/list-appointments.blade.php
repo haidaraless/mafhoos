@@ -156,16 +156,16 @@
                 $isToday = $selectedDate === now()->format('Y-m-d');
             @endphp
             @if($this->getTodayTotal() > 0 && !$isToday)
-            <div class="space-y-2 p-3 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20">
-                <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-violet-700 dark:text-violet-300">
-                    @svg('phosphor-calendar-star', 'size-4')
-                    <span>Today</span>
+                <div class="space-y-2 p-3 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20">
+                    <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-violet-700 dark:text-violet-300">
+                        @svg('phosphor-calendar-star', 'size-4')
+                        <span>Today</span>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-bold text-violet-900 dark:text-violet-200">{{ $this->getTodayTotal() }}</span>
+                        <span class="text-sm text-violet-600 dark:text-violet-400">appointments scheduled</span>
+                    </div>
                 </div>
-                <div class="flex items-baseline gap-2">
-                    <span class="text-2xl font-bold text-violet-900 dark:text-violet-200">{{ $this->getTodayTotal() }}</span>
-                    <span class="text-sm text-violet-600 dark:text-violet-400">appointments scheduled</span>
-                </div>
-            </div>
             @endif
         </div>
     </div>
@@ -181,9 +181,9 @@
     @endphp
 
     @foreach($hours as $hour)
-        <div class="col-span-1 flex gap-6 px-8 min-h-16 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
+        <div class="col-span-1 flex items-center px-4 lg:px-8 min-h-16 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
             <!-- Time Label with line -->
-            <div class="w-20 flex-shrink-0 relative pt-2 text-neutral-900 dark:text-white/70 font-normal">
+            <div class="w-20 flex-shrink-0 relative text-neutral-900 dark:text-white/70 font-normal">
                 <span class="text-4xl">
                     @php
                         $displayHour = $hour;
@@ -207,19 +207,33 @@
             </div>
 
             <!-- Appointments for this hour -->
-            <div class="flex-1 pt-2 pb-4">
+            <div class="flex-1 grid grid-cols-1 gap-4 content-start">
                 @php
                     $appointmentsForHour = $this->getAppointmentsForTime($hour);
                 @endphp
 
                 @if($appointmentsForHour->count() > 0)
                     @foreach($appointmentsForHour as $appointment)
-                        <div class="mb-3 p-3 bg-white dark:bg-white/5">
-                            <!-- ID and Status -->
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-mono text-neutral-600 dark:text-white/70">
-                                    {{ $appointment->number }}
+                        <div class="grid grid-cols-5 gap-1 pl-4 items-center overflow-hidden bg-white dark:bg-white/5">
+                            <div class="col-span-2 flex flex-col">
+                                <span class="text-xl font-semibold text-neutral-800 dark:text-white">
+                                    {{ $appointment->vehicle->name ?? __('Unknown Vehicle') }}
                                 </span>
+                                <span class="text-sm text-neutral-500 dark:text-white/60 font-mono">
+                                    #{{ $appointment->number }}
+                                </span>
+                            </div>
+
+                            <div class="col-span-2 flex flex-col">
+                                @if($appointment->vehicle && $appointment->vehicle->user)
+                                    <span class="text-xl font-semibold text-neutral-800 dark:text-white">{{ $appointment->vehicle->user->name }}</span>
+                                @endif
+                                @if($appointment->inspection_type)
+                                    <span class="text-sm text-neutral-600 dark:text-white/70">{{ ucfirst(str_replace('-', ' ', $appointment->inspection_type->value)) }} Inspection</span>
+                                @endif
+                            </div>
+
+                            <div class="flex justify-end">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
                                     {{ $appointment->status->value === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' : '' }}
                                     {{ $appointment->status->value === 'confirmed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300' : '' }}
@@ -229,31 +243,6 @@
                                     {{ ucfirst($appointment->status->value) }}
                                 </span>
                             </div>
-
-                            <!-- Vehicle -->
-                            <div class="mb-1">
-                                <span class="text-sm font-medium text-neutral-800 dark:text-white">
-                                    {{ $appointment->vehicle->name ?? 'N/A' }}
-                                </span>
-                            </div>
-
-                            <!-- Person -->
-                            @if($appointment->vehicle && $appointment->vehicle->user)
-                                <div class="mb-1">
-                                    <span class="text-sm text-neutral-600 dark:text-white/70">
-                                        {{ $appointment->vehicle->user->name }}
-                                    </span>
-                                </div>
-                            @endif
-
-                            <!-- Service -->
-                            @if($appointment->inspection_type)
-                                <div>
-                                    <span class="text-sm text-neutral-600 dark:text-white/70">
-                                        {{ ucfirst(str_replace('-', ' ', $appointment->inspection_type->value)) }} Inspection
-                                    </span>
-                                </div>
-                            @endif
                         </div>
                     @endforeach
                 @endif

@@ -29,7 +29,7 @@
                 </a>
             </div>
         </div>
-        <div class="flex flex-col gap-6 lg:gap-8 p-6 bg-neutral-50">
+        <div class="flex flex-col gap-6 lg:gap-8 p-6">
             <div class="w-1 h-16 bg-neutral-950 dark:bg-white"></div>
             <div class="flex flex-col gap-2">
                 <h2 class="text-3xl font-extrabold font-montserrat text-neutral-950 dark:text-white">Don’t know where to start?</h2>

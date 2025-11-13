@@ -14,7 +14,7 @@
             $paymentCompleted = $appointment->status && in_array($appointment->status->value, ['confirmed', 'completed']);
         @endphp
 
-        <div class="grid grid-cols-1">
+        <div class="grid grid-cols-1 content-start">
             <div class="col-span-1 flex items-center gap-2 px-6 py-1 {{ $appointment->provider_id ? 'text-green-700' : 'text-neutral-500' }} border-t border-neutral-300 dark:border-white/10">
                 @svg(($appointment->provider_id) ? 'phosphor-check-circle' : 'phosphor-number-circle-one', 'size-4')
                 <p class="text-sm font-medium">
@@ -79,57 +79,45 @@
             </div>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Fee Summary & Action Button -->
         @if($appointment && $appointment->scheduled_at && ! $paymentCompleted)
-            <div class="p-6">
-                <!-- Auto Quotation Request Checkbox -->
-                <div class="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                    <div class="flex items-start">
-                        <div class="flex items-center h-5">
-                            <input
-                                wire:model.live="autoQuotationRequest"
-                                type="checkbox"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                                id="auto_quotation_request"
-                            >
+            <div class="p-6 space-y-4">
+                <!-- Fee Summary -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-semibold text-neutral-900 dark:text-white">Fee Summary</h4>
+                    
+                    @if($appointment->inspection_type)
+                        <div class="flex items-center justify-between p-3 bg-neutral-50 dark:bg-white/5 rounded-lg border border-neutral-200 dark:border-neutral-700">
+                            <div class="flex items-center gap-2">
+                                @svg('phosphor-clipboard-text', 'size-4 text-neutral-600 dark:text-white/70')
+                                <span class="text-sm text-neutral-700 dark:text-white/80">
+                                    {{ ucfirst(str_replace('-', ' ', $appointment->inspection_type->value)) }} Inspection
+                                </span>
+                            </div>
+                            <span class="text-base font-bold text-neutral-900 dark:text-white">
+                                {{ number_format($this->getInspectionPrice($appointment->inspection_type), 2) }} SAR
+                            </span>
                         </div>
-                        <div class="ml-3 text-sm">
-                            <label for="auto_quotation_request" class="font-medium text-gray-900">
-                                Auto Quotation Request
-                            </label>
-                            <p class="text-gray-600 text-xs mt-1">
-                                Automatically create quotation requests for damaged parts after inspection completion
-                            </p>
-                        </div>
+                    @endif
+
+                    <div class="flex flex-col gap-4 pt-4 ">
+                        <span class="text-4xl text-right font-medium text-neutral-900 dark:text-white">
+                            {{ number_format($this->getInspectionPrice($appointment->inspection_type ?? null), 2) }}
+                            <span class="text-base font-medium text-neutral-500 dark:text-white/70">SAR</span>
+                        </span>
                     </div>
                 </div>
 
+                <!-- Complete Appointment Button -->
                 <a href="{{ route('appointments.fees.pay', $appointment->id) }}"
-                    class="w-full bg-green-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200">
-                    Complete Appointment
+                    class="w-full flex items-center justify-between gap-2 bg-neutral-800 text-white text-base font-semibold py-4 px-6 rounded-full hover:bg-neutral-950 transition-all duration-200 shadow-md hover:shadow-lg">
+                    <div class="flex items-center gap-2">
+                        @svg('phosphor-credit-card', 'size-5')
+                        <span>Complete Appointment & Pay</span>
+                    </div>
+                    @svg('phosphor-arrow-right', 'size-5')
                 </a>
             </div>
         @endif
-
-        <!-- Progress Bar -->
-        <div class="mt-auto p-6">
-            @php
-                $completedSteps = 0;
-                $totalSteps = 4;
-                if ($appointment->provider_id) $completedSteps++;
-                if ($appointment->inspection_type) $completedSteps++;
-                if ($appointment->scheduled_at) $completedSteps++;
-                if ($paymentCompleted) $completedSteps++;
-                $progressPercentage = $totalSteps > 0 ? ($completedSteps / $totalSteps) * 100 : 0;
-            @endphp
-
-            <div class="flex items-center justify-between mb-2 text-base text-neutral-700 dark:text-white/70 font-medium">
-                <span>Progress</span>
-                <span>{{ $completedSteps }}/{{ $totalSteps }}</span>
-            </div>
-            <div class="w-full bg-neutral-200 dark:bg-white/10 rounded-full h-2">
-                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 h-2 rounded-full transition-all duration-300" style="width: {{ $progressPercentage }}%"></div>
-            </div>
-        </div>
     @endif
 </div>
