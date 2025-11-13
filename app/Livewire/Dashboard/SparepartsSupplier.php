@@ -33,7 +33,7 @@ class SparepartsSupplier extends Component
             return;
         }
 
-        $this->provider = $currentAccount->accountable;
+        $this->provider = Provider::find($currentAccount->accountable_id);
         
         // Only load for spare parts suppliers
         if ($this->provider->type !== ProviderType::SPARE_PARTS_SUPPLIER) {
@@ -46,7 +46,11 @@ class SparepartsSupplier extends Component
         $this->quotationRequests = QuotationRequest::whereHas('providers', function ($query) use ($providerId) {
             $query->where('provider_id', $providerId);
         })
-        ->where('status', QuotationRequestStatus::OPEN)
+        ->whereIn('status', [
+            QuotationRequestStatus::OPEN,
+            QuotationRequestStatus::PENDING,
+            QuotationRequestStatus::QUOTED,
+        ])
         ->where('type', QuotationType::SPARE_PARTS)
         ->with([
             'inspection.appointment.vehicle.user',

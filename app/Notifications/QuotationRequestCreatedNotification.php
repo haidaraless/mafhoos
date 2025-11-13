@@ -43,9 +43,7 @@ class QuotationRequestCreatedNotification extends Notification
                 'type' => $type,
             ],
             'action_url' => route('quotation-requests.view', $quotationRequest->id),
-            'icon' => $type === QuotationType::SPARE_PARTS->value
-                ? 'phosphor-wrench-screwdriver'
-                : 'phosphor-wrench',
+            'icon' => 'phosphor-wrench',
         ];
     }
 }

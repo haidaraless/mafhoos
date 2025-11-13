@@ -54,10 +54,26 @@ class BrowseQuotations extends Component
 
     protected function baseFilteredQuery()
     {
-        $query = QuotationRequest::query()
-            ->whereHas('inspection.appointment.vehicle', function ($q) {
-                $q->where('user_id', Auth::id());
+        $query = QuotationRequest::query();
+
+        $user = Auth::user();
+        $currentAccount = $user?->currentAccount;
+
+        if ($currentAccount && $currentAccount->isProvider()) {
+            $providerId = $currentAccount->accountable_id;
+
+            if ($providerId) {
+                $query->whereHas('providers', function ($q) use ($providerId) {
+                    $q->where('provider_id', $providerId);
+                });
+            } else {
+                $query->whereRaw('0 = 1');
+            }
+        } else {
+            $query->whereHas('inspection.appointment.vehicle', function ($q) use ($user) {
+                $q->where('user_id', $user?->id);
             });
+        }
 
         // Apply search filter
         if ($this->search) {

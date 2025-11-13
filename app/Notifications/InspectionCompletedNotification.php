@@ -34,7 +34,7 @@ class InspectionCompletedNotification extends Notification
                 'appointment_id' => $inspection->appointment_id,
             ],
             'action_url' => route('inspections.view', $inspection->id),
-            'icon' => 'phosphor-clipboard-check',
+            'icon' => 'phosphor-check',
         ];
     }
 }

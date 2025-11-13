@@ -30,7 +30,11 @@ class AutoRepairWorkshop extends Component
         $this->quotationRequests = QuotationRequest::whereHas('providers', function ($query) use ($providerId) {
             $query->where('provider_id', $providerId);
         })
-        ->where('status', QuotationRequestStatus::OPEN)
+        ->whereIn('status', [
+            QuotationRequestStatus::OPEN,
+            QuotationRequestStatus::PENDING,
+            QuotationRequestStatus::QUOTED,
+        ])
         ->where('type', QuotationType::REPAIR)
         ->with([
             'inspection.appointment.vehicle.user',
