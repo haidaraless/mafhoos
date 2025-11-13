@@ -25,6 +25,10 @@ class DashboardController extends Controller
             };
         }
 
+        if ($user->vehicles()->count() === 0) {
+            return redirect()->route('vehicles.create');
+        }
+
         return redirect()->route('dashboard.vehicle-owner');
     }
 }

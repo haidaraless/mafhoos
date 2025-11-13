@@ -23,32 +23,49 @@ class DemoDataSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create a technician user
+        // Create a technician user with Saudi details
         $technician = User::query()->firstOrCreate(
-            ['email' => 'technician@example.com'],
+            ['email' => 'khalid.alm@mafhoos.sa'],
             [
-                'name' => 'Demo Technician',
-                'email' => 'technician@example.com',
-                'password' => bcrypt('password'),
+                'name' => 'Khalid Al-Mutairi',
+                'email' => 'khalid.alm@mafhoos.sa',
+                'password' => bcrypt('Mafhoos@123'),
             ]
         );
 
+        $saudiOwners = [
+            ['name' => 'Abdullah Al-Qahtani', 'email' => 'abdullah.alqahtani@mail.sa'],
+            ['name' => 'Faisal Al-Shehri', 'email' => 'faisal.alshehri@mail.sa'],
+            ['name' => 'Nouf Al-Harbi', 'email' => 'nouf.alharbi@mail.sa'],
+            ['name' => 'Bandar Al-Shammari', 'email' => 'bandar.alshammari@mail.sa'],
+            ['name' => 'Dana Al-Otaibi', 'email' => 'dana.alotaibi@mail.sa'],
+            ['name' => 'Saad Al-Dossary', 'email' => 'saad.aldossary@mail.sa'],
+            ['name' => 'Laila Al-Mutairi', 'email' => 'laila.almutairi@mail.sa'],
+            ['name' => 'Majed Al-Juhani', 'email' => 'majed.aljuhani@mail.sa'],
+            ['name' => 'Huda Al-Qahtani', 'email' => 'huda.alqahtani@mail.sa'],
+            ['name' => 'Turki Al-Mutlaq', 'email' => 'turki.almutlaq@mail.sa'],
+            ['name' => 'Rawan Al-Salem', 'email' => 'rawan.alsalem@mail.sa'],
+            ['name' => 'Nasser Al-Ghamdi', 'email' => 'nasser.alghamdi@mail.sa'],
+            ['name' => 'Reem Al-Anazi', 'email' => 'reem.alanazi@mail.sa'],
+            ['name' => 'Badr Al-Olayan', 'email' => 'badr.alolayan@mail.sa'],
+            ['name' => 'Amal Al-Sharif', 'email' => 'amal.alsharif@mail.sa'],
+        ];
+
         // Create vehicle owners and their accounts, and vehicles
         $vehicles = collect();
-        for ($u = 1; $u <= 15; $u++) {
-            $email = "owner{$u}@example.com";
+        foreach ($saudiOwners as $owner) {
             $user = User::query()->firstOrCreate(
-                ['email' => $email],
+                ['email' => $owner['email']],
                 [
-                    'name' => "Owner {$u}",
-                    'email' => $email,
-                    'password' => bcrypt('password'),
+                    'name' => $owner['name'],
+                    'email' => $owner['email'],
+                    'password' => bcrypt('Mafhoos@123'),
                 ]
             );
 
             // Create account for user if missing and set as current
             if (! $user->current_account_id) {
-                $account = Account::create([
+                $account = Account::query()->firstOrCreate([
                     'accountable_id' => $user->id,
                     'accountable_type' => User::class,
                 ]);
@@ -79,10 +96,10 @@ class DemoDataSeeder extends Seeder
             }
             $provider = $inspectionProviders->random();
             $inspectionType = collect(InspectionType::cases())->random();
-            $scheduledAt = Carbon::now()->addDays(rand(0, 10))->addHours(rand(8, 18));
+            $scheduledAt = Carbon::now('Asia/Riyadh')->addDays(rand(0, 10))->addHours(rand(8, 18));
 
             $appointment = Appointment::create([
-                'user_id' => $user->id,
+                'user_id' => $vehicle->user_id,
                 'status' => AppointmentStatus::CONFIRMED->value,
                 'vehicle_id' => $vehicle->id,
                 'provider_id' => $provider->id,
@@ -101,7 +118,7 @@ class DemoDataSeeder extends Seeder
             $inspection = Inspection::create([
                 'number' => 'INSP-' . Str::upper(Str::random(8)),
                 'type' => $appointment->inspection_type,
-                'report' => 'Demo inspection report for vehicle ' . $appointment->vehicle_id,
+                'report' => 'Comprehensive inspection report issued in Saudi Arabia for vehicle ' . $appointment->vehicle_id,
                 'technician_id' => $technician->id,
                 'provider_id' => $appointment->provider_id,
                 'appointment_id' => $appointment->id,
