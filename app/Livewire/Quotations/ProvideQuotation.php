@@ -9,9 +9,13 @@ class ProvideQuotation extends Component
 {
     public QuotationRequest $quotationRequest;
 
-    public function mount(int $quotationRequestId): void
+    public function mount($quotationRequestId = null, QuotationRequest $quotationRequest = null): void
     {
-        $this->quotationRequest = QuotationRequest::with(['inspection.appointment.vehicle', 'type', 'status'])->findOrFail($quotationRequestId);
+        if ($quotationRequest) {
+            $this->quotationRequest = $quotationRequest->load(['inspection.appointment.vehicle']);
+        } elseif ($quotationRequestId) {
+            $this->quotationRequest = QuotationRequest::with(['inspection.appointment.vehicle'])->findOrFail($quotationRequestId);
+        }
     }
 
     public function render()

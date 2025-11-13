@@ -12,6 +12,23 @@ class Quotation extends Model
 {
     use HasUlids;
 
+    protected static function booted(): void
+    {
+        static::creating(function (Quotation $quotation) {
+            if (! empty($quotation->number)) {
+                return;
+            }
+
+            // Set number from appointment via quotation request
+            if ($quotation->quotation_request_id) {
+                $quotationRequest = QuotationRequest::with('inspection.appointment')->find($quotation->quotation_request_id);
+                if ($quotationRequest && $quotationRequest->inspection && $quotationRequest->inspection->appointment && $quotationRequest->inspection->appointment->number) {
+                    $quotation->number = $quotationRequest->inspection->appointment->number;
+                }
+            }
+        });
+    }
+
     protected $guarded = [];
 
     protected $casts = [

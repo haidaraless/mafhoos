@@ -1,100 +1,171 @@
 <div class="grid sm:grid-cols-1 lg:grid-cols-4 gap-8 content-start">
-    <!-- Filters -->
+    <!-- Statistics -->
     <div class="lg:col-span-1 space-y-6">
         <div class="border border-neutral-300 dark:border-white/10 rounded-2xl p-6 bg-white dark:bg-white/5 shadow-sm">
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2">
-                    @svg('phosphor-funnel', 'size-5 text-violet-500')
-                    <span class="text-lg font-semibold text-neutral-900 dark:text-white">Filter Requests</span>
+                    @svg('phosphor-chart-bar', 'size-6 text-sky-500')
+                    <span class="text-lg font-semibold text-neutral-900 dark:text-white">Quotation Insights</span>
+                </div>
+                <span class="text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">{{ now()->format('M Y') }}</span>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Total -->
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
+                        @svg('phosphor-stack', 'size-4')
+                        <span>Total Requests</span>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-bold text-neutral-900 dark:text-white">{{ number_format($statistics['total']) }}</span>
+                        <span class="text-sm text-neutral-500 dark:text-white/60">overall</span>
+                    </div>
+                </div>
+
+                <!-- Status Breakdown -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
+                        @svg('phosphor-traffic-signal', 'size-4')
+                        <span>Status Breakdown</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-sky-50 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/20">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-sky-500"></div>
+                                <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Open</span>
+                            </div>
+                            <span class="text-lg font-bold text-sky-700 dark:text-sky-300">{{ $statistics['statusCounts']['open'] }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-200 dark:border-yellow-500/20">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Pending</span>
+                            </div>
+                            <span class="text-lg font-bold text-yellow-700 dark:text-yellow-300">{{ $statistics['statusCounts']['pending'] }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Quoted</span>
+                            </div>
+                            <span class="text-lg font-bold text-emerald-700 dark:text-emerald-300">{{ $statistics['statusCounts']['quoted'] }}</span>
+                        </div>
+
+                        @if($statistics['statusCounts']['cancelled'] > 0)
+                            <div class="flex items-center justify-between p-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                                    <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Cancelled</span>
+                                </div>
+                                <span class="text-lg font-bold text-red-700 dark:text-red-300">{{ $statistics['statusCounts']['cancelled'] }}</span>
+                            </div>
+                        @endif
+
+                        @if($statistics['statusCounts']['expired'] > 0)
+                            <div class="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-neutral-500"></div>
+                                    <span class="text-sm font-medium text-neutral-700 dark:text-white/80">Expired</span>
+                                </div>
+                                <span class="text-lg font-bold text-neutral-700 dark:text-white/70">{{ $statistics['statusCounts']['expired'] }}</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Type Breakdown -->
+                <div class="space-y-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
+                        @svg('phosphor-engine', 'size-4')
+                        <span>Type Breakdown</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1 p-3 rounded-xl bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20">
+                            <span class="text-xs uppercase tracking-wide text-violet-600 dark:text-violet-300">Repair</span>
+                            <span class="text-2xl font-extrabold text-neutral-900 dark:text-white">{{ $statistics['typeCounts']['repair'] }}</span>
+                        </div>
+                        <div class="flex flex-col gap-1 p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20">
+                            <span class="text-xs uppercase tracking-wide text-amber-600 dark:text-amber-300">Spare Parts</span>
+                            <span class="text-2xl font-extrabold text-neutral-900 dark:text-white">{{ $statistics['typeCounts']['spare-parts'] }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Completion Rate -->
+                <div class="space-y-2 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
+                            @svg('phosphor-gauge', 'size-4')
+                            <span>Quote Conversion</span>
+                        </div>
+                        <span class="text-2xl font-bold text-neutral-900 dark:text-white">{{ $statistics['completionRate'] }}%</span>
+                    </div>
+                    <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2 overflow-hidden">
+                        <div
+                            class="h-full bg-gradient-to-r from-emerald-500 to-green-500 transition-all duration-500"
+                            style="width: {{ $statistics['completionRate'] }}%"
+                        ></div>
+                    </div>
+                    <p class="text-xs text-neutral-500 dark:text-white/50">Quoted requests relative to your total submissions.</p>
+                </div>
+
+                <!-- Highlights -->
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="space-y-2 p-4 rounded-xl bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20">
+                        <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-orange-700 dark:text-orange-300">
+                            @svg('phosphor-hourglass-medium', 'size-4')
+                            <span>Awaiting Action</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-bold text-orange-900 dark:text-orange-200">{{ $statistics['awaiting'] }}</span>
+                            <span class="text-sm text-orange-700 dark:text-orange-300">open or pending</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
-                <!-- Search -->
-                <div>
-                    <label for="search" class="block text-sm font-semibold text-neutral-700 dark:text-white mb-1">Search</label>
-                    <input
-                        type="text"
-                        id="search"
-                        wire:model.live.debounce.300ms="search"
-                        placeholder="Search by ID, make, model, or VIN..."
-                        class="w-full px-4 py-2.5 border border-neutral-300 dark:border-white/10 rounded-full bg-white dark:bg-transparent text-neutral-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow">
+                    <div class="space-y-1 p-4 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20">
+                        <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-blue-700 dark:text-blue-300">
+                            @svg('phosphor-calendar-check', 'size-4')
+                            <span>This Month</span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-bold text-blue-900 dark:text-blue-200">{{ $statistics['thisMonth'] }}</span>
+                            <span class="text-sm text-blue-700 dark:text-blue-300">new requests</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Status Filter -->
-                <div>
-                    <label for="statusFilter" class="block text-sm font-semibold text-neutral-700 dark:text-white mb-1">Status</label>
-                    <select
-                        wire:model.live="statusFilter"
-                        id="statusFilter"
-                        class="w-full px-4 py-2.5 border border-neutral-300 dark:border-white/10 rounded-full bg-white dark:bg-transparent text-neutral-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow">
-                        <option value="">All Statuses</option>
-                        <option value="open">Open</option>
-                        <option value="pending">Pending</option>
-                        <option value="quoted">Quoted</option>
-                        <option value="cancelled">Cancelled</option>
-                        <option value="expired">Expired</option>
-                    </select>
-                </div>
-
-                <!-- Type Filter -->
-                <div>
-                    <label for="typeFilter" class="block text-sm font-semibold text-neutral-700 dark:text-white mb-1">Type</label>
-                    <select
-                        wire:model.live="typeFilter"
-                        id="typeFilter"
-                        class="w-full px-4 py-2.5 border border-neutral-300 dark:border-white/10 rounded-full bg-white dark:bg-transparent text-neutral-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow">
-                        <option value="">All Types</option>
-                        <option value="repair">Repair</option>
-                        <option value="spare-parts">Spare Parts</option>
-                    </select>
-                </div>
-
-                <!-- Vehicle Filter -->
-                <div>
-                    <label for="vehicleFilter" class="block text-sm font-semibold text-neutral-700 dark:text-white mb-1">Vehicle</label>
-                    <select
-                        wire:model.live="vehicleFilter"
-                        id="vehicleFilter"
-                        class="w-full px-4 py-2.5 border border-neutral-300 dark:border-white/10 rounded-full bg-white dark:bg-transparent text-neutral-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-shadow">
-                        <option value="">All Vehicles</option>
-                        @foreach($userVehicles as $vehicle)
-                            <option value="{{ $vehicle->id }}">
-                                {{ $vehicle->year }} {{ $vehicle->make }} {{ $vehicle->model }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            @if($search || $statusFilter || $typeFilter || $vehicleFilter)
-                <div class="mt-6">
-                    <button
-                        type="button"
-                        wire:click="clearFilters"
-                        class="inline-flex items-center justify-center w-full px-4 py-2 border border-neutral-300 dark:border-white/20 text-neutral-800 dark:text-white text-sm font-semibold rounded-full bg-white dark:bg-transparent hover:bg-neutral-50 dark:hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500">
-                        @svg('phosphor-x', 'size-4 mr-2')
-                        Clear Filters
-                    </button>
+                @if($statistics['latest'])
+                    <div class="space-y-2 p-4 rounded-xl bg-neutral-100 dark:bg-white/10 border border-neutral-200 dark:border-white/10">
+                        <div class="flex items-center gap-2 text-xs uppercase tracking-wide text-neutral-600 dark:text-white/60">
+                            @svg('phosphor-clock-clockwise', 'size-4')
+                            <span>Latest Request</span>
+                        </div>
+                        <div class="space-y-1 text-sm text-neutral-700 dark:text-white/80">
+                            <p class="font-semibold text-neutral-900 dark:text-white">
+                                Request #{{ $statistics['latest']->number ?? substr($statistics['latest']->id, -8) }}
+                            </p>
+                            <p class="text-xs text-neutral-500 dark:text-white/60">
+                                {{ $statistics['latest']->created_at->diffForHumans() }}
+                                @if(optional($statistics['latest']->inspection->appointment->vehicle)->make)
+                                    • {{ $statistics['latest']->inspection->appointment->vehicle->make }}
+                                    {{ $statistics['latest']->inspection->appointment->vehicle->model }}
+                                @endif
+                            </p>
+                        </div>
                 </div>
             @endif
+            </div>
         </div>
     </div>
 
     <!-- Quotation Requests -->
     <div class="lg:col-span-3 space-y-6">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 px-8 pt-8">
                 @svg('phosphor-calculator', 'size-8 text-fuchsia-500')
-                <div>
-                    <h2 class="text-2xl font-extrabold text-neutral-950 dark:text-white">Quotation Requests</h2>
-                    <p class="text-sm text-neutral-600 dark:text-white/60">Track inspections, quotes, and follow-ups in one place.</p>
-                </div>
-            </div>
-            <div class="inline-flex items-center gap-2 rounded-full bg-neutral-100 dark:bg-white/10 px-4 py-2 text-sm font-medium text-neutral-600 dark:text-white/70">
-                <span class="h-2 w-2 rounded-full bg-fuchsia-500"></span>
-                <span>{{ $quotationRequests->count() }} results</span>
-            </div>
+            <h2 class="text-2xl font-normal text-neutral-950 dark:text-white">Quotation Requests</h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -126,7 +197,7 @@
                             @endif
 
                             <div class="space-y-1">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-white/50">Request #{{ $quotationRequest->id }}</span>
+                                <span class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-white/50">Request #{{ $quotationRequest->number ?? substr($quotationRequest->id, -8) }}</span>
                                 <h3 class="text-xl md:text-2xl font-extrabold text-neutral-900 dark:text-white">
                                     {{ ucfirst(str_replace('-', ' ', $quotationRequest->type->value)) }} Request
                                 </h3>
@@ -201,16 +272,8 @@
                     </div>
                 </div>
             @empty
-                <div class="col-span-full p-12 text-center border border-dashed border-neutral-300 dark:border-white/10 rounded-3xl bg-white dark:bg-white/5">
-                    @svg('phosphor-invoice', 'size-12 mx-auto text-neutral-400 dark:text-white/40')
-                    <h3 class="mt-4 text-lg font-semibold text-neutral-900 dark:text-white">No quotation requests found</h3>
-                    <p class="mt-2 text-sm text-neutral-600 dark:text-white/70 max-w-md mx-auto">
-                        @if($search || $statusFilter || $typeFilter || $vehicleFilter)
-                            Try adjusting your filters to see more results.
-                        @else
-                            You haven't created any quotation requests yet. Start by booking an inspection.
-                        @endif
-                    </p>
+                <div class="flex text-base text-neutral-500 dark:text-white/20">
+                    <span>{{ __('_________ No quotation requests yet') }}</span>
                 </div>
             @endforelse
         </div>

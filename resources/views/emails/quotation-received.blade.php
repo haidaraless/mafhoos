@@ -159,7 +159,7 @@
                 <h3>Quotation Details</h3>
                 <div class="detail-row">
                     <span class="detail-label">Quotation Number:</span>
-                    <span class="detail-value">#{{ $quotation->id }}</span>
+                    <span class="detail-value">#{{ $quotation->number ?? substr($quotation->id, -8) }}</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Vehicle:</span>

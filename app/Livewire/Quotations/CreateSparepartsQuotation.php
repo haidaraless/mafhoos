@@ -18,9 +18,7 @@ class CreateSparepartsQuotation extends Component
     public QuotationRequest $quotationRequest;
     public $sparepartPrices = [];
     public $notes = '';
-    public $showModal = false;
     public $damageSpareparts;
-    public bool $inline = false;
 
     protected $rules = [
         'sparepartPrices.*' => 'required|numeric|min:0.01',
@@ -46,7 +44,6 @@ class CreateSparepartsQuotation extends Component
     public function mount(QuotationRequest $quotationRequest, bool $inline = false)
     {
         $this->quotationRequest = $quotationRequest;
-        $this->inline = $inline;
         $this->loadDamageSpareparts();
         $this->initializePrices();
     }
@@ -65,20 +62,6 @@ class CreateSparepartsQuotation extends Component
                 $this->sparepartPrices[$damageSparepart->id] = '';
             }
         }
-    }
-
-    public function openModal()
-    {
-        $this->showModal = true;
-        $this->initializePrices();
-        $this->reset(['notes']);
-    }
-
-    public function closeModal()
-    {
-        $this->showModal = false;
-        $this->reset(['notes']);
-        $this->resetErrorBag();
     }
 
     public function createQuotation()
@@ -120,7 +103,9 @@ class CreateSparepartsQuotation extends Component
             }
         }
 
-        $this->closeModal();
+        $this->reset(['notes']);
+        $this->initializePrices();
+        $this->resetErrorBag();
         
         session()->flash('message', 'Quotation created successfully as draft. You can now send it to the vehicle owner.');
         

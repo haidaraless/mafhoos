@@ -16,8 +16,6 @@ class CreateRepairQuotation extends Component
     public QuotationRequest $quotationRequest;
     public $total = '';
     public $notes = '';
-    public $showModal = false;
-    public bool $inline = false;
 
     protected $rules = [
         'total' => 'required|numeric|min:0.01',
@@ -27,20 +25,6 @@ class CreateRepairQuotation extends Component
     public function mount(QuotationRequest $quotationRequest, bool $inline = false)
     {
         $this->quotationRequest = $quotationRequest;
-        $this->inline = $inline;
-    }
-
-    public function openModal()
-    {
-        $this->showModal = true;
-        $this->reset(['total', 'notes']);
-    }
-
-    public function closeModal()
-    {
-        $this->showModal = false;
-        $this->reset(['total', 'notes']);
-        $this->resetErrorBag();
     }
 
     public function createQuotation()
@@ -60,7 +44,8 @@ class CreateRepairQuotation extends Component
             'status' => 'draft',
         ]);
 
-        $this->closeModal();
+        $this->reset(['total', 'notes']);
+        $this->resetErrorBag();
         
         session()->flash('message', 'Quotation created successfully as draft. You can now send it to the vehicle owner.');
         

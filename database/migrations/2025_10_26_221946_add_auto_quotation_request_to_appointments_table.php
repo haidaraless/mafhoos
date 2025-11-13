@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('appointments', function (Blueprint $table) {
-            $table->boolean('auto_quotation_request')->default(false);
+            $table->boolean('auto_quotation_request')->default(true);
         });
     }
 

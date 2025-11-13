@@ -13,6 +13,23 @@ class QuotationRequest extends Model
 {
     use HasUlids;
 
+    protected static function booted(): void
+    {
+        static::creating(function (QuotationRequest $quotationRequest) {
+            if (! empty($quotationRequest->number)) {
+                return;
+            }
+
+            // Set number from appointment
+            if ($quotationRequest->inspection_id) {
+                $inspection = Inspection::with('appointment')->find($quotationRequest->inspection_id);
+                if ($inspection && $inspection->appointment && $inspection->appointment->number) {
+                    $quotationRequest->number = $inspection->appointment->number;
+                }
+            }
+        });
+    }
+
     protected $guarded = [];
 
     protected $casts = [

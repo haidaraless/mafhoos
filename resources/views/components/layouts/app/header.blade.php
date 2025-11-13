@@ -20,15 +20,15 @@
             </a>
             @svg('phosphor-minus', 'size-6')
             <div class="flex items-center gap-8 text-base font-medium">
-                @if (Auth::user()->currentAccount->isUser())
-                    <a href="{{ route('quotation-requests.browse') }}" wire:navigate class="text-neutral-900 hover:text-orange-600 transition-colors duration-200">Quotations</a>
-                @endif
                 @php
                     $currentAccount = Auth::user()->currentAccount;
                     $isVehicleInspectionCenter = $currentAccount->isProvider() 
                         && $currentAccount->accountable instanceof \App\Models\Provider
                         && $currentAccount->accountable->type === \App\Enums\ProviderType::VEHICLE_INSPECTION_CENTER;
                 @endphp
+                @if (!$isVehicleInspectionCenter)
+                    <a href="{{ route('quotation-requests.browse') }}" wire:navigate class="text-neutral-900 hover:text-orange-600 transition-colors duration-200">Quotation Requests</a>
+                @endif
                 @if ($isVehicleInspectionCenter)
                     <a href="{{ route('appointments.index') }}" wire:navigate class="text-neutral-900 hover:text-orange-600 transition-colors duration-200">Appointments</a>
                     <a href="{{ route('providers.available-times.manage') }}" wire:navigate class="text-neutral-900 hover:text-orange-600 transition-colors duration-200">Available Times</a>

@@ -52,26 +52,23 @@ class BrowseQuotations extends Component
         $this->resetPage();
     }
 
-    public function getQuotationRequestsProperty()
+    protected function baseFilteredQuery()
     {
-        $query = QuotationRequest::with([
-            'inspection.appointment.vehicle',
-            'quotations.provider',
-            'quotations.quotationSpareparts.damageSparepart.sparepart'
-        ])
-        ->whereHas('inspection.appointment.vehicle', function ($q) {
-            $q->where('user_id', Auth::user()->id);
-        });
+        $query = QuotationRequest::query()
+            ->whereHas('inspection.appointment.vehicle', function ($q) {
+                $q->where('user_id', Auth::id());
+            });
 
         // Apply search filter
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('id', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('inspection.appointment.vehicle', function ($vehicleQuery) {
-                      $vehicleQuery->where('make', 'like', '%' . $this->search . '%')
-                                  ->orWhere('model', 'like', '%' . $this->search . '%')
-                                  ->orWhere('vin', 'like', '%' . $this->search . '%');
-                  });
+                    ->orWhere('number', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('inspection.appointment.vehicle', function ($vehicleQuery) {
+                        $vehicleQuery->where('make', 'like', '%' . $this->search . '%')
+                            ->orWhere('model', 'like', '%' . $this->search . '%')
+                            ->orWhere('vin', 'like', '%' . $this->search . '%');
+                    });
             });
         }
 
@@ -92,7 +89,73 @@ class BrowseQuotations extends Component
             });
         }
 
-        return $query->orderBy('created_at', 'desc')->paginate(10);
+        return $query;
+    }
+
+    public function getQuotationRequestsProperty()
+    {
+        return $this->baseFilteredQuery()
+            ->with([
+                'inspection.appointment.vehicle',
+                'quotations.provider',
+                'quotations.quotationSpareparts.damageSparepart.sparepart',
+            ])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+    }
+
+    public function getStatisticsProperty()
+    {
+        $query = $this->baseFilteredQuery();
+
+        $total = (clone $query)->count();
+
+        $statusCounts = (clone $query)
+            ->selectRaw('status, COUNT(*) as aggregate')
+            ->groupBy('status')
+            ->pluck('aggregate', 'status');
+
+        $typeCounts = (clone $query)
+            ->selectRaw('type, COUNT(*) as aggregate')
+            ->groupBy('type')
+            ->pluck('aggregate', 'type');
+
+        $awaiting = ($statusCounts['open'] ?? 0) + ($statusCounts['pending'] ?? 0);
+        $fulfilled = $statusCounts['quoted'] ?? 0;
+        $cancelled = $statusCounts['cancelled'] ?? 0;
+        $expired = $statusCounts['expired'] ?? 0;
+        $completionRate = $total > 0 ? (int) round(($fulfilled / $total) * 100) : 0;
+
+        $thisMonth = (clone $query)
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->count();
+
+        $latest = (clone $query)
+            ->with(['inspection.appointment.vehicle'])
+            ->orderByDesc('created_at')
+            ->first();
+
+        return [
+            'total' => $total,
+            'awaiting' => $awaiting,
+            'fulfilled' => $fulfilled,
+            'cancelled' => $cancelled,
+            'expired' => $expired,
+            'statusCounts' => [
+                'open' => $statusCounts['open'] ?? 0,
+                'pending' => $statusCounts['pending'] ?? 0,
+                'quoted' => $statusCounts['quoted'] ?? 0,
+                'cancelled' => $cancelled,
+                'expired' => $expired,
+            ],
+            'typeCounts' => [
+                'repair' => $typeCounts['repair'] ?? 0,
+                'spare-parts' => $typeCounts['spare-parts'] ?? 0,
+            ],
+            'completionRate' => $completionRate,
+            'thisMonth' => $thisMonth,
+            'latest' => $latest,
+        ];
     }
 
     public function getUserVehiclesProperty()
@@ -112,6 +175,7 @@ class BrowseQuotations extends Component
         return view('livewire.quotations.browse-quotations', [
             'quotationRequests' => $this->quotationRequests,
             'userVehicles' => $this->userVehicles,
+            'statistics' => $this->statistics,
         ]);
     }
 }

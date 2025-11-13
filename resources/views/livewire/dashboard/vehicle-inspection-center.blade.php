@@ -156,7 +156,7 @@
                                 @if($appointment->status->value === 'confirmed')
                                     <button 
                                         wire:click="startInspection('{{ $appointment->id }}')"
-                                        class="inline-flex items-center justify-between gap-3 w-full px-4 py-3 bg-neutral-800 text-white text-base font-medium font-montserrat rounded-full hover:bg-neutral-900 transition-colors duration-200 cursor-pointer"
+                                        class="inline-flex items-center justify-between gap-3 w-full px-4 py-3 bg-neutral-800 text-white text-sm font-medium font-montserrat rounded-full hover:bg-neutral-900 transition-colors duration-200 cursor-pointer"
                                     >
                                         <span>Start Inspection</span>
                                         @svg('phosphor-arrow-right-light', 'size-5')
