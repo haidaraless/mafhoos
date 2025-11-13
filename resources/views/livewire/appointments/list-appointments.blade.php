@@ -1,8 +1,8 @@
-<div class="grid grid-cols-4 content-start">
+<div class="grid grid-cols-1 xl:grid-cols-4 content-start gap-6">
     <!-- Left Section: Calendar and Statistics -->
-    <div class="col-span-1 grid grid-cols-1 content-start border-r border-neutral-900 dark:border-neutral-700">
+    <div class="col-span-1 grid grid-cols-1 content-start border border-neutral-200 dark:border-white/10 rounded-3xl overflow-hidden bg-white dark:bg-neutral-900">
         <!-- Calendar Section -->
-        <div class="col-span-1 p-8 border-b border-neutral-900 dark:border-neutral-700">
+        <div class="col-span-1 p-6 lg:p-8 border-b border-neutral-200 dark:border-white/10">
             <!-- Month Navigation -->
             <div class="flex items-center justify-between mb-8">
                 <div class="flex items-center gap-2">
@@ -171,9 +171,9 @@
     </div>
 
     <!-- Right Section: Daily Schedule Timeline -->
-    <div class="col-span-3 grid grid-cols-1 overflow-y-auto">
-        <div class="col-span-1 flex items-center justify-between gap-2 p-8">
-            <span class="text-2xl">{{ __('List of Appointments') }}</span>
+        <div class="col-span-3 grid grid-cols-1 border border-neutral-200 dark:border-white/10 rounded-3xl bg-white dark:bg-neutral-900 overflow-hidden">
+        <div class="col-span-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-6 lg:p-8 border-b border-neutral-200 dark:border-white/10">
+            <span class="text-2xl text-neutral-900 dark:text-white">{{ __('List of Appointments') }}</span>
             @svg('phosphor-clock-user', 'size-8 text-blue-500')
         </div>
         @php
@@ -181,10 +181,10 @@
     @endphp
 
     @foreach($hours as $hour)
-        <div class="col-span-1 flex items-center px-4 lg:px-8 min-h-16 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
+        <div class="col-span-1 flex flex-col sm:flex-row sm:items-center gap-4 px-4 lg:px-8 py-4 border-b border-neutral-200 dark:border-white/10 last:border-b-0">
             <!-- Time Label with line -->
-            <div class="w-20 flex-shrink-0 relative text-neutral-900 dark:text-white/70 font-normal">
-                <span class="text-4xl">
+            <div class="w-full sm:w-20 flex-shrink-0 relative text-neutral-900 dark:text-white/70 font-normal">
+                <span class="text-3xl sm:text-4xl">
                     @php
                         $displayHour = $hour;
                         $ampm = 'AM';
@@ -199,7 +199,7 @@
                         echo str_pad($displayHour, 2, '0', STR_PAD_LEFT);
                     @endphp
                 </span>
-                <span class="-ml-2 text-xs">
+                <span class="-ml-1 sm:-ml-2 text-xs uppercase tracking-wide text-neutral-500 dark:text-white/50">
                     {{ $ampm }}
                 </span>
                 <!-- Horizontal line extending from time -->
@@ -214,9 +214,9 @@
 
                 @if($appointmentsForHour->count() > 0)
                     @foreach($appointmentsForHour as $appointment)
-                        <div class="grid grid-cols-5 gap-1 pl-4 items-center overflow-hidden bg-white dark:bg-white/5">
-                            <div class="col-span-2 flex flex-col">
-                                <span class="text-xl font-semibold text-neutral-800 dark:text-white">
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-1 p-4 md:pl-4 items-center overflow-hidden border border-neutral-200 dark:border-white/10 rounded-2xl bg-white dark:bg-white/5">
+                            <div class="md:col-span-2 flex flex-col">
+                                <span class="text-lg md:text-xl font-semibold text-neutral-800 dark:text-white">
                                     {{ $appointment->vehicle->name ?? __('Unknown Vehicle') }}
                                 </span>
                                 <span class="text-sm text-neutral-500 dark:text-white/60 font-mono">
@@ -224,16 +224,16 @@
                                 </span>
                             </div>
 
-                            <div class="col-span-2 flex flex-col">
+                            <div class="md:col-span-2 flex flex-col">
                                 @if($appointment->vehicle && $appointment->vehicle->user)
                                     <span class="text-xl font-semibold text-neutral-800 dark:text-white">{{ $appointment->vehicle->user->name }}</span>
                                 @endif
                                 @if($appointment->inspection_type)
-                                    <span class="text-sm text-neutral-600 dark:text-white/70">{{ ucfirst(str_replace('-', ' ', $appointment->inspection_type->value)) }} Inspection</span>
+                                <span class="text-sm text-neutral-600 dark:text-white/70">{{ ucfirst(str_replace('-', ' ', $appointment->inspection_type->value)) }} Inspection</span>
                                 @endif
                             </div>
 
-                            <div class="flex justify-end">
+                            <div class="flex md:justify-end">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
                                     {{ $appointment->status->value === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' : '' }}
                                     {{ $appointment->status->value === 'confirmed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300' : '' }}

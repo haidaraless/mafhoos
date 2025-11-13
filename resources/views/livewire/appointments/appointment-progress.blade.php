@@ -1,9 +1,8 @@
-<div class="grid grid-cols-1 content-start min-h-full border-l border-neutral-900 dark:border-white/10">
+<div class="grid grid-cols-1 content-start min-h-full border border-neutral-200 dark:border-white/10 rounded-3xl bg-white dark:bg-neutral-900">
     @if($appointment)
         <div class="flex flex-col gap-3 p-6">
-            
             @svg('phosphor-calendar-dots', 'size-8 text-violet-600')
-            <h3 class="text-2xl">Appointment Details</h3>
+            <h3 class="text-2xl text-neutral-900 dark:text-white">Appointment Details</h3>
             <div class="flex items-center gap-2 text-neutral-600 dark:text-white/70">
                 @svg('phosphor-hash-light', 'size-4')
                 <span class="font-medium">{{ $appointment->number }}</span>
@@ -15,7 +14,7 @@
         @endphp
 
         <div class="grid grid-cols-1 content-start">
-            <div class="col-span-1 flex items-center gap-2 px-6 py-1 {{ $appointment->provider_id ? 'text-green-700' : 'text-neutral-500' }} border-t border-neutral-300 dark:border-white/10">
+            <div class="col-span-1 flex items-center gap-2 px-6 py-2 {{ $appointment->provider_id ? 'text-green-700 dark:text-green-300' : 'text-neutral-500 dark:text-white/50' }} border-t border-neutral-200 dark:border-white/10">
                 @svg(($appointment->provider_id) ? 'phosphor-check-circle' : 'phosphor-number-circle-one', 'size-4')
                 <p class="text-sm font-medium">
                     {{  ($appointment->provider_id) ? __($appointment->provider->name) : __('Inspection Center') }}
@@ -23,7 +22,7 @@
             </div>
 
             <!-- Step 2: Inspection Type -->
-            <div class="col-span-1 flex items-center gap-2 px-6 py-1 {{ $appointment->inspection_type ? 'text-green-700' : 'text-neutral-500' }} border-t border-neutral-300 dark:border-white/10">
+            <div class="col-span-1 flex items-center gap-2 px-6 py-2 {{ $appointment->inspection_type ? 'text-green-700 dark:text-green-300' : 'text-neutral-500 dark:text-white/50' }} border-t border-neutral-200 dark:border-white/10">
                 @svg(($appointment->inspection_type) ? 'phosphor-check-circle' : 'phosphor-number-circle-two', 'size-4')
                 <p class="text-sm font-medium">
                     {{  ($appointment->inspection_type) ? ucfirst(str_replace('-', ' ', $appointment->inspection_type->value)) : __('Inspection Type') }}
@@ -31,7 +30,7 @@
             </div>
 
             <!-- Step 3: Date & Time -->
-            <div class="col-span-1 flex items-center gap-2 px-6 py-1 {{ $appointment->scheduled_at ? 'text-green-700' : 'text-neutral-500' }} border-t border-neutral-300 dark:border-white/10">
+            <div class="col-span-1 flex items-center gap-2 px-6 py-2 {{ $appointment->scheduled_at ? 'text-green-700 dark:text-green-300' : 'text-neutral-500 dark:text-white/50' }} border-t border-neutral-200 dark:border-white/10">
                 @svg(($appointment->scheduled_at) ? 'phosphor-check-circle' : 'phosphor-number-circle-three', 'size-4')
                 <p class="text-sm font-medium">
                     @if($appointment->scheduled_at)
@@ -43,7 +42,7 @@
             </div>
 
             <!-- Step 4: Pay Inspection Fee -->
-            <div class="col-span-1 flex items-center gap-2 px-6 py-1 {{ $paymentCompleted ? 'text-green-700' : 'text-neutral-500' }} border-t border-neutral-300 dark:border-white/10">
+            <div class="col-span-1 flex items-center gap-2 px-6 py-2 {{ $paymentCompleted ? 'text-green-700 dark:text-green-300' : 'text-neutral-500 dark:text-white/50' }} border-t border-neutral-200 dark:border-white/10">
                 @svg($paymentCompleted ? 'phosphor-check-circle' : 'phosphor-number-circle-four', 'size-4')
                 <p class="text-sm font-medium">
                     {{ 'Pay Inspection Fee' }}
@@ -52,10 +51,10 @@
         </div>
 
         <!-- Appointment Details -->
-        <div class="border-t border-neutral-200 dark:border-white/10 px-6 pt-4">
+        <div class="border-t border-neutral-200 dark:border-white/10 px-6 pt-4 pb-6">
             <h4 class="text-sm font-semibold text-neutral-900 dark:text-white mb-3">Vehicle Details</h4>
             <div class="space-y-2 text-sm">
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between gap-4">
                     <span class="flex items-center gap-2 text-neutral-600 dark:text-white/70">
                         @svg('phosphor-car-light', 'size-4')
                         <span>Vehicle</span>

@@ -1,9 +1,9 @@
-<div class="grid grid-cols-3 content-start">
+<div class="grid grid-cols-1 lg:grid-cols-3 content-start gap-6 lg:gap-0">
     <!-- Left Section: Calendar -->
-    <div class="col-span-2 grid grid-cols-1 content-start overflow-hidden">
-        <div class="col-span-1 flex flex-col gap-6 bg-white border-b border-neutral-900 dark:border-white/10">
-            <div class="col-span-1 flex items-center gap-2 px-8 h-10 border-b border-neutral-900 dark:border-white/10">
-                <a href="{{ route('appointments.inspection-type.select', $appointment) }}" class="inline-flex items-center gap-2 text-base font-medium text-neutral-900 hover:text-orange-500 transition-colors duration-200">
+    <div class="col-span-1 lg:col-span-2 grid grid-cols-1 content-start overflow-hidden border border-neutral-200 dark:border-white/10 rounded-3xl bg-white dark:bg-neutral-900">
+        <div class="col-span-1 flex flex-col gap-6 border-b border-neutral-200 dark:border-white/10 bg-white dark:bg-neutral-900">
+            <div class="col-span-1 flex items-center gap-2 px-4 sm:px-6 lg:px-8 h-12 border-b border-neutral-200 dark:border-white/10">
+                <a href="{{ route('appointments.inspection-type.select', $appointment) }}" class="inline-flex items-center gap-2 text-base font-medium text-neutral-900 dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors duration-200">
                     @svg('phosphor-arrow-left', 'size-5')
                     Back to inspection type
                 </a>
@@ -12,18 +12,18 @@
                 @svg('phosphor-clock', 'size-10 md:size-12 text-orange-500')
             </div>
             <div class="flex flex-col p-3 md:p-6">
-                <h1 class="text-2xl md:text-3xl text-neutral-800 font-bold">Select Inspection Date & Time</h1>
-                <p class="text-neutral-600">Choose your preferred date and time with {{ $appointment->provider->name }}</p>
+                <h1 class="text-2xl md:text-3xl text-neutral-800 dark:text-white font-bold">Select Inspection Date & Time</h1>
+                <p class="text-neutral-600 dark:text-white/70">Choose your preferred date and time with {{ $appointment->provider->name }}</p>
             </div>
         </div>
-        <div class="grid grid-cols-3 content-start">
+        <div class="grid grid-cols-1 lg:grid-cols-3 content-start">
             <!-- Calendar Section -->
-            <div class="col-span-1 p-8 border-r border-neutral-900 dark:border-neutral-700">
+            <div class="col-span-1 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-neutral-200 dark:border-white/10">
                 <!-- Month Navigation -->
                 <div class="flex items-center justify-between mb-8">
                     <div class="flex items-center gap-2">
                         @svg('phosphor-calendar-dots', 'size-8 text-violet-600')
-                        <span class="text-2xl dark:text-white">{{ $this->getMonthName() }}</span>
+                        <span class="text-2xl text-neutral-900 dark:text-white">{{ $this->getMonthName() }}</span>
                     </div>
                     
                     <div class="flex items-center gap-2">
@@ -73,7 +73,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 lg:col-span-2">
                 <!-- Available Times for Selected Date -->
                 @if($selectedDate)
                     <div class="grid grid-cols-1">
@@ -83,38 +83,38 @@
                         ], key('day-' . $selectedDate))
                     </div>
                 @else
-                    <div class="flex items-center justify-center p-8 text-neutral-500 dark:text-white/50">
+                    <div class="flex items-center justify-center p-8 text-neutral-500 dark:text-white/60">
                         <div class="text-center">
                             @svg('phosphor-calendar-dots', 'size-12 mb-4 mx-auto')
-                            <p class="text-lg">Please select a date from the calendar</p>
+                            <p class="text-lg text-neutral-700 dark:text-white/70">Please select a date from the calendar</p>
                         </div>
                     </div>
                 @endif
             </div>
-            <div class="col-span-3">
+            <div class="col-span-1 lg:col-span-3">
                 @if($errors->has('selection'))
-                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-400 rounded-md">
+                    <div class="mb-6 p-4 bg-red-50 dark:bg-red-500/10 border-l-4 border-red-400 dark:border-red-500/40 rounded-md">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <svg class="h-5 w-5 text-red-400 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                             <div class="ml-3">
-                                <p class="text-red-800 font-medium">{{ $errors->first('selection') }}</p>
+                                <p class="text-red-800 dark:text-red-200 font-medium">{{ $errors->first('selection') }}</p>
                             </div>
                         </div>
                     </div>
                 @endif
                 <!-- Selection Summary & Confirm Button -->
                 @if($selectedDate && $selectedTime)
-                    <div class="flex items-center justify-between p-6 border-t border-neutral-900 dark:border-neutral-700">
-                        <div class="flex items-center gap-2 text-3xl text-neutral-900 dark:text-white font-semibold">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-6 border-t border-neutral-200 dark:border-white/10">
+                        <div class="flex flex-wrap items-center gap-2 text-2xl lg:text-3xl text-neutral-900 dark:text-white font-semibold">
                             @svg('phosphor-calendar-check', 'size-7 text-green-500')
                             <span>{{ \Carbon\Carbon::parse($selectedDate)->format('l, F j, Y') }}</span>
                             <span>{{ \Carbon\Carbon::createFromFormat('H:i', $selectedTime)->format('g:i A') }}</span>
                         </div>
-                        <button wire:click="confirmSelection" class="inline-flex items-center gap-2 px-8 py-3 bg-neutral-800 text-white rounded-full hover:bg-neutral-900 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <button wire:click="confirmSelection" class="inline-flex items-center justify-center gap-2 px-6 lg:px-8 py-3 bg-neutral-800 text-white rounded-full hover:bg-neutral-900 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                             <span>Confirm</span>
                             @svg('phosphor-arrow-right-light', 'size-6')
                         </button>

@@ -1,4 +1,4 @@
-<div class="border border-neutral-300 rounded-lg">
+<div class="border border-neutral-300 dark:border-white/10 rounded-lg bg-white dark:bg-neutral-900">
     <flux:dropdown position="bottom" align="start">
         <flux:button variant="ghost" class="h-8">
             @php
